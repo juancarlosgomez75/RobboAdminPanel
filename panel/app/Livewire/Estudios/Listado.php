@@ -11,6 +11,8 @@ class Listado extends Component
 
     public $filtrosActivos=false;
 
+    public $datos;
+
     public function switchFiltros(){
         if($this->filtrosActivos){
             $this->filtrosActivos=false;
@@ -20,8 +22,8 @@ class Listado extends Component
         }
     }
 
-    public function mount(){
-
+    public function mount($datos){
+        $this->datos = $datos;
     }
 
     public function render()

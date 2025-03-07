@@ -26,5 +26,6 @@
 
 </style>
 @section("contenido")
-    @livewire("estudios.listado")
+@livewire("estudios.listado", ['datos' => "Holis"])
+
 @endsection
