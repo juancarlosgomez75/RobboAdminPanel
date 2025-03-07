@@ -8,6 +8,6 @@ class StudyController extends Controller
 {
 
     public function index(){
-        return "Es el index";
+        return view("estudios.index");
     }
 }
