@@ -27,17 +27,14 @@ class Listado extends Component
 
     public function render()
     {
-        //Filtro los datos
-        $datosFiltrados=$this->datos;
-
-        if($this->filtroNombre != "") {
-            $datosFiltrados=[];
-        }
+        $datosEnviar = empty($this->filtroNombre) ? $this->datos : array_filter($this->datos, function ($dato) {
+            return stripos($dato["Nombre"], $this->filtroNombre) !== false;
+        });
 
         return view('livewire.estudios.listado', [
             'texto' => $this->filtroNombre,
             'filtroOn' => $this->filtrosActivos,
-            'datos' => $datosFiltrados, // Pasamos los datos filtrados
+            'datosUsar' => $datosEnviar, // Pasamos los datos filtrados
         ]);
     }
 }

@@ -1,5 +1,4 @@
 <div>
-    {{json_encode($datos)}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -40,7 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($datos as $index => $dato)
+                            @foreach($datosUsar as $index => $dato)
                                 <tr>
                                     <th scope="row">{{ $index + 1 }}</th>
                                     <td>{{ $dato['Nombre'] ?? 'Sin Nombre' }}</td>
