@@ -1,13 +1,18 @@
 <?php
 
+use App\Http\Controllers\StudyController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return "Holi";
 })->name('home');
+
+Route::get('/estudios', StudyController::class)->name('home');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
