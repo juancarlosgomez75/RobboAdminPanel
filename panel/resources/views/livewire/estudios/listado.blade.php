@@ -1,4 +1,5 @@
 <div>
+    {{json_encode($datos)}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -30,39 +31,31 @@
                 <div class="col-md-12">
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th class="w-10" scope="col" style="width: 7%;">#</th>
-                            <th class="w-40" scope="col">Nombre</th>
-                            <th class="w-30" scope="col">Ciudad</th>
-                            <th class="w-15" scope="col">Modelos</th>
-                            <th scope="col" style="width: 23%;">Acciones</th>
-                        </tr>
+                            <tr>
+                                <th class="w-10" scope="col" style="width: 7%;">#</th>
+                                <th class="w-40" scope="col">Nombre</th>
+                                <th class="w-30" scope="col">Ciudad</th>
+                                <th class="w-15" scope="col">Modelos</th>
+                                <th scope="col" style="width: 23%;">Acciones</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>
-                                <a type="button" class="btn btn-outline-secondary btn-sm" href="modelos.php?id=">Ver</a>
-                                <a type="button" class="btn btn-outline-primary btn-sm" href="editarestudio.php?id=">Editar</a>
-                                <button type="button" class="btn btn-outline-danger btn-sm">Eliminar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
+                            @foreach($datos as $index => $dato)
+                                <tr>
+                                    <th scope="row">{{ $index + 1 }}</th>
+                                    <td>{{ $dato['Nombre'] ?? 'Sin Nombre' }}</td>
+                                    <td>{{ $dato['Ciudad'] ?? 'No especificada' }}</td>
+                                    <td>{{ $dato['Modelos'] ?? 'N/A' }}</td>
+                                    <td>
+                                        <a type="button" class="btn btn-outline-secondary btn-sm" href="modelos.php?id={{ $index }}">Ver</a>
+                                        <a type="button" class="btn btn-outline-primary btn-sm" href="editarestudio.php?id={{ $index }}">Editar</a>
+                                        <button type="button" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
+                    
                 </div>
             </div>
 

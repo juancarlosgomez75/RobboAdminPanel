@@ -26,6 +26,10 @@
 
 </style>
 @section("contenido")
-@livewire("estudios.listado", ['datos' => "Holis"])
+@livewire("estudios.listado", ['datos' => [
+    ["Nombre"=>"Roberto"],
+    ["Nombre"=>"Juan Carlos"],
+    ["Nombre"=>"Erio"]
+]])
 
 @endsection
