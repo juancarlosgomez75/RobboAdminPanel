@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudyController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -8,6 +9,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+Route::controller(StudyController::class)->group(function(){
+    Route::get('/estudios', 'index');
+});
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
