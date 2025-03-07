@@ -33,6 +33,18 @@ if (isset($_GET['id'])) {
     header("Location: estudios.php");
     exit();
 }
+
+if (isset($_POST['studyName']) && isset($_POST['managerName']) && isset($_POST['location']) && isset($_POST['address']) && isset($_POST['monitor']) && isset($_POST['contactMonitor']) && isset($_POST['contactMail']) ){
+    
+    //Obtengo las variables
+    $studyName=$_POST['studyName'];
+    $managerName=$_POST['managerName'];
+    $location=$_POST['location'];
+    $address=$_POST['address'];
+    $monitor=$_POST['monitor'];
+    $contactMonitor=$_POST['contactMonitor'];
+    $contactMail=$_POST['contactMail'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -60,19 +72,19 @@ if (isset($_GET['id'])) {
             <b>Información del estudio:</b>
             <div class="mb-3">
                 <label for="studyName" class="form-label">Nombre de estudio</label>
-                <input type="text" class="form-control" id="studyName" required value="<?php echo $user["WcStudy"]["StudyName"];?>">
+                <input type="text" class="form-control" id="studyName" name="studyName" required value="<?php echo $user["WcStudy"]["StudyName"];?>">
             </div>
             <div class="mb-3">
                 <label for="manager" class="form-label">Nombre de manager</label>
-                <input type="text" class="form-control" id="manager" required value="<?php echo $user["WcStudy"]["Contact"];?>">
+                <input type="text" class="form-control" id="manager" name="managerName" required value="<?php echo $user["WcStudy"]["Contact"];?>">
             </div>
             <div class="mb-3">
                 <label for="location" class="form-label">Ciudad</label>
-                <input type="text" class="form-control" id="location" required>
+                <input type="text" class="form-control" id="location" name="location" required>
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">Dirección</label>
-                <input type="text" class="form-control" id="address" required value="<?php echo $user["WcStudy"]["Address"];?>">
+                <input type="text" class="form-control" id="address" required name="address" value="<?php echo $user["WcStudy"]["Address"];?>">
             </div>
 
             <hr class="my-4">
@@ -81,15 +93,15 @@ if (isset($_GET['id'])) {
 
             <div class="mb-3">
                 <label for="monitor" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="monitor" required value="<?php echo $user["Name"];?>">
+                <input type="text" class="form-control" id="monitor" name="monitor" required value="<?php echo $user["Name"];?>">
             </div>
             <div class="mb-3">
                 <label for="contactNumber" class="form-label">Número de contacto</label>
-                <input type="tel" class="form-control" id="contactNumber" required value="<?php echo $user["Phone"];?>">
+                <input type="tel" class="form-control" id="contactNumber" name="contactMonitor" required value="<?php echo $user["Phone"];?>">
             </div>
             <div class="mb-3">
                 <label for="contactNumber" class="form-label">Email</label>
-                <input type="email" class="form-control" id="contactmail" required value="<?php echo $user["Email"];?>">
+                <input type="email" class="form-control" id="contactmail" name="contactMail" required value="<?php echo $user["Email"];?>">
             </div>
             <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
