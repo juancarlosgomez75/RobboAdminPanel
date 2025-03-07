@@ -1,6 +1,30 @@
 @extends('paneltemplate')
 @section('title','Listado de estudios')
 
+<style>
+.custom-input {
+    display: flex;
+    align-items: center;
+    padding: 4px 10px; /* Reduce la altura */
+    border: 1px solid #ddd; /* Borde gris claro */
+    border-radius: 6px;
+    width: 100%;
+    font-size: 14px;
+    margin-bottom:0.5rem;
+    height: 30px; /* Controla la altura */
+}
+
+.custom-input:focus {
+    outline: none;
+    box-shadow: none; /* Elimina borde azul en focus */
+    border-color: #ccc; /* Borde ligeramente más oscuro al enfocar */
+}
+
+.hide{
+    display: none;
+}
+
+</style>
 @section("contenido")
     <div class="card shadow-custom">
         <div class="card-body">
@@ -14,23 +38,30 @@
                         <i class="fa-solid fa-plus"></i> Crear
                     </button>
                     
-                    <button type="button" class="btn btn-sm action-btn btn-outline-secondary">
-                        <i class="fa-solid fa-filter"></i> Filtrar
-                    </button>
+                    <a type="button" class="btn btn-sm action-btn btn-outline-secondary" id="verFiltros">
+                        <i class="fa-solid fa-filter"></i> Filtros
+                    </a>
                     
                 </div>
-                <div class="col-md-12">
-                    Filtros
+                <div class="col-md-12 hide" id="Filtros">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="custom-input" placeholder="Filtrar por nombre">
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="custom-input" placeholder="Filtrar por ciudad">
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <table class="table">
                         <thead>
                         <tr>
-                            <th scope="col">#id</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Ciudad</th>
-                            <th scope="col">Modelos</th>
-                            <th scope="col">Acciones</th>
+                            <th class="w-10" scope="col" style="width: 7%;">#</th>
+                            <th class="w-40" scope="col">Nombre</th>
+                            <th class="w-30" scope="col">Ciudad</th>
+                            <th class="w-15" scope="col">Modelos</th>
+                            <th scope="col" style="width: 23%;">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -64,3 +95,11 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+<script>
+    document.getElementById("verFiltros").addEventListener("click", function(event) {
+        event.preventDefault();
+        document.getElementById("Filtros").classList.toggle("hide");
+    });
+</script>
+@endpush
