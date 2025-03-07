@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 class StudyController extends Controller
 {
-    public function __invoke(){
-        return "Prueba";
+
+    public function index(){
+        return "Es el index";
     }
 }

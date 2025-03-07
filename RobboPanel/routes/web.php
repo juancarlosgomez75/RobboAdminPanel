@@ -11,7 +11,11 @@ Route::get('/', function () {
     return "Holi";
 })->name('home');
 
-Route::get('/estudios', StudyController::class)->name('home');
+//Route::get('/estudios', StudyController::class)->name('home');
+
+Route::controller(StudyController::class)->group(function(){
+    Route::get('/estudios', 'index')->name('estudios');
+});
 
 
 Route::view('dashboard', 'dashboard')
