@@ -84,7 +84,30 @@
                 <div class="col-md-12">
                     <br>
                     <h5 class="card-title">Managers asociados</h5>
-                    <p class="card-text">Esta es la información almacenada actualmente para este estudio</p><br>
+                    <p class="card-text">Estas son las personas registradas que gestionan el estudio</p><br>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Contacto</th>
+                                <th scope="col">Email</th>
+                                <th scope="col" style="width: 12%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($managers as $index => $manager)
+                                <tr>
+                                    <td>{{ $manager["Name"] ?? 'Sin Nombre' }}</td>
+                                    <td>{{ $manager["Phone"] ?? 'No especificado' }}</td>
+                                    <td>{{ $manager["Email"] ?? 'No especificado' }}</td>
+                                    <td>
+                                        <a type="button" class="btn btn-outline-primary btn-sm" href="manager/{{ $manager['Id'] }}">Visualizar</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
