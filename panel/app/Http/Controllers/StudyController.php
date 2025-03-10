@@ -160,7 +160,7 @@ class StudyController extends Controller
                 }
 
 
-                return view("estudios.viewedit",["Managers"=> $dataManagers["ListUserData"],"Ciudades"=>$cityMap,"CiudadActual"=>"5"]);
+                return view("estudios.viewedit",["EstudioActual"=>$idestudio,"Managers"=> $dataManagers["ListUserData"],"Ciudades"=>$cityMap,"CiudadActual"=>"5"]);
             }
         }
 

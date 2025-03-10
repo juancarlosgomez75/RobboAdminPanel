@@ -109,6 +109,11 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="col-md-12 text-center">
+                    <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$estudioactual}}">
+                        Crear nuevo manager
+                    </a>
+                </div>
             </div>
         </div>
     </div>

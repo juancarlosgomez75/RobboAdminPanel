@@ -7,12 +7,15 @@ use Livewire\Component;
 class Viewedit extends Component
 {
     public $editing=false;
+
+    public $estudioactual;
     public $managers;
     public $ciudades;
 
     public $ciudadactual;
 
-    public function mount($Managers,$Ciudades,$CiudadActual){
+    public function mount($EstudioActual,$Managers,$Ciudades,$CiudadActual){
+        $this->estudioactual=$EstudioActual;
         $this->managers = $Managers;
         $this->ciudades = $Ciudades;
         $this->ciudadactual = $CiudadActual;
@@ -24,6 +27,6 @@ class Viewedit extends Component
     }
     public function render()
     {
-        return view('livewire.estudios.viewedit',["managers"=> $this->managers,"Ciudades"=> $this->ciudades,"CiudadActual"=>$this->ciudadactual]);
+        return view('livewire.estudios.viewedit',["estudioactual"=>$this->estudioactual, "managers"=> $this->managers,"Ciudades"=> $this->ciudades,"CiudadActual"=>$this->ciudadactual]);
     }
 }

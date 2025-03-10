@@ -21,15 +21,16 @@
             margin: 0;
             padding: 0;
             transition: background-color 0.3s ease-in-out;
+            width: 100%; /* Asegura que ocupa todo el ancho */
         }
 
+        .sidebar ul li{
+            padding: 0.5rem 1.5rem 0.5rem 2rem;
 
-        .sidebar > ul.active > li >a{
+        }
+
+        .sidebar > ul > li.active >a{
             color: #D2665A;
-        }
-
-        .sidebar > ul > li > ul{
-            border: 1 px solid red;
         }
 
         .sidebar ul li a {
@@ -38,7 +39,7 @@
             padding: 0.3rem 0;
             align-items: center;
             text-decoration: none;
-            color: #6d6d6d;
+            color: #cfcfcf;
             transition: all .2s;
             cursor: pointer;
             font-weight: 600;
@@ -95,67 +96,59 @@
 <body>
     <div class="container" style="padding-top: 1em">
         <div class="row" style="margin-bottom: 1em">
-            <div class="col-md-2">
-                <img src="{{ asset('img/Logo.png') }}" class="img-fluid" alt="Imagen" width="120">
-            </div>
-        </div>
+            <div class="col-md-2" style="position: fixed; height: 100%; background-color: black; margin: 0; padding: 0; top: 0; left: 0;">
+                <img src="{{ asset('img/LogoBlanco.png') }}" class="img-fluid d-block mx-auto" alt="Imagen" width="200" style="padding: 8px; margin-bottom: 2rem;">
 
-        <div class="row">
-            <div class="col-md-2">
-                <nav class="sidebar">
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-submenu">
-                                <i class="fa-solid fa-city"></i>
-                                <span>Estudios</span>
-                                <i class="fa-solid fa-chevron-down dropdown"></i>
-                            </a>
-                            <ul class="submenu">
-                                <li><a href="#">Crear nuevo</a></li>
-                                <li><a href="#">Ver listado</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-submenu">
-                                <i class="fa-solid fa-users"></i>
-                                <span>Modelos</span>
-                                <i class="fa-solid fa-chevron-down dropdown"></i>
-                            </a>
-                            <ul class="submenu">
-                                <li><a href="#">Crear nuevo</a></li>
-                                <li><a href="#">Ver listado</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-submenu">
-                                <i class="fa-solid fa-laptop"></i>
-                                <span>Máquinas</span>
-                                <i class="fa-solid fa-chevron-down dropdown"></i>
-                            </a>
-                            <ul class="submenu">
-                                <li><a href="#">Crear nuevo</a></li>
-                                <li><a href="#">Ver listado</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <a href="#">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                <span>Salir del panel</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+
+                    <nav class="sidebar">
+                        <ul>
+                            <li>
+                                <a href="estudios">
+                                    <i class="fa-solid fa-city"></i>
+                                    <span>Estudios</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="modelos">
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>Modelos</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="maquinas">
+                                    <i class="fa-solid fa-laptop"></i>
+                                    <span>Máquinas</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="toggle-submenu">
+                                    <i class="fa-solid fa-laptop"></i>
+                                    <span>Máquinas</span>
+                                    <i class="fa-solid fa-chevron-down dropdown"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#">Crear nuevo</a></li>
+                                    <li><a href="#">Ver listado</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <span>Salir del panel</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+ 
+
             </div>
-            <div class="col md-10 ps-5">
+
+            <div class="col offset-md-1 md-10">
                 @yield("contenido")
             </div>
-            </div>
+
+        </div>
+
     </div>
 
     <script>
@@ -165,7 +158,7 @@
             toggleLinks.forEach(link => {
                 link.addEventListener("click", function(event) {
                     event.preventDefault();
-                    const parentUl = this.closest("ul");
+                    const parentUl = this.closest("li");
                     const submenu = this.nextElementSibling;
                     const icon = this.querySelector(".dropdown");
 
@@ -173,7 +166,7 @@
                     document.querySelectorAll(".submenu").forEach(menu => {
                         if (menu !== submenu) {
                             menu.classList.remove("active");
-                            menu.parentElement.closest("ul").classList.remove("active");
+                            menu.parentElement.closest("li").classList.remove("active");
                         }
                     });
 
