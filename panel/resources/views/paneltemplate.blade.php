@@ -39,14 +39,18 @@
             padding: 0.3rem 0;
             align-items: center;
             text-decoration: none;
-            color: #cfcfcf;
+            color: #ffffff;
             transition: all .2s;
             cursor: pointer;
             font-weight: 600;
         }
 
-        .sidebar ul li > a:hover {
-            color: #D2665A;
+        /* .sidebar ul li:hover > a {
+            color: #d4d4d4;
+        } */
+
+        .sidebar ul li:hover {
+            background-color: #e49f97;
         }
 
         .sidebar ul li > a .dropdown {
@@ -96,8 +100,8 @@
 <body>
     <div class="container" style="padding-top: 1em">
         <div class="row" style="margin-bottom: 1em">
-            <div class="col-md-2" style="position: fixed; height: 100%; background-color: black; margin: 0; padding: 0; top: 0; left: 0;">
-                <img src="{{ asset('img/LogoBlanco.png') }}" class="img-fluid d-block mx-auto" alt="Imagen" width="200" style="padding: 8px; margin-bottom: 2rem;">
+            <div class="col-md-2" style="position: fixed; height: 100%; background-color: #D2665A; margin: 0; padding: 0; top: 0; left: 0;">
+                <img src="{{ asset('img/LogoBlanco.png') }}" class="img-fluid d-block mx-auto" alt="Imagen" width="200" style="padding: 8px; margin-bottom: 2rem; margin-top: 1rem;">
 
 
                     <nav class="sidebar">
