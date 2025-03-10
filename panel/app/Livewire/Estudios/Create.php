@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Estudios;
 
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 
 class Create extends Component
@@ -25,7 +26,7 @@ class Create extends Component
     public $telcontacto="";
 
     public function validar(){
-        if(!(preg_match('/^[a-zA-Z0-9\/\-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
+        if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
             
             $this->alerta=true;
             $this->alerta_warning= "Alerta: El nombre del estudio no es válido";
@@ -98,8 +99,47 @@ class Create extends Component
     public function registrar()
     {
         if($this->validar()){
+
+            //Ahora envio el post al sistema
+            $API="https://robbocock.online:8443/WSIntegration-1.0/resources/restapi/transaction";
+            
+            //Genero la petición de informacion
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post($API, [
+                'Branch' => 'Server',
+                'Service' => 'PlatformUser',
+                'Action' => 'CreateUpdateStudy',
+                'DataStudy' => [
+                    "Id"=>null,
+                    "StudyName"=>$this->nombre,
+                    "RazonSocial"=>$this->razonsocial,
+                    "Nit"=>$this->nit,
+                    "CityId"=>$this->idciudad,
+                    "Address"=>$this->direccion,
+                    "Contact"=>$this->responsable,
+                    "Phone"=>$this->telcontacto
+                ]
+            ]);
+
+            $data = $response->json();
+
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    $this->resetExcept('ciudades');
+                    $this->alerta=true;
+                    $this->alerta_sucess= "Se ha registrado el estudio de forma satisfactoria";
+                    return;
+                }
+            }
+
             $this->alerta=true;
-            $this->alerta_sucess= "Sii".$this->telcontacto;
+            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+
+
+
         }
 
     }
