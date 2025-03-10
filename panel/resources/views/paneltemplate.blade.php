@@ -156,16 +156,19 @@
                 <br>
 
                 <div class="row">
-                   <div class="col md-9">
+                   {{-- <div class="col md-9">
                         <h2><b>@yield('title')</b></h2>
                     </div> 
                     <div class="col md-3">
                         Holis
-                    </div> 
+                    </div> --}}
+                    <div class="col md-12">
+                        @yield("contenido")
+                    </div>
                 </div>
 
                 <br>
-                @yield("contenido")
+                
             </div>
 
         </div>
