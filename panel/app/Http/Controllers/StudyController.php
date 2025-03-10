@@ -90,6 +90,8 @@ class StudyController extends Controller
             //Analizo si el status es true
             if($generalinformation["Status"]){
 
+
+
                 // Mapear ciudades con su país
                 $cityMap = [];
                 if (isset($generalinformation['CountryList'])) {
@@ -112,6 +114,31 @@ class StudyController extends Controller
     }
 
     public function viewedit($idestudio){
-        return view("estudios.viewedit");
+
+        //Genero la petición de buscar a los managers de ese estudio
+        $responseManagers = Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post($this->API, [
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'UserList',
+            'Data' => ["UserId" => "1"],
+            "DataStudy"=>["Id"=>$idestudio]
+        ]);
+
+        $dataManagers = $responseManagers->json();
+
+        //Si se recibe la informacion
+        if (isset($dataManagers['Status'])){
+            //Analizo si el status es correcto
+            if($dataManagers['Status']){
+                return view("estudios.viewedit");
+            }
+        }
+
+
+        return "Error";
     }
 }
