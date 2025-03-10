@@ -3,6 +3,6 @@
 
 </style>
 @section("contenido")
-@livewire("estudios.viewedit",["Managers"=>$Managers])
+@livewire("estudios.viewedit",["Managers"=>$Managers,"Ciudades"=>$Ciudades,"CiudadActual"=>$CiudadActual])
 
 @endsection

@@ -130,11 +130,37 @@ class StudyController extends Controller
 
         $dataManagers = $responseManagers->json();
 
+        //Genero la petición para obtener la información general
+        $information = Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post($this->API, [
+            'Branch' => 'Server',
+            'Service' => "GeneralParams",
+            'Action' => "GeneralParams",
+            'Data' => ["UserId" => "1"]
+        ]);
+
+        $generalinformation=$information->json();
+
         //Si se recibe la informacion
-        if (isset($dataManagers['Status'])){
+        if (isset($dataManagers['Status']) && isset($generalinformation["Status"])){
             //Analizo si el status es correcto
-            if($dataManagers['Status']){
-                return view("estudios.viewedit",["Managers"=> $dataManagers["ListUserData"]]);
+            if($dataManagers['Status'] && $generalinformation["Status"]){
+
+                // Mapear ciudades con su país
+                $cityMap = [];
+                if (isset($generalinformation['CountryList'])) {
+                    foreach ($generalinformation['CountryList'] as $country) {
+                        foreach ($country['Cities'] as $city) {
+                            $cityMap[] = ["Id"=>$city["Id"],"Name"=>$city['CityName'] . ', ' . $country['CountryName']];
+                        }
+                    }
+                }
+
+
+                return view("estudios.viewedit",["Managers"=> $dataManagers["ListUserData"],"Ciudades"=>$cityMap,"CiudadActual"=>"5"]);
             }
         }
 
