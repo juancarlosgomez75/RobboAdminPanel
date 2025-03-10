@@ -30,8 +30,8 @@
 
         }
 
-        .sidebar > ul > li.active >a{
-            color: #D2665A;
+        .sidebar > ul > li.active{
+            background-color: #e49f97;
         }
 
         .sidebar ul li a {
@@ -74,6 +74,10 @@
 
         .submenu li a{
             font-weight: 500 !important;
+        }
+
+        .submenu li a:hover{
+            color: #D2665A;
         }
 
         .submenu.active {
@@ -149,6 +153,18 @@
             </div>
 
             <div class="col offset-md-1 md-10">
+                <br>
+
+                <div class="row">
+                   <div class="col md-9">
+                        <h2><b>@yield('title')</b></h2>
+                    </div> 
+                    <div class="col md-3">
+                        Holis
+                    </div> 
+                </div>
+
+                <br>
                 @yield("contenido")
             </div>
 
