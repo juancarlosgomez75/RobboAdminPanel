@@ -34,20 +34,17 @@
                                 <th class="w-10" scope="col" style="width: 7%;">#</th>
                                 <th class="w-40" scope="col">Nombre</th>
                                 <th class="w-30" scope="col">Ciudad</th>
-                                <th class="w-15" scope="col">Usuarios</th>
-                                <th scope="col" style="width: 23%;">Acciones</th>
+                                <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($datosUsar as $index => $dato)
                                 <tr>
                                     <th scope="row">{{ $dato['Id'] }}</th>
-                                    <td>{{ $dato['Nombre'] ?? 'Sin Nombre' }}</td>
-                                    <td>{{ $dato['Ciudad'] ?? 'No especificada' }}</td>
-                                    <td>{{ $dato['Usuarios'] ?? 'N/A' }}</td>
+                                    <td>{{ $dato["StudyName"] ?? 'Sin Nombre' }}</td>
+                                    <td>{{ $dato['City'] ?? 'No especificada' }}</td>
                                     <td>
-                                        <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/{{ $dato['Id'] }}">Ver/Editar</a>
-                                        <button type="button" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                                        <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/{{ $dato['Id'] }}">Visualizar</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -56,7 +53,7 @@
                     
                 </div>
             </div>
-
         </div>
     </div>
+    <br>
 </div>

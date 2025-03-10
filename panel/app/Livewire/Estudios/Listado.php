@@ -32,8 +32,8 @@ class Listado extends Component
     {
         // Filtrar los datos
         $filtrados = array_filter($this->datos, function ($dato) {
-            $nombreCoincide = empty($this->filtroNombre) || stripos($dato["Nombre"], $this->filtroNombre) !== false;
-            $ciudadCoincide = empty($this->filtroCiudad) || stripos($dato["Ciudad"], $this->filtroCiudad) !== false;
+            $nombreCoincide = empty($this->filtroNombre) || stripos($dato["StudyName"], $this->filtroNombre) !== false;
+            $ciudadCoincide = empty($this->filtroCiudad) || stripos($dato["City"], $this->filtroCiudad) !== false;
             return $nombreCoincide && $ciudadCoincide;
         });
 
