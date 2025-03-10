@@ -26,23 +26,23 @@
                     <div class="row">
                         <div class="col-md-4">
                             <label for="studyname" class="form-label">Nombre del estudio</label>
-                            <input type="text" class="form-control" id="studyname" aria-describedby="studynameHelp" placeholder="Ejemplo: Robbocock Medellin" wire:model="nombre" required @if(!$editing) readonly @endif>
+                            <input type="text" class="form-control" id="studyname" aria-describedby="studynameHelp" placeholder="Ejemplo: Robbocock Medellin" wire:model="nombre" required @if(!$editing) disabled @endif>
                             <div id="studynameHelp" class="form-text">Si hay varias sedes, indica también la sede.</div>
                             <br>
                         </div>
                         <div class="col-md-4">
                             <label for="socialname" class="form-label">Razón social</label>
-                            <input type="text" class="form-control" id="socialname" aria-describedby="socialnameHelp" placeholder="Ejemplo: Coolsoft Technology" wire:model="razonsocial" required @if(!$editing) readonly @endif>
+                            <input type="text" class="form-control" id="socialname" aria-describedby="socialnameHelp" placeholder="Ejemplo: Coolsoft Technology" wire:model="razonsocial" required @if(!$editing) disabled @endif>
                             <div id="socialnameHelp" class="form-text">Nombre jurídico</div>
                             <br>
                         </div>
                         <div class="col-md-4">
                             <label for="nitname" class="form-label">NIT</label>
-                            <input type="number" class="form-control" id="nitname" aria-describedby="nitnameHelp" placeholder="Documento legal de la empresa" wire:model="nit" required min="0" @if(!$editing) readonly @endif>
+                            <input type="number" class="form-control" id="nitname" aria-describedby="nitnameHelp" placeholder="Documento legal de la empresa" wire:model="nit" required min="0" @if(!$editing) disabled @endif>
                         </div>
                         <div class="col-md-5">
                             <label for="cityname" class="form-label">Ciudad</label>
-                            <select class="form-select" id="cityname" aria-label="cityHelp" wire:model="idciudad" required @if(!$editing) readonly @endif>
+                            <select class="form-select" id="cityname" aria-label="cityHelp" wire:model="idciudad" required @if(!$editing) disabled @endif>
                                 <option disabled value="0">Selecciona la ciudad y pais del estudio</option>
                                 @foreach($ciudades as $index => $ciudad)
                                 <option value="{{$ciudad["Id"]}}" @if ($ciudad["Id"]==$CiudadActual) selected @endif>{{$ciudad["Name"]}}</option>
@@ -51,18 +51,18 @@
                         </div>
                         <div class="col-md-7">
                             <label for="addressname" class="form-label">Dirección</label>
-                            <input type="text" class="form-control" id="addressname" aria-describedby="addressnameHelp" placeholder="Ejemplo: Carrera 49 #61 Sur - 540 Bodega 177" wire:model="direccion" required @if(!$editing) readonly @endif>
+                            <input type="text" class="form-control" id="addressname" aria-describedby="addressnameHelp" placeholder="Ejemplo: Carrera 49 #61 Sur - 540 Bodega 177" wire:model="direccion" required @if(!$editing) disabled @endif>
                             <div id="addressnameHelp" class="form-text">En dónde está ubicada la sede, barrio, y tipo de domicilio</div>
                             <br>
                         </div>
                         <div class="col-md-7">
                             <label for="studyname" class="form-label">Nombre del responsable</label>
-                            <input type="text" class="form-control" id="studyname" aria-describedby="studynameHelp" placeholder="Ej: Pepito Perez" wire:model="responsable" required @if(!$editing) readonly @endif>
+                            <input type="text" class="form-control" id="studyname" aria-describedby="studynameHelp" placeholder="Ej: Pepito Perez" wire:model="responsable" required @if(!$editing) disabled @endif>
                             <div id="studynameHelp" class="form-text">Es el representante/manager del estudio</div>
                         </div>
                         <div class="col-md-5">
                             <label for="phonename" class="form-label">Número de contacto</label>
-                            <input type="text" class="form-control" id="phonename" aria-describedby="phonenameHelp" placeholder="Ej: +573005696354" wire:model="telcontacto" required @if(!$editing) readonly @endif>
+                            <input type="text" class="form-control" id="phonename" aria-describedby="phonenameHelp" placeholder="Ej: +573005696354" wire:model="telcontacto" required @if(!$editing) disabled @endif>
                             <div id="phonenameHelp" class="form-text">Número al que se pueda comunicar con el responsable</div>
                             <br>
                         </div>
