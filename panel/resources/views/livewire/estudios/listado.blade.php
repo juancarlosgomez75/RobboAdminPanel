@@ -54,7 +54,10 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @if(!$filtroOn)
                     {{ $datosUsar->links('pagination::bootstrap-5') }}
+                    @endif
+                
 
                 </div>
             </div>

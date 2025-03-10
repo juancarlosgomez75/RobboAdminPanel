@@ -50,10 +50,19 @@ class Listado extends Component
             ['path' => request()->url(), 'query' => request()->query()] // Mantener query params
         );
 
-        return view('livewire.estudios.listado', [
-            'texto' => $this->filtroNombre,
-            'filtroOn' => $this->filtrosActivos,
-            'datosUsar' => $paginator, // Ahora 'datosUsar' tiene paginación
-        ]);
+        if (!$this->filtrosActivos) {
+            return view('livewire.estudios.listado', [
+                'texto' => $this->filtroNombre,
+                'filtroOn' => $this->filtrosActivos,
+                'datosUsar' => $paginator,
+            ]);
+        }else{
+            return view('livewire.estudios.listado', [
+                'texto' => $this->filtroNombre,
+                'filtroOn' => $this->filtrosActivos,
+                'datosUsar' => $filtrados
+            ]);
+        }
+
     }
 }
