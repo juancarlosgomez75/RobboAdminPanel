@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-9">
-                    <h5 class="card-title">Listado de estudios {{$texto}}</h5>
+                    <h5 class="card-title">Listado de estudios</h5>
                     {{-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> --}}
                 </div>
                 <div class="col-md-3 justify-content-end" style="display: flex; gap:0.6rem">
@@ -54,7 +54,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    
+                    {{ $datosUsar->links('pagination::bootstrap-5') }}
+
                 </div>
             </div>
 
