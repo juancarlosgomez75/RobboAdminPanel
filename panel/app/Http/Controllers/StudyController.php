@@ -70,7 +70,45 @@ class StudyController extends Controller
     }
 
     public function create(){
-        return view("estudios.create");
+
+        //Genero la petición para obtener la información
+        $information = Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post($this->API, [
+            'Branch' => 'Server',
+            'Service' => "GeneralParams",
+            'Action' => "GeneralParams",
+            'Data' => ["UserId" => "1"]
+        ]);
+
+        $generalinformation=$information->json();
+
+        //Analizo si es válido lo que necesito
+        if (isset($generalinformation['Status'])) {
+            //Analizo si el status es true
+            if($generalinformation["Status"]){
+
+                // Mapear ciudades con su país
+                $cityMap = [];
+                if (isset($generalinformation['CountryList'])) {
+                    foreach ($generalinformation['CountryList'] as $country) {
+                        foreach ($country['Cities'] as $city) {
+                            $cityMap[] = ["Id"=>$city["Id"],"Name"=>$city['CityName'] . ', ' . $country['CountryName']];
+                        }
+                    }
+                }
+                return view("estudios.create",["Ciudades"=>$cityMap]);
+            }
+            
+        }
+        
+        
+        return "Error";
+
+        
+        
     }
 
     public function viewedit($idestudio){

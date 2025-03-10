@@ -1,3 +1,8 @@
-<div>
-    <!-- Happiness is not something readymade. It comes from your own actions. - Dalai Lama -->
-</div>
+@extends('paneltemplate')
+@section('title','Creación de estudios')
+
+</style>
+@section("contenido")
+@livewire("estudios.create",['Ciudades' => $Ciudades])
+
+@endsection
