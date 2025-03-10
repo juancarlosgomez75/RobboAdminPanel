@@ -28,6 +28,7 @@ class Listado extends Component
         $this->datos = $datos;
     }
 
+
     public function render()
     {
         // Filtrar los datos

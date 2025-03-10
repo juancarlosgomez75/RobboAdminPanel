@@ -1,13 +1,19 @@
 <div>
-    <div class="alert alert-success" role="alert">
-        A simple success alert—check it out!
-    </div>
-    <div class="alert alert-danger" role="alert">
-        A simple danger alert—check it out!
-    </div>
-    <div class="alert alert-warning" role="alert">
-        A simple warning alert—check it out!
-    </div>
+    @if($alerta)
+        @if($alerta_sucess!="")
+        <div class="alert alert-success" role="alert">
+            {{$alerta_sucess}}
+        </div>
+        @elseif($alerta_error!="")
+        <div class="alert alert-danger" role="alert">
+            {{$alerta_error}}
+        </div>
+        @elseif($alerta_warning!="")
+        <div class="alert alert-warning" role="alert">
+            {{$alerta_warning}}
+        </div>
+        @endif
+    @endif
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -18,29 +24,52 @@
                 <div class="col-md-12">
                     
                     <div class="row">
-                        <div class="col-md-7">
+                        <div class="col-md-4">
                             <label for="studyname" class="form-label">Nombre del estudio</label>
-                            <input type="text" class="form-control" id="studyname" aria-describedby="studynameHelp">
-                            <div id="studynameHelp" class="form-text">Si es una cadena de estudios, por favor indica la ciudad en el nombre. Ej: JB Medellin</div>
+                            <input type="text" class="form-control" id="studyname" aria-describedby="studynameHelp" placeholder="Ejemplo: Robbocock Medellin" wire:model="nombre" required>
+                            <div id="studynameHelp" class="form-text">Si hay varias sedes, indica también la sede.</div>
+                            <br>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="socialname" class="form-label">Razón social</label>
+                            <input type="text" class="form-control" id="socialname" aria-describedby="socialnameHelp" placeholder="Ejemplo: Coolsoft Technology" wire:model="razonsocial" required>
+                            <div id="socialnameHelp" class="form-text">Nombre jurídico</div>
+                            <br>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nitname" class="form-label">NIT</label>
+                            <input type="number" class="form-control" id="nitname" aria-describedby="nitnameHelp" placeholder="Documento legal de la empresa" wire:model="nit" required min="0">
                         </div>
                         <div class="col-md-5">
                             <label for="cityname" class="form-label">Ciudad</label>
-                            <select class="form-select" id="cityname" aria-label="cityHelp">
+                            <select class="form-select" id="cityname" aria-label="cityHelp" wire:model="idciudad" required>
                                 <option selected disabled value="0">Selecciona la ciudad y pais del estudio</option>
-                                @foreach($datosUsar as $index => $dato)
-                                <tr>
-                                    <th scope="row">{{ $dato['Id'] }}</th>
-                                    <td>{{ $dato["StudyName"] ?? 'Sin Nombre' }}</td>
-                                    <td>{{ $dato['City'] ?? 'No especificada' }}</td>
-                                    <td>
-                                        <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/{{ $dato['Id'] }}">Visualizar</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                @foreach($Ciudades as $index => $ciudad)
+                                <option value="{{$ciudad["Id"]}}">{{$ciudad["Name"]}}</option>
+                                @endforeach
                             </select>
+                        </div>
+                        <div class="col-md-7">
+                            <label for="addressname" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="addressname" aria-describedby="addressnameHelp" placeholder="Ejemplo: Carrera 49 #61 Sur - 540 Bodega 177" wire:model="direccion" required>
+                            <div id="addressnameHelp" class="form-text">En dónde está ubicada la sede, barrio, y tipo de domicilio</div>
+                            <br>
+                        </div>
+                        <div class="col-md-7">
+                            <label for="studyname" class="form-label">Nombre del responsable</label>
+                            <input type="text" class="form-control" id="studyname" aria-describedby="studynameHelp" placeholder="Ej: Pepito Perez" wire:model="responsable" required>
+                            <div id="studynameHelp" class="form-text">Es el representante/manager del estudio</div>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="phonename" class="form-label">Número de contacto</label>
+                            <input type="text" class="form-control" id="phonename" aria-describedby="phonenameHelp" placeholder="Ej: +573005696354" wire:model="telcontacto" required>
+                            <div id="phonenameHelp" class="form-text">Número al que se pueda comunicar con el responsable</div>
+                            <br>
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Registrar estudio en base de datos
+                            </button>
                         </div>
                     </div>
                     
@@ -48,5 +77,38 @@
             </div>
         </div>
     </div>
+
+  
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de registro</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Al presionar en registrar, confirma que la información aquí contenida es correcta.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="registrar" >Confirmar registro</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+  <script>
+    const myModal = document.getElementById('myModal')
+    const myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', () => {
+    myInput.focus()
+    })
+</script>
     <br>
+
+
 </div>
