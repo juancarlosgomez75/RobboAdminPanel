@@ -23,7 +23,7 @@
                             <input type="text" class="custom-input" placeholder="Filtrar por nombre" wire:model.live="filtroNombre">
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="custom-input" placeholder="Filtrar por ciudad">
+                            <input type="text" class="custom-input" placeholder="Filtrar por ciudad" wire:model.live="filtroCiudad">
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                                 <th class="w-10" scope="col" style="width: 7%;">#</th>
                                 <th class="w-40" scope="col">Nombre</th>
                                 <th class="w-30" scope="col">Ciudad</th>
-                                <th class="w-15" scope="col">Modelos</th>
+                                <th class="w-15" scope="col">Máquinas</th>
                                 <th scope="col" style="width: 23%;">Acciones</th>
                             </tr>
                         </thead>

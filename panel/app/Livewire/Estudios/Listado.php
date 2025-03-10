@@ -7,7 +7,7 @@ use Livewire\Component;
 class Listado extends Component
 {
     public $filtroNombre = "";
-    public $filtrociudad = "";
+    public $filtroCiudad = "";
     public $filtrosActivos = false;
     public $datos;
 
@@ -16,7 +16,7 @@ class Listado extends Component
         $this->filtrosActivos = !$this->filtrosActivos;
         if (!$this->filtrosActivos) {
             $this->filtroNombre = "";
-            $this->filtrociudad = "";
+            $this->filtroCiudad = "";
         }
     }
 
@@ -27,9 +27,13 @@ class Listado extends Component
 
     public function render()
     {
-        $datosEnviar = empty($this->filtroNombre) ? $this->datos : array_filter($this->datos, function ($dato) {
-            return stripos($dato["Nombre"], $this->filtroNombre) !== false;
+        $datosEnviar = array_filter($this->datos, function ($dato) {
+            $nombreCoincide = empty($this->filtroNombre) || stripos($dato["Nombre"], $this->filtroNombre) !== false;
+            $ciudadCoincide = empty($this->filtroCiudad) || stripos($dato["Ciudad"], $this->filtroCiudad) !== false;
+            
+            return $nombreCoincide && $ciudadCoincide;
         });
+        
 
         return view('livewire.estudios.listado', [
             'texto' => $this->filtroNombre,
