@@ -62,11 +62,12 @@ class StudyController extends Controller
                 }
                 return view("estudios.index",["information"=>$data["ListStudyData"]]);
             }
+            return "Error de status";
             
         }
         
         
-        return "Error";
+        return "Error general";
     }
 
     public function create(){

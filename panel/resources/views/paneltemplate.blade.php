@@ -112,7 +112,7 @@
                     <nav class="sidebar">
                         <ul>
                             <li>
-                                <a href="estudios">
+                                <a href="/estudios">
                                     <i class="fa-solid fa-city"></i>
                                     <span>Estudios</span>
                                 </a>
