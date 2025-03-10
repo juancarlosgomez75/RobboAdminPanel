@@ -12,6 +12,8 @@ Route::get('/', function () {
 
 Route::controller(StudyController::class)->group(function(){
     Route::get('/estudios', 'index');
+    Route::get('/estudios/crear', 'create');
+    Route::get('/estudio/{idestudio}', 'viewedit');
 });
 
 Route::view('dashboard', 'dashboard')
