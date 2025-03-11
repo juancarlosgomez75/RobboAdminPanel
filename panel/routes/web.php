@@ -13,7 +13,10 @@ Route::get('/', function () {
 Route::controller(StudyController::class)->group(function(){
     Route::get('/estudios', 'index')->name('estudios.index');
     Route::get('/estudios/crear', 'create')->name('estudios.create');
+
+    Route::get('/estudio/manager/crear/{idestudio}', 'manager_create')->name('manager.create');
     Route::get('/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
+    
     Route::get('/estudio/{idestudio}', 'viewedit')->name('estudio.ver');
 });
 

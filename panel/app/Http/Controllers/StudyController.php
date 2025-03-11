@@ -174,4 +174,9 @@ class StudyController extends Controller
         return view("estudios.manager-viewedit");
     }
 
+    public function manager_create($idestudio){
+
+        return view("estudios.manager-create");
+    }
+
 }
