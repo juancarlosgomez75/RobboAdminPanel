@@ -45,7 +45,7 @@
                             <select class="form-select" id="cityname" aria-label="cityHelp" wire:model="idciudad" required @if(!$editing) disabled @endif>
                                 <option disabled value="0">Selecciona la ciudad y pais del estudio</option>
                                 @foreach($ciudades as $index => $ciudad)
-                                <option value="{{$ciudad["Id"]}}" @if ($ciudad["Id"]==$CiudadActual) selected @endif>{{$ciudad["Name"]}}</option>
+                                <option value="{{$ciudad["Id"]}}">{{$ciudad["Name"]}}</option>
                                 @endforeach
                             </select>
                         </div>

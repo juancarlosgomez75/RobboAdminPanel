@@ -19,7 +19,6 @@ class Viewedit extends Component
     public $managers;
     public $ciudades;
 
-    public $ciudadactual;
 
     //Variables
     public $nombre="";
@@ -153,7 +152,7 @@ class Viewedit extends Component
         $this->estudioactual=$EstudioActual;
         $this->managers = $Managers;
         $this->ciudades = $Ciudades;
-        $this->ciudadactual = $CiudadActual;
+        $this->idciudad = $CiudadActual;
     }
 
     public function activarEdicion(){
@@ -162,6 +161,6 @@ class Viewedit extends Component
     }
     public function render()
     {
-        return view('livewire.estudios.viewedit',["estudioactual"=>$this->estudioactual, "managers"=> $this->managers,"Ciudades"=> $this->ciudades,"CiudadActual"=>$this->ciudadactual]);
+        return view('livewire.estudios.viewedit',["estudioactual"=>$this->estudioactual, "managers"=> $this->managers,"Ciudades"=> $this->ciudades,"CiudadActual"=>$this->idciudad]);
     }
 }
