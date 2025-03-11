@@ -3,8 +3,10 @@
 namespace App\Livewire\Estudios;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Http;
 
 class Viewedit extends Component
+
 {
 
     public $alerta=false;
@@ -104,41 +106,47 @@ class Viewedit extends Component
     public function modificar()
     {
         if($this->validar()){
+ 
+            //Genero la petición de informacion
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post(config('app.API_URL'), [
+                'Branch' => 'Server',
+                'Service' => 'PlatformUser',
+                'Action' => 'CreateUpdateStudy',
+                'DataStudy' => [
+                    "Id"=>$this->informacion["Id"],
+                    "StudyName"=>$this->nombre,
+                    "RazonSocial"=>$this->razonsocial,
+                    "Nit"=>$this->nit,
+                    "CityId"=>$this->idciudad,
+                    "Address"=>$this->direccion,
+                    "Contact"=>$this->responsable,
+                    "Phone"=>$this->telcontacto
+                ],
+                "Data"=>[
+                    "UserId"=>"1"
+                ]
+            ]);
 
-            // //Ahora envio el post al sistema
-            // $API="https://robbocock.online:8443/WSIntegration-1.0/resources/restapi/transaction";
-            
-            // //Genero la petición de informacion
-            // $response = Http::withHeaders([
-            //     'Authorization' => 'AAAA'
-            // ])->withOptions([
-            //     'verify' => false // Desactiva la verificación SSL
-            // ])->post($API, [
-            //     'Branch' => 'Server',
-            //     'Service' => 'PlatformUser',
-            //     'Action' => 'CreateUpdateStudy',
-            //     'DataStudy' => [
-            //         "Id"=>null,
-            //         "StudyName"=>$this->nombre,
-            //         "RazonSocial"=>$this->razonsocial,
-            //         "Nit"=>$this->nit,
-            //         "CityId"=>$this->idciudad,
-            //         "Address"=>$this->direccion,
-            //         "Contact"=>$this->responsable,
-            //         "Phone"=>$this->telcontacto
-            //     ]
-            // ]);
+            $data = $response->json();
 
-            // $data = $response->json();
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    //$this->resetExcept('ciudades');
+                    $this->editing=false;
+                    $this->alerta=true;
+                    $this->alerta_sucess= "Se ha modificado el estudio de forma satisfactoria";
 
-            // if (isset($data['Status'])) {
-            //     if($data['Status']){
-            //         $this->resetExcept('ciudades');
-            //         $this->alerta=true;
-            //         $this->alerta_sucess= "Se ha registrado el estudio de forma satisfactoria";
-            //         return;
-            //     }
-            // }
+                    return;
+                }else{
+                    $this->alerta=true;
+                    $this->alerta_error= "Ha ocurrido un error con el status";
+                    return;
+                }
+            }
 
             $this->alerta=true;
             $this->alerta_error= "Ha ocurrido un error, contacte a soporte";

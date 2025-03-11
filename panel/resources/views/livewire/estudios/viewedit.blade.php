@@ -96,6 +96,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(!empty($managers))
                             @foreach($managers as $index => $manager)
                                 <tr>
                                     <td>{{ $manager["Name"] ?? 'Sin Nombre' }}</td>
@@ -106,6 +107,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -130,6 +132,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(!empty($maquinas))
                             @foreach($maquinas as $index => $maquina)
                                 <tr>
                                     <td>{{ $maquina["ID"] ?? 'N/R' }}</td>
@@ -140,6 +143,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
