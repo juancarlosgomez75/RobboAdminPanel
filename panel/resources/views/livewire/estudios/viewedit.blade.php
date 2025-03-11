@@ -110,7 +110,42 @@
                     </table>
                 </div>
                 <div class="col-md-12 text-center">
-                    <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$estudioactual}}">
+                    {{-- <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$estudioactual}}"> --}}
+                    <a type="button" class="btn btn-outline-secondary" href="manager/crear/">
+                        Crear nuevo manager
+                    </a>
+                </div>
+                <div class="col-md-12">
+                    <br>
+                    <h5 class="card-title">Máquinas asociadas</h5>
+                    <p class="card-text">Estas son las máquinas que se encuentran registradas para este estudio</p><br>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Firmware</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col" style="width: 12%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($maquinas as $index => $maquina)
+                                <tr>
+                                    <td>{{ $maquina["ID"] ?? 'N/R' }}</td>
+                                    <td>{{ $maquina["FirmwareID"] ?? 'N/E' }}</td>
+                                    <td>{{ $maquina["Tipo"] ?? 'No especificado' }}</td>
+                                    <td>
+                                        <a type="button" class="btn btn-outline-danger btn-sm">Desvincular</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 text-center">
+                    {{-- <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$estudioactual}}"> --}}
+                    <a type="button" class="btn btn-outline-secondary" href="manager/crear/">
                         Crear nuevo manager
                     </a>
                 </div>

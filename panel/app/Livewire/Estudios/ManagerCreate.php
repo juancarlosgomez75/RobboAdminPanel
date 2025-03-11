@@ -4,6 +4,8 @@ namespace App\Livewire\Estudios;
 
 use Livewire\Component;
 
+use Illuminate\Support\Facades\Http;
+
 class ManagerCreate extends Component
 {
     public $alerta=false;
@@ -41,6 +43,33 @@ class ManagerCreate extends Component
 
     public function guardar(){
         if($this->verificarCampos()){
+
+            //Genero la petición de informacion
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post(config('app.API_URL'), [
+                'Branch' => 'Server',
+                'Service' => 'PlatformUser',
+                'Action' => 'CreateUpdateStudy',
+                'DataStudy' => [
+                    "StudyName"=>$this->nombre,
+                    "RazonSocial"=>$this->razonsocial,
+                    "Nit"=>$this->nit,
+                    "CityId"=>$this->idciudad,
+                    "Address"=>$this->direccion,
+                    "Contact"=>$this->responsable,
+                    "Phone"=>$this->telcontacto
+                ],
+                "Data"=>[
+                    "UserId"=>"1"
+                ]
+            ]);
+
+            $data = $response->json();
+
+
             $this->alerta=true;
             $this->alerta_sucess= "Se ha registrado a esta persona correctamente";
         }

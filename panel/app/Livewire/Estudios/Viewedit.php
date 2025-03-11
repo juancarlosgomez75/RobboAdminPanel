@@ -15,8 +15,9 @@ class Viewedit extends Component
 
     public $editing=false;
 
-    public $estudioactual;
+    public $informacion;
     public $managers;
+    public $maquinas;
     public $ciudades;
 
 
@@ -148,11 +149,20 @@ class Viewedit extends Component
 
     }
 
-    public function mount($EstudioActual,$Managers,$Ciudades,$CiudadActual){
-        $this->estudioactual=$EstudioActual;
+    public function mount($Informacion,$Managers,$Maquinas,$Ciudades){
+        $this->informacion=$Informacion;
         $this->managers = $Managers;
+        $this->maquinas = $Maquinas;
         $this->ciudades = $Ciudades;
-        $this->idciudad = $CiudadActual;
+
+        //Cargo la información
+        $this->nombre=$this->informacion["StudyName"] ?? "No definido";
+        $this->razonsocial=$this->informacion["RazonSocial"] ?? "No definida";
+        $this->nit=$this->informacion["Nit"] ?? 0;
+        $this->idciudad=$this->informacion["CityId"] ?? 1;
+        $this->direccion=$this->informacion["Address"] ?? "No definida";
+        $this->responsable=$this->informacion["Contact"] ?? "No definido";
+        
     }
 
     public function activarEdicion(){
@@ -161,6 +171,6 @@ class Viewedit extends Component
     }
     public function render()
     {
-        return view('livewire.estudios.viewedit',["estudioactual"=>$this->estudioactual, "managers"=> $this->managers,"Ciudades"=> $this->ciudades,"CiudadActual"=>$this->idciudad]);
+        return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades]);
     }
 }

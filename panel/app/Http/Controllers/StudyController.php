@@ -116,19 +116,19 @@ class StudyController extends Controller
     public function viewedit($idestudio){
 
         //Genero la petición de buscar a los managers de ese estudio
-        $responseManagers = Http::withHeaders([
+        $responseStudio = Http::withHeaders([
             'Authorization' => 'AAAA'
         ])->withOptions([
             'verify' => false // Desactiva la verificación SSL
         ])->post(config('app.API_URL'), [
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
-            'Action' => 'UserList',
+            'Action' => 'StudyInfo',
             'Data' => ["UserId" => "1"],
             "DataStudy"=>["Id"=>$idestudio]
         ]);
 
-        $dataManagers = $responseManagers->json();
+        $dataStudio = $responseStudio->json();
 
         //Genero la petición para obtener la información general
         $information = Http::withHeaders([
@@ -145,9 +145,9 @@ class StudyController extends Controller
         $generalinformation=$information->json();
 
         //Si se recibe la informacion
-        if (isset($dataManagers['Status']) && isset($generalinformation["Status"])){
+        if (isset($dataStudio['Status']) && isset($generalinformation["Status"])){
             //Analizo si el status es correcto
-            if($dataManagers['Status'] && $generalinformation["Status"]){
+            if($dataStudio['Status'] && $generalinformation["Status"]){
 
                 // Mapear ciudades con su país
                 $cityMap = [];
@@ -160,7 +160,7 @@ class StudyController extends Controller
                 }
 
 
-                return view("estudios.viewedit",["EstudioActual"=>$idestudio,"Managers"=> $dataManagers["ListUserData"],"Ciudades"=>$cityMap,"CiudadActual"=>"5"]);
+                return view("estudios.viewedit",["Information"=> $dataStudio["DataStudy"],"Managers"=> $dataStudio["ListUserData"],"Machines"=> $dataStudio["Data"]["Machines"],"Ciudades"=>$cityMap]);
             }
         }
 
