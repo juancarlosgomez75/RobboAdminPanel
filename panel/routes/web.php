@@ -24,6 +24,7 @@ Route::middleware(['auth'])->controller(StudyController::class)->group(function(
 
 Route::controller(MachineController::class)->group(function(){
     Route::get('/maquinas', 'index')->name('maquinas.index');
+    Route::get('/maquinas/crear', 'create')->name('maquinas.create');
 });
 
 Route::view('dashboard', 'dashboard')
