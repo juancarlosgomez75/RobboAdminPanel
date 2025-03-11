@@ -1,5 +1,5 @@
 <div>
-    {{-- @if($alerta)
+    @if($alerta)
         @if($alerta_sucess!="")
         <div class="alert alert-success" role="alert">
             {{$alerta_sucess}}
@@ -13,7 +13,7 @@
             {{$alerta_warning}}
         </div>
         @endif
-    @endif --}}
+    @endif
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -123,17 +123,17 @@
         <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de registro</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de edición</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>
-                    Al presionar en registrar, confirma que la información aquí contenida es correcta.
+                    Al presionar en confirmar modificaciones, confirma que la información aquí contenida es correcta.
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="registrar" >Confirmar registro</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="modificar" >Confirmar modificaciones</button>
             </div>
         </div>
         </div>

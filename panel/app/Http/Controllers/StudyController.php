@@ -168,4 +168,10 @@ class StudyController extends Controller
 
         return "Error";
     }
+
+    public function manager_viewedit($idmanager){
+
+        return view("estudios.manager-viewedit");
+    }
+
 }

@@ -166,8 +166,6 @@
                         @yield("contenido")
                     </div>
                 </div>
-
-                <br>
                 
             </div>
 
