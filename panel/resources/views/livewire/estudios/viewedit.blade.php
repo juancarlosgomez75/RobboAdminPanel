@@ -113,7 +113,7 @@
                 </div>
                 <div class="col-md-12 text-center">
                     {{-- <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$estudioactual}}"> --}}
-                    <a type="button" class="btn btn-outline-secondary" href="manager/crear/">
+                    <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$informacion["Id"]}}">
                         Crear nuevo manager
                     </a>
                 </div>

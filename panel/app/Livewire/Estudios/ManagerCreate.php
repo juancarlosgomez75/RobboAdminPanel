@@ -14,6 +14,8 @@ class ManagerCreate extends Component
     public $alerta_error="";
     public $alerta_warning="";
 
+    public $idEstudio=0;
+
     public $nombre="";
     public $telefono= "";
     public $email="";
@@ -52,29 +54,47 @@ class ManagerCreate extends Component
             ])->post(config('app.API_URL'), [
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
-                'Action' => 'CreateUpdateStudy',
-                'DataStudy' => [
-                    "StudyName"=>$this->nombre,
-                    "RazonSocial"=>$this->razonsocial,
-                    "Nit"=>$this->nit,
-                    "CityId"=>$this->idciudad,
-                    "Address"=>$this->direccion,
-                    "Contact"=>$this->responsable,
-                    "Phone"=>$this->telcontacto
-                ],
+                'Action' => 'CreateUser',
                 "Data"=>[
-                    "UserId"=>"1"
+                    "UserId"=>"1",
+                    "UserData"=>[
+                        "WcStudy"=>[
+                            "Id"=>$this->idEstudio
+                        ],
+                        "Name"=>$this->nombre,
+                        "Phone"=> $this->telefono,
+                        "Email"=> $this->email,
+                        "RolID"=>"1"
+                    ]
                 ]
             ]);
 
             $data = $response->json();
 
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    $this->alerta=true;
+                    $this->alerta_sucess= "Se ha registrado a este manager correctamente";
+                    $this->resetExcept(['idEstudio']);
+                    return;
+
+                }else{
+                    $this->alerta=true;
+                    $this->alerta_error= "Ha ocurrido un error durante la operación";
+                    return;
+                }
+            }
 
             $this->alerta=true;
-            $this->alerta_sucess= "Se ha registrado a esta persona correctamente";
+            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+
+
         }
     }
 
+    public function mount($IdEstudio){
+        $this->idEstudio=$IdEstudio;
+    }
     public function render()
     {
         return view('livewire.estudios.manager-create');

@@ -3,6 +3,6 @@
 
 </style>
 @section("contenido")
-@livewire("estudios.manager-create")
+@livewire("estudios.manager-create",["IdEstudio"=>$IdEstudio])
 
 @endsection
