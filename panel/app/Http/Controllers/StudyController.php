@@ -101,6 +101,11 @@ class StudyController extends Controller
                         }
                     }
                 }
+
+                usort($cityMap, function ($a, $b) {
+                    return strcmp($a["Name"], $b["Name"]);
+                });
+
                 return view("estudios.create",["Ciudades"=>$cityMap]);
             }
             
