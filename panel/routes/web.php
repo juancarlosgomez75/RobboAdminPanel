@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MachineController;
 use App\Http\Controllers\StudyController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -18,6 +19,10 @@ Route::controller(StudyController::class)->group(function(){
     Route::get('/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
     
     Route::get('/estudio/{idestudio}', 'viewedit')->name('estudio.ver');
+});
+
+Route::controller(MachineController::class)->group(function(){
+    Route::get('/maquinas', 'index')->name('maquinas.index');
 });
 
 Route::view('dashboard', 'dashboard')

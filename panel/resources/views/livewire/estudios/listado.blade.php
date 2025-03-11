@@ -20,10 +20,10 @@
 
                     <div class="row">
                         <div class="col-md-5">
-                            <input type="text" class="custom-input" placeholder="Filtrar por nombre" wire:model.live="filtroNombre">
+                            <input type="text" class="custom-input" placeholder="Filtrar por nombre" wire:model.change="filtroNombre">
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="custom-input" placeholder="Filtrar por ciudad" wire:model.live="filtroCiudad">
+                            <input type="text" class="custom-input" placeholder="Filtrar por ciudad" wire:model.change="filtroCiudad">
                         </div>
                     </div>
                 </div>
