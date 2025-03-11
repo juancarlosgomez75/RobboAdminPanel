@@ -55,6 +55,36 @@
                     </div>
                     
                 </div>
+
+                <div class="col-md-12">
+                    <h5 class="card-title">Modelos asignados</h5>
+                    <p class="card-text">Estos son los modelos gestionados por este manager</p><br>
+                </div>
+                <div class="col-md-12">
+                    
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="w-10" scope="col" style="width: 7%;">#</th>
+                                <th class="w-40" scope="col">Nickname</th>
+                                <th class="w-30" scope="col"># páginas</th>
+                                <th scope="col" style="width: 15%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>102</td>
+                                <td>Hola</td>
+                                <td>4</td>
+                                <td>
+                                    <a type="button" class="btn btn-outline-primary btn-sm" href="/modelo/id">Visualizar</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+
             </div>
         </div>
     </div>
