@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Http;
 
 class StudyController extends Controller
 {
-    public $API="https://robbocock.online:8443/WSIntegration-1.0/resources/restapi/transaction";
     public function index(){
 
         //Genero la petición para obtener la información
@@ -16,7 +15,7 @@ class StudyController extends Controller
             'Authorization' => 'AAAA'
         ])->withOptions([
             'verify' => false // Desactiva la verificación SSL
-        ])->post($this->API, [
+        ])->post(config('app.API_URL'), [
             'Branch' => 'Server',
             'Service' => "GeneralParams",
             'Action' => "GeneralParams",
@@ -30,7 +29,7 @@ class StudyController extends Controller
             'Authorization' => 'AAAA'
         ])->withOptions([
             'verify' => false // Desactiva la verificación SSL
-        ])->post($this->API, [
+        ])->post(config('app.API_URL'), [
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'StudyList',
@@ -77,7 +76,7 @@ class StudyController extends Controller
             'Authorization' => 'AAAA'
         ])->withOptions([
             'verify' => false // Desactiva la verificación SSL
-        ])->post($this->API, [
+        ])->post(config('app.API_URL'), [
             'Branch' => 'Server',
             'Service' => "GeneralParams",
             'Action' => "GeneralParams",
@@ -121,7 +120,7 @@ class StudyController extends Controller
             'Authorization' => 'AAAA'
         ])->withOptions([
             'verify' => false // Desactiva la verificación SSL
-        ])->post($this->API, [
+        ])->post(config('app.API_URL'), [
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'UserList',
@@ -136,7 +135,7 @@ class StudyController extends Controller
             'Authorization' => 'AAAA'
         ])->withOptions([
             'verify' => false // Desactiva la verificación SSL
-        ])->post($this->API, [
+        ])->post(config('app.API_URL'), [
             'Branch' => 'Server',
             'Service' => "GeneralParams",
             'Action' => "GeneralParams",

@@ -123,4 +123,14 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | API URL
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    'API_URL' => 'https://robbocock.online:8443/WSIntegration-1.0/resources/restapi/transaction',
+    
+
 ];

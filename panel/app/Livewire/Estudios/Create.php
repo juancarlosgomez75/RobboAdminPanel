@@ -100,15 +100,13 @@ class Create extends Component
     {
         if($this->validar()){
 
-            //Ahora envio el post al sistema
-            $API="https://robbocock.online:8443/WSIntegration-1.0/resources/restapi/transaction";
             
             //Genero la petición de informacion
             $response = Http::withHeaders([
                 'Authorization' => 'AAAA'
             ])->withOptions([
                 'verify' => false // Desactiva la verificación SSL
-            ])->post($API, [
+            ])->post(config('app.API_URL'), [
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
                 'Action' => 'CreateUpdateStudy',
