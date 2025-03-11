@@ -118,13 +118,13 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="modelos">
+                                <a href="/modelos">
                                     <i class="fa-solid fa-users"></i>
                                     <span>Modelos</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="maquinas">
+                                <a href="/maquinas">
                                     <i class="fa-solid fa-laptop"></i>
                                     <span>Máquinas</span>
                                 </a>

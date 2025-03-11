@@ -111,7 +111,6 @@ class Create extends Component
                 'Service' => 'PlatformUser',
                 'Action' => 'CreateUpdateStudy',
                 'DataStudy' => [
-                    "Id"=>null,
                     "StudyName"=>$this->nombre,
                     "RazonSocial"=>$this->razonsocial,
                     "Nit"=>$this->nit,
@@ -119,6 +118,9 @@ class Create extends Component
                     "Address"=>$this->direccion,
                     "Contact"=>$this->responsable,
                     "Phone"=>$this->telcontacto
+                ],
+                "Data"=>[
+                    "UserId"=>"1"
                 ]
             ]);
 
