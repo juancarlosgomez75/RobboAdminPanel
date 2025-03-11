@@ -26,6 +26,6 @@
 
 </style>
 @section("contenido")
-@livewire("maquinas.index")
+@livewire("maquinas.index",["Maquinas"=>$Maquinas])
 
 @endsection

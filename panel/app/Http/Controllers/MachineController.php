@@ -10,7 +10,11 @@ class MachineController extends Controller
 {
     public function index(){
 
-        return view("maquinas.index");
+        $maquinas=[
+            ["Id"=>"102","Hardware"=>"200009","Tipo"=>"Cum","Estudio"=>"Casa"],
+            ["Id"=>"103","Hardware"=>"200010","Tipo"=>"Fuck","Estudio"=>"Sabaneta"]
+        ];
+        return view("maquinas.index",["Maquinas"=>$maquinas]);
 
     }
 }
