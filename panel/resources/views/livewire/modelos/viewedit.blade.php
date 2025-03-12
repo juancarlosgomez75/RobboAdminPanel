@@ -32,16 +32,16 @@
                 <div class="col-md-12">
                     
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <label for="manname" class="form-label">Nombre de usuario</label>
                             <input type="text" class="form-control" id="manname" aria-describedby="mannameHelp" placeholder="Ejemplo: labtest" wire:model="drivername" @if(!$editing) disabled @endif>
                             <div id="mannameHelp" class="form-text">Con el que se loguea en el driver</div>
                             <br>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <label for="customname" class="form-label">Nombre personalizado</label>
                             <input type="text" class="form-control" id="customname" aria-describedby="customnameHelp" placeholder="Ejemplo: Labtesito" wire:model="customname" @if(!$editing) disabled @endif>
-                            <div id="customnameHelp" class="form-text">Con el que el driver saluda. Dejar en blanco para desactivar</div>
+                            <div id="customnameHelp" class="form-text">Con el que el driver saluda si decides usarlo.</div>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">¿Usarlo?</label>
@@ -124,23 +124,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(!empty($Models))
-                            @foreach ($Models as $Model)
+                            @if(!empty($ModelInformation["ModelPages"]))
+                            @foreach ($ModelInformation["ModelPages"] as $Page)
                             <tr>
-                                <td>{{$Model["ModelId"]}}</td>
-                                <td>{{$Model["ModelUserName"]}}</td>
-                                <td>
-                                    @if(!empty($Model["ModelPages"]))
-                                    @foreach ($Model["ModelPages"] as $Page)
-                                        <span>{{$Page["NickPage"]}}</span> |
-                                    @endforeach
-                                    @else
-                                    <span>Sin páginas</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a type="button" class="btn btn-outline-primary btn-sm" href="/modelo/{{$Model["ModelId"]}}">Visualizar</a>
-                                </td>
+                                <td>a</td>
                             </tr>
                             @endforeach
                             @else
@@ -150,6 +137,7 @@
                                 </td>
                             </tr>
                             @endif
+
 
                         </tbody>
                     </table>
