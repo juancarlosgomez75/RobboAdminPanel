@@ -15,6 +15,12 @@
         @endif
     @endif
 
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="/estudio/{{$Information["WcStudy"]["Id"]}}" class="text-secondary">Estudio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manager</li>
+        </ol>
+    </nav>
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -66,20 +72,39 @@
                         <thead>
                             <tr>
                                 <th class="w-10" scope="col" style="width: 7%;">#</th>
-                                <th class="w-40" scope="col">Nickname</th>
-                                <th class="w-30" scope="col"># páginas</th>
+                                <th class="w-40" scope="col">Username</th>
+                                <th class="w-30" scope="col">Páginas</th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
                         <tbody>
+                            @if(!empty($Models))
+                            @foreach ($Models as $Model)
                             <tr>
-                                <td>102</td>
-                                <td>Hola</td>
-                                <td>4</td>
+                                <td>{{$Model["ModelId"]}}</td>
+                                <td>{{$Model["ModelUserName"]}}</td>
+                                <td>
+                                    @if(!empty($Model["ModelPages"]))
+                                    @foreach ($Model["ModelPages"] as $Page)
+                                        <span>{{$Page["NickPage"]}}</span> |
+                                    @endforeach
+                                    @else
+                                    <span>Sin páginas</span>
+                                    @endif
+                                </td>
                                 <td>
                                     <a type="button" class="btn btn-outline-primary btn-sm" href="/modelo/id">Visualizar</a>
                                 </td>
                             </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    Sin modelos registrados
+                                </td>
+                            </tr>
+                            @endif
+
                         </tbody>
                     </table>
                     

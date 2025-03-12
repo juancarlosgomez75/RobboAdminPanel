@@ -119,6 +119,12 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    Sin modelos managers registrados
+                                </td>
+                            </tr>
                             @endif
                         </tbody>
                     </table>
@@ -155,6 +161,12 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    Sin modelos registrados
+                                </td>
+                            </tr>
                             @endif
                         </tbody>
                     </table>
