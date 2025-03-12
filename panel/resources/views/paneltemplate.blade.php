@@ -141,7 +141,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="/logout">
                                     <i class="fa-solid fa-right-from-bracket"></i>
                                     <span>Salir del panel</span>
                                 </a>

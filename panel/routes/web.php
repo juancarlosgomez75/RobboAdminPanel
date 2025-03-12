@@ -12,6 +12,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::controller(LoginController::class)->group(function(){
+    Route::get('/login', 'login')->name('login');
+    Route::get('/logout', 'logout')->name('logout');
+});
 
 Route::controller(StudyController::class)->group(function(){
     Route::get('/estudios', 'index')->name('estudios.index');
@@ -40,4 +44,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';
