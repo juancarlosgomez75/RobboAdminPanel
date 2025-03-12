@@ -27,25 +27,60 @@
             <div class="row">
                 <div class="col-md-12">
                     <h5 class="card-title">Información del modelo</h5>
-                    <p class="card-text">Esta es la información almacenada actualmente para este manager</p><br>
+                    <p class="card-text">Esta es la información almacenada actualmente para este modelo</p><br>
                 </div>
                 <div class="col-md-12">
                     
                     <div class="row">
+                        <div class="col-md-4">
+                            <label for="manname" class="form-label">Nombre de usuario</label>
+                            <input type="text" class="form-control" id="manname" aria-describedby="mannameHelp" placeholder="Ejemplo: labtest" wire:model="drivername" @if(!$editing) disabled @endif>
+                            <div id="mannameHelp" class="form-text">Con el que se loguea en el driver</div>
+                            <br>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="customname" class="form-label">Nombre personalizado</label>
+                            <input type="text" class="form-control" id="customname" aria-describedby="customnameHelp" placeholder="Ejemplo: Labtesito" wire:model="customname" @if(!$editing) disabled @endif>
+                            <div id="customnameHelp" class="form-text">Con el que el driver saluda. Dejar en blanco para desactivar</div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">¿Usarlo?</label>
+                            <select class="form-select" @if(!$editing) disabled @endif wire:model.live="usecustomname">
+                                <option disabled value="-1">Seleccionar una opción</option>
+                                <option value="0">No</option>
+                                <option value="1">Si</option>
+                            </select>
+
+                        </div>
                         <div class="col-md-6">
-                            <label for="manname" class="form-label">Nombre del manager</label>
-                            <input type="text" class="form-control" id="manname" aria-describedby="mannameHelp" placeholder="Ejemplo: Juan Carlos Gomez" wire:model="nombre" @if(!$editing) disabled @endif>
-                            <div id="mannameHelp" class="form-text">O la forma en que gusta que se refieran.</div>
+                            <label class="form-label">Estudio actual</label>
+                            <select class="form-select" @if(!$editing) disabled @endif wire:model.live="estudioactual">
+                                
+                                @if(!empty($listadoestudios))
+                                <option disabled value="0">Seleccionar un estudio</option>
+                                @foreach($listadoestudios as $estudio)
+                                <option value="{{$estudio["Id"]}}">{{$estudio["FullName"]}}</option>
+                                @endforeach
+                                @else
+                                <option disabled value="0"></option>
+                                @endif
+                            </select>
                             <br>
                         </div>
-                        <div class="col-md-3">
-                            <label for="telname" class="form-label">Numero de contacto</label>
-                            <input type="tel" class="form-control" id="telname" aria-describedby="telnameHelp" placeholder="Ejemplo: +573007885858" wire:model="telefono" @if(!$editing) disabled @endif>
+                        <div class="col-md-6">
+                            <label class="form-label">Manager actual</label>
+                            <select class="form-select" @if(!$editing) disabled @endif wire:model="manageractual">
+                                
+                                @if(!empty($listadomanagers))
+                                <option disabled value="0">Seleccionar un manager</option>
+                                @foreach($listadomanagers as $manager)
+                                <option value="{{$manager["Id"]}}">{{$manager["Name"]}}</option>
+                                @endforeach
+                                @else
+                                <option disabled value="0"></option>
+                                @endif
+                            </select>
                             <br>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="emailname" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="emailname" aria-describedby="emailnameHelp" placeholder="Ejemplo: juancarlos@gmail.com" wire:model="email" @if(!$editing) disabled @endif>
                         </div>
                         <div class="col-md-12 text-center">
                             {{-- @if(!$editing)
@@ -74,8 +109,8 @@
                 </div>
 
                 <div class="col-md-12">
-                    <h5 class="card-title">Modelos asignados</h5>
-                    <p class="card-text">Estos son los modelos gestionados por este manager</p><br>
+                    <h5 class="card-title">Páginas que usa</h5>
+                    <p class="card-text">Estas son las páginas que el modelo indica que usa</p><br>
                 </div>
                 <div class="col-md-12">
                     
@@ -83,8 +118,8 @@
                         <thead>
                             <tr>
                                 <th class="w-10" scope="col" style="width: 7%;">#</th>
-                                <th class="w-40" scope="col">Username</th>
-                                <th class="w-30" scope="col">Páginas</th>
+                                <th class="w-40" scope="col">Página</th>
+                                <th class="w-30" scope="col">Nickname</th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
@@ -111,7 +146,7 @@
                             @else
                             <tr>
                                 <td colspan="4" class="text-center">
-                                    Sin modelos registrados
+                                    Sin páginas registradas
                                 </td>
                             </tr>
                             @endif
