@@ -122,7 +122,7 @@
                             @else
                             <tr>
                                 <td colspan="4" class="text-center">
-                                    Sin modelos managers registrados
+                                    Sin managers registrados
                                 </td>
                             </tr>
                             @endif
@@ -164,7 +164,7 @@
                             @else
                             <tr>
                                 <td colspan="4" class="text-center">
-                                    Sin modelos registrados
+                                    Sin máquinas asociadas
                                 </td>
                             </tr>
                             @endif
