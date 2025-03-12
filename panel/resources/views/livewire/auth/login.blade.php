@@ -1,3 +1,3 @@
 <div>
-    {{-- To attain knowledge, add things every day; To attain wisdom, subtract things every day. --}}
+    {{-- The best athlete wants his opponent at his best. --}}
 </div>
