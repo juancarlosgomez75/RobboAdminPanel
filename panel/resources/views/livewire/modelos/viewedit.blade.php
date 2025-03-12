@@ -1,5 +1,5 @@
 <div>
-    @if($alerta)
+    {{-- @if($alerta)
         @if($alerta_sucess!="")
         <div class="alert alert-success" role="alert">
             {{$alerta_sucess}}
@@ -13,19 +13,20 @@
             {{$alerta_warning}}
         </div>
         @endif
-    @endif
+    @endif --}}
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="/estudio/{{$Study["Id"]}}" class="text-secondary">Estudio</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Manager</li>
+            <li class="breadcrumb-item "><a href="/estudio/" class="text-secondary">Estudio</a></li>
+            <li class="breadcrumb-item "><a href="/estudio/" class="text-secondary">Manager</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Modelo</li>
         </ol>
     </nav>
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
-                    <h5 class="card-title">Información del manager</h5>
+                    <h5 class="card-title">Información del modelo</h5>
                     <p class="card-text">Esta es la información almacenada actualmente para este manager</p><br>
                 </div>
                 <div class="col-md-12">
@@ -47,7 +48,7 @@
                             <input type="email" class="form-control" id="emailname" aria-describedby="emailnameHelp" placeholder="Ejemplo: juancarlos@gmail.com" wire:model="email" @if(!$editing) disabled @endif>
                         </div>
                         <div class="col-md-12 text-center">
-                            @if(!$editing)
+                            {{-- @if(!$editing)
                             <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
                                 Editar información
                             </button>
@@ -65,7 +66,7 @@
                             <button type="button" class="btn btn-outline-success ms-2" wire:click="activarUsuario()">
                                 Activar usuario
                             </button>
-                            @endif
+                            @endif --}}
                         </div>
                         
                     </div>

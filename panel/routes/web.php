@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MachineController;
+use App\Http\Controllers\ModelController;
 use App\Http\Controllers\StudyController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -31,6 +32,10 @@ Route::middleware('auth')->controller(StudyController::class)->group(function ()
 Route::middleware('auth')->controller(MachineController::class)->group(function(){
     Route::get('/maquinas', 'index')->name('maquinas.index');
     Route::get('/maquinas/crear', 'create')->name('maquinas.create');
+});
+
+Route::middleware('auth')->controller(ModelController::class)->group(function(){
+    Route::get('/modelo/{idmodelo}', 'viewedit')->name('modelos.viewedit');
 });
 
 // Route::view('dashboard', 'dashboard')
