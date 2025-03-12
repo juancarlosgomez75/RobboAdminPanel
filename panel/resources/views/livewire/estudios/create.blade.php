@@ -61,9 +61,21 @@
                             <div id="studynameHelp" class="form-text">Es el representante/manager del estudio</div>
                         </div>
                         <div class="col-md-5">
-                            <label for="phonename" class="form-label">Número de contacto</label>
+                            <label for="phonename" class="form-label">Número de contacto 1</label>
                             <input type="text" class="form-control" id="phonename" aria-describedby="phonenameHelp" placeholder="Ej: +573005696354" wire:model="telcontacto" required>
-                            <div id="phonenameHelp" class="form-text">Número al que se pueda comunicar con el responsable</div>
+                            <div id="phonenameHelp" class="form-text">Número principal del responsable</div>
+                            <br>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="phonename" class="form-label">Número de contacto 2</label>
+                            <input type="text" class="form-control" id="phonename" aria-describedby="phonenameHelp" placeholder="Ej: +573005696354" wire:model="telcontacto2">
+                            <div id="phonenameHelp" class="form-text">Número secundario del responsable</div>
+                            <br>
+                        </div>
+                        <div class="col-md-7">
+                            <label for="emailname" class="form-label">Email de contacto</label>
+                            <input type="email" class="form-control" id="emailname" aria-describedby="emailnameHelp" placeholder="Ej: estudio@estudio.com" wire:model="email">
+                            <div id="emailnameHelp" class="form-text">Correo al que llegarán los soportes</div>
                             <br>
                         </div>
                         <div class="col-md-12 text-center">

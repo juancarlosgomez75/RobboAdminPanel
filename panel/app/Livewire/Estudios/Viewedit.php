@@ -31,6 +31,8 @@ class Viewedit extends Component
     public $direccion="";
     public $responsable="";
     public $telcontacto="";
+    public $telcontacto2="";
+    public $email="";
 
     public function validar(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
@@ -79,6 +81,20 @@ class Viewedit extends Component
 
             return false;
         }
+        elseif (!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) && 
+        (empty(trim($this->telcontacto2)) || $this->telcontacto2 === "0" || preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto2)))) { 
+
+            $this->alerta = true;
+            $this->alerta_warning = "Alerta: El número de contacto secundario no es válido";
+            
+            return false;
+        }
+        elseif(!(preg_match('/^[\w\.-]+@[\w\.-]+\.\w{2,}$/', $this->email) && !empty(trim($this->email)))){
+            $this->alerta=true;
+            $this->alerta_warning= "Alerta: El email no es válido";
+
+            return false;
+        }
 
         //Valido la ciudad
         $encontrado=false;
@@ -124,7 +140,9 @@ class Viewedit extends Component
                     "CityId"=>$this->idciudad,
                     "Address"=>$this->direccion,
                     "Contact"=>$this->responsable,
-                    "Phone"=>$this->telcontacto
+                    "Phone"=>$this->telcontacto,
+                    "Phone2"=>$this->telcontacto2,
+                    "Email"=>$this->email
                 ],
                 "Data"=>[
                     "UserId"=>"1"
@@ -170,6 +188,9 @@ class Viewedit extends Component
         $this->idciudad=$this->informacion["CityId"] ?? 1;
         $this->direccion=$this->informacion["Address"] ?? "No definida";
         $this->responsable=$this->informacion["Contact"] ?? "No definido";
+        $this->telcontacto=$this->informacion["Phone"] ?? "0";
+        $this->telcontacto2=$this->informacion["Phone2"] ?? "0";
+        $this->email=$this->informacion["Email"] ?? "noconfigurado@noconfigurado.com";
         
     }
 

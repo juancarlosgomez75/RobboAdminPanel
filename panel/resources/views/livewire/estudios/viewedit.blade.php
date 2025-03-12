@@ -66,6 +66,18 @@
                             <div id="phonenameHelp" class="form-text">Número al que se pueda comunicar con el responsable</div>
                             <br>
                         </div>
+                        <div class="col-md-5">
+                            <label for="phonename" class="form-label">Número de contacto 2</label>
+                            <input type="text" class="form-control" id="phonename" aria-describedby="phonenameHelp" placeholder="Ej: +573005696354" wire:model="telcontacto2" required @if(!$editing) disabled @endif>
+                            <div id="phonenameHelp" class="form-text">Número secundario del responsable</div>
+                            <br>
+                        </div>
+                        <div class="col-md-7">
+                            <label for="emailname" class="form-label">Email de contacto</label>
+                            <input type="email" class="form-control" id="emailname" aria-describedby="emailnameHelp" placeholder="Ej: estudio@estudio.com" wire:model="email" required @if(!$editing) disabled @endif>
+                            <div id="emailnameHelp" class="form-text">Correo al que llegarán los soportes</div>
+                            <br>
+                        </div>
                         <div class="col-md-12 text-center">
                             @if(!$editing)
                             <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
