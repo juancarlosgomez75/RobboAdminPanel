@@ -11,7 +11,11 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::controller(StudyController::class)->group(function(){
+Route::get('/login', function () {
+    return "Login";
+})->name('login');
+
+Route::middleware(['auth.custom'])->controller(StudyController::class)->group(function(){
     Route::get('/estudios', 'index')->name('estudios.index');
     Route::get('/estudios/crear', 'create')->name('estudios.create');
 
@@ -38,4 +42,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';
