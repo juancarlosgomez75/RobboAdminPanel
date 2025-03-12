@@ -17,9 +17,9 @@ Route::controller(LoginController::class)->group(function(){
     Route::get('/logout', 'logout')->name('logout');
 });
 
-Route::controller(StudyController::class)->group(function(){
+Route::middleware('auth')->controller(StudyController::class)->group(function () {
     Route::get('/estudios', 'index')->name('estudios.index');
-    Route::get('/estudios/crear', 'create')->name('estudios.create');
+    Route::middleware('checkrank:2')->get('/estudios/crear', 'create')->name('estudios.create');
 
     Route::get('/estudio/manager/crear/{idestudio}', 'manager_create')->name('manager.create');
     Route::get('/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
@@ -27,21 +27,21 @@ Route::controller(StudyController::class)->group(function(){
     Route::get('/estudio/{idestudio}', 'viewedit')->name('estudio.ver');
 });
 
-Route::controller(MachineController::class)->group(function(){
+Route::middleware('auth')->controller(MachineController::class)->group(function(){
     Route::get('/maquinas', 'index')->name('maquinas.index');
     Route::get('/maquinas/crear', 'create')->name('maquinas.create');
 });
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// Route::view('dashboard', 'dashboard')
+//     ->middleware(['auth', 'verified'])
+//     ->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
+// Route::middleware(['auth'])->group(function () {
+//     Route::redirect('settings', 'settings/profile');
 
-    Route::get('settings/profile', Profile::class)->name('settings.profile');
-    Route::get('settings/password', Password::class)->name('settings.password');
-    Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
-});
+//     Route::get('settings/profile', Profile::class)->name('settings.profile');
+//     Route::get('settings/password', Password::class)->name('settings.password');
+//     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
+// });
 
 // require __DIR__.'/auth.php';
