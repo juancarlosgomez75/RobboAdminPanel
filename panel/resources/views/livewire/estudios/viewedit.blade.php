@@ -100,20 +100,28 @@
 
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr class="align-middle">
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Contacto</th>
                                 <th scope="col">Email</th>
+                                <th scope="col"></th>
                                 <th scope="col" style="width: 12%;"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @if(!empty($managers))
                             @foreach($managers as $index => $manager)
-                                <tr>
+                                <tr class="align-middle">
                                     <td>{{ $manager["Name"] ?? 'Sin Nombre' }}</td>
                                     <td>{{ $manager["Phone"] ?? 'No especificado' }}</td>
                                     <td>{{ $manager["Email"] ?? 'No especificado' }}</td>
+                                    <td>
+                                        @if($manager["Activo"] )
+                                        <i class="fa-solid fa-circle-check" style="color: green;"></i>
+                                        @else
+                                        <i class="fa-solid fa-circle-xmark" style="color: red;"></i>
+                                        @endif
+                                    </td>
                                     <td>
                                         <a type="button" class="btn btn-outline-primary btn-sm" href="manager/{{ $manager['Id'] }}">Visualizar</a>
                                     </td>
@@ -142,7 +150,7 @@
 
                     <table class="table">
                         <thead>
-                            <tr>
+                            <tr class="align-middle">
                                 <th scope="col">#</th>
                                 <th scope="col">Firmware</th>
                                 <th scope="col">Tipo</th>
@@ -152,7 +160,7 @@
                         <tbody>
                             @if(!empty($maquinas))
                             @foreach($maquinas as $index => $maquina)
-                                <tr>
+                                <tr class="align-middle">
                                     <td>{{ $maquina["ID"] ?? 'N/R' }}</td>
                                     <td>{{ $maquina["FirmwareID"] ?? 'N/E' }}</td>
                                     <td>{{ $maquina["Tipo"] ?? 'No especificado' }}</td>

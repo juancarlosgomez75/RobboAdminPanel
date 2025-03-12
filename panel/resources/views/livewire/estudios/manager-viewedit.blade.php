@@ -17,7 +17,7 @@
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="/estudio/{{$Information["WcStudy"]["Id"]}}" class="text-secondary">Estudio</a></li>
+            <li class="breadcrumb-item "><a href="/estudio/{{$Study["Id"]}}" class="text-secondary">Estudio</a></li>
             <li class="breadcrumb-item active" aria-current="page">Manager</li>
         </ol>
     </nav>
@@ -54,6 +54,16 @@
                             @else
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                 Guardar cambios
+                            </button>
+                            @endif
+
+                            @if($activo)
+                            <button type="button" class="btn btn-outline-danger ms-2" wire:click="desactivarUsuario()">
+                                Desactivar usuario
+                            </button>
+                            @else
+                            <button type="button" class="btn btn-outline-success ms-2" wire:click="activarUsuario()">
+                                Activar usuario
                             </button>
                             @endif
                         </div>

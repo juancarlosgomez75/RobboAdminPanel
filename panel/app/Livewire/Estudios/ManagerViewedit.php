@@ -19,6 +19,9 @@ class ManagerViewedit extends Component
 
     public $Information;
     public $Models;
+    public $Study;
+
+    public $activo;
 
     
     public function verificarCampos(){
@@ -67,7 +70,7 @@ class ManagerViewedit extends Component
                         ]
                     ],
                 "DataStudy"=>[
-                    "Id"=>$this->Information["WcStudy"]["Id"]
+                    "Id"=>$this->Study["Id"]
                 ]
             ]);
 
@@ -98,14 +101,111 @@ class ManagerViewedit extends Component
 
     }
 
-    public function mount($Information,$Models){
+    public function activarUsuario(){
+
+        //Genero la modificación
+        $response = Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post(config('app.API_URL'), [
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'CreateEditUser',
+            "Data"=>[
+                "UserId"=>"1",
+                "UserData"=>[
+                    "Id"=>$this->Information["Id"],
+                    "Name"=>$this->nombre,
+                    "Phone"=> $this->telefono,
+                    "Email"=> $this->email,
+                    "RolID"=>"1",
+                    "Activo"=>true
+                    ]
+                ],
+            "DataStudy"=>[
+                "Id"=>$this->Study["Id"]
+            ]
+        ]);
+
+        $data = $response->json();
+
+        if (isset($data['Status'])) {
+            if($data['Status']){
+                $this->alerta=true;
+                $this->alerta_sucess= "Se ha activado esta cuenta satisfactoriamente";
+                $this->activo=true;
+                
+                return;
+
+            }else{
+                $this->alerta=true;
+                $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                return;
+            }
+        }
+
+        $this->alerta=true;
+        $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+    }
+
+    public function desactivarUsuario(){
+        //Genero la modificación
+        $response = Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post(config('app.API_URL'), [
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'CreateEditUser',
+            "Data"=>[
+                "UserId"=>"1",
+                "UserData"=>[
+                    "Id"=>$this->Information["Id"],
+                    "Name"=>$this->nombre,
+                    "Phone"=> $this->telefono,
+                    "Email"=> $this->email,
+                    "RolID"=>"1",
+                    "Activo"=>false
+                    ]
+                ],
+            "DataStudy"=>[
+                "Id"=>$this->Study["Id"]
+            ]
+        ]);
+
+        $data = $response->json();
+
+        if (isset($data['Status'])) {
+            if($data['Status']){
+                $this->alerta=true;
+                $this->alerta_sucess= "Se ha desactivado esta cuenta satisfactoriamente";
+                $this->activo=false;
+                
+                return;
+
+            }else{
+                $this->alerta=true;
+                $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                return;
+            }
+        }
+
+        $this->alerta=true;
+        $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+    }
+
+    public function mount($Information,$Models,$Study){
         $this->Information=$Information;
         $this->Models=$Models;
+        $this->Study=$Study;
 
         //Cargo la info
         $this->nombre=$Information["Name"];
         $this->telefono=$Information["Phone"];
         $this->email=$Information["Email"];
+        $this->activo=$Information["Activo"];
     }
 
     public function render()

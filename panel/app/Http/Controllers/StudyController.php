@@ -197,7 +197,7 @@ class StudyController extends Controller
         if (isset($dataManager['Status'])){
             //Analizo si el status es correcto
             if($dataManager['Status']){
-                return view("estudios.manager-viewedit",["Information"=>$dataManager['Data']["UserData"],"Models"=>$dataManager['ListModelData']]);
+                return view("estudios.manager-viewedit",["Information"=>$dataManager['Data']["UserData"],"Models"=>$dataManager['ListModelData'],"Study"=>$dataManager['DataStudy']]);
             }else{
                 return "Error: ".$dataManager["Error"];
             }

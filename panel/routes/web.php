@@ -19,7 +19,8 @@ Route::controller(LoginController::class)->group(function(){
 
 Route::middleware('auth')->controller(StudyController::class)->group(function () {
     Route::get('/estudios', 'index')->name('estudios.index');
-    Route::middleware('checkrank:2')->get('/estudios/crear', 'create')->name('estudios.create');
+    Route::get('/estudios/crear', 'create')->name('estudios.create');
+    // Route::middleware('checkrank:2')->get('/estudios/crear', 'create')->name('estudios.create');
 
     Route::get('/estudio/manager/crear/{idestudio}', 'manager_create')->name('manager.create');
     Route::get('/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
