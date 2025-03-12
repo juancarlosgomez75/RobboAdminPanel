@@ -161,7 +161,7 @@ class Viewedit extends Component
                     return;
                 }else{
                     $this->alerta=true;
-                    $this->alerta_error= "Ha ocurrido un error con el status";
+                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
                     return;
                 }
             }

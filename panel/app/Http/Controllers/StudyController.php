@@ -174,8 +174,36 @@ class StudyController extends Controller
     }
 
     public function manager_viewedit($idmanager){
+        //Genero la petición de buscar a los managers de ese estudio
+        $response= Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post(config('app.API_URL'), [
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'ViewUser',
+            'Data' => [
+                "UserId" => "1",
+                "UserData"=>[
+                    "Id"=>$idmanager
+                ]
+            ]
+        ]);
 
-        return view("estudios.manager-viewedit");
+        $dataManager = $response->json();
+
+        //Si se recibe la informacion
+        if (isset($dataManager['Status'])){
+            //Analizo si el status es correcto
+            if($dataManager['Status']){
+                return view("estudios.manager-viewedit",["Information"=>$dataManager['Data']["UserData"],"Models"=>$dataManager['ListModelData']]);
+            }else{
+                return "Error: ".$dataManager["Error"];
+            }
+        }
+
+        return "Error";
     }
 
     public function manager_create($idestudio){
@@ -200,6 +228,8 @@ class StudyController extends Controller
             if($dataStudio['Status']){
 
                 return view("estudios.manager-create",["IdEstudio"=>$idestudio]);
+            }else{
+                return "Error: ".$dataStudio["Error"];
             }
         }
 

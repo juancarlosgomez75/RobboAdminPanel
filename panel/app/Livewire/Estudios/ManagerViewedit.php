@@ -3,7 +3,7 @@
 namespace App\Livewire\Estudios;
 
 use Livewire\Component;
-
+use Illuminate\Support\Facades\Http;
 class ManagerViewedit extends Component
 {
     public $editing=false;
@@ -16,6 +16,9 @@ class ManagerViewedit extends Component
     public $nombre="";
     public $telefono= "";
     public $email="";
+
+    public $Information;
+    public $Models;
 
     
     public function verificarCampos(){
@@ -43,15 +46,66 @@ class ManagerViewedit extends Component
 
     public function guardarEdicion(){
         if($this->verificarCampos()){
+
+            //Genero la modificación
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post(config('app.API_URL'), [
+                'Branch' => 'Server',
+                'Service' => 'PlatformUser',
+                'Action' => 'CreateEditUser',
+                "Data"=>[
+                    "UserId"=>"1",
+                    "UserData"=>[
+                        "Id"=>$this->Information["Id"],
+                        "Name"=>$this->nombre,
+                        "Phone"=> $this->telefono,
+                        "Email"=> $this->email,
+                        "RolID"=>"1"
+                        ]
+                    ],
+                "DataStudy"=>[
+                    "Id"=>$this->Information["WcStudy"]["Id"]
+                ]
+            ]);
+
+            $data = $response->json();
+
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    $this->alerta=true;
+                    $this->alerta_sucess= "Se ha actualizado correctamente la información";
+                    $this->editing=false;
+                    
+                    return;
+
+                }else{
+                    $this->alerta=true;
+                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                    return;
+                }
+            }
+
             $this->alerta=true;
-            $this->alerta_sucess= "Se han modificado los datos correctamente";
-            $this->editing=false;
+            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
         }
     }
 
     public function activarEdicion(){
         $this->editing=true;
 
+    }
+
+    public function mount($Information,$Models){
+        $this->Information=$Information;
+        $this->Models=$Models;
+
+        //Cargo la info
+        $this->nombre=$Information["Name"];
+        $this->telefono=$Information["Phone"];
+        $this->email=$Information["Email"];
     }
 
     public function render()

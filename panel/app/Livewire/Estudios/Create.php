@@ -151,6 +151,10 @@ class Create extends Component
                     $this->alerta=true;
                     $this->alerta_sucess= "Se ha registrado el estudio de forma satisfactoria";
                     return;
+                }else{
+                    $this->alerta=true;
+                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                    return;
                 }
             }
 

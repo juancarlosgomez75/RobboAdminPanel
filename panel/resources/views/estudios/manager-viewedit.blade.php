@@ -3,6 +3,6 @@
 
 </style>
 @section("contenido")
-@livewire("estudios.manager-viewedit")
+@livewire("estudios.manager-viewedit",compact("Information","Models"))
 
 @endsection

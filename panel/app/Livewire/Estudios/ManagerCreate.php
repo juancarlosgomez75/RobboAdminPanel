@@ -54,18 +54,18 @@ class ManagerCreate extends Component
             ])->post(config('app.API_URL'), [
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
-                'Action' => 'CreateUser',
+                'Action' => 'CreateEditUser',
                 "Data"=>[
                     "UserId"=>"1",
                     "UserData"=>[
-                        "WcStudy"=>[
-                            "Id"=>$this->idEstudio
-                        ],
                         "Name"=>$this->nombre,
                         "Phone"=> $this->telefono,
                         "Email"=> $this->email,
                         "RolID"=>"1"
                     ]
+                    ],
+                "DataStudy"=>[
+                        "Id"=>$this->idEstudio
                 ]
             ]);
 
@@ -73,14 +73,15 @@ class ManagerCreate extends Component
 
             if (isset($data['Status'])) {
                 if($data['Status']){
+                    $this->resetExcept(['idEstudio']);
                     $this->alerta=true;
                     $this->alerta_sucess= "Se ha registrado a este manager correctamente";
-                    $this->resetExcept(['idEstudio']);
+                    
                     return;
 
                 }else{
                     $this->alerta=true;
-                    $this->alerta_error= "Ha ocurrido un error durante la operación";
+                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
                     return;
                 }
             }
