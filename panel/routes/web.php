@@ -10,11 +10,8 @@ use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
-// Obtener la URL base desde .env
-$appUrl = rtrim(env('APP_URL', 'http://localhost'), '/');
-
-Livewire::setUpdateRoute(function ($handle) use ($appUrl) {
-    return Route::get("$appUrl/livewire/update", $handle);
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::get('/RobboAdminPanel/panel/public/livewire/update', $handle);
 });
 
 Route::get('/', function () {

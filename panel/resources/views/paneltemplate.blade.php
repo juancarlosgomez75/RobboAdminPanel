@@ -183,9 +183,9 @@ body {
                                     <i class="fa-solid fa-chevron-down dropdown"></i>
                                 </a>
                                 <ul class="submenu">
-                                    <li><a href="/estudios">Estudios</a></li>
-                                    <li><a href="/modelos">Modelos</a></li>
-                                    <li><a href="/maquinas">Máquinas</a></li>
+                                    <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
+                                    <li><a href="{{ url('/modelos') }}">Modelos</a></li>
+                                    <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
                                 </ul>
                             </li>
                             @endif
@@ -223,7 +223,7 @@ body {
                                 <div class="user-actions">
 
                                     <a href="/profile"><i class="fa-solid fa-gear"></i></a>
-                                    <a href="/logout" class="ps-1"><i class="fa-solid fa-right-from-bracket"></i></a>
+                                    <a href="{{ route('logout') }}" class="ps-1"><i class="fa-solid fa-right-from-bracket"></i></a>
                                 </div>
                             </li>
                             
