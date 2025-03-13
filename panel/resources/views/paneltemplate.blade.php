@@ -175,24 +175,7 @@ body {
 
                     <nav class="sidebar">
                         <ul>
-                            <li>
-                                <a href="/estudios">
-                                    <i class="fa-solid fa-city"></i>
-                                    <span>Estudios</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/modelos">
-                                    <i class="fa-solid fa-users"></i>
-                                    <span>Modelos</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/maquinas">
-                                    <i class="fa-solid fa-laptop"></i>
-                                    <span>Máquinas</span>
-                                </a>
-                            </li>
+                            @if(auth()->check() && auth()->user()->rank >= 2)
                             <li>
                                 <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-truck"></i>
@@ -205,6 +188,11 @@ body {
                                     <li><a href="/maquinas">Máquinas</a></li>
                                 </ul>
                             </li>
+                            @endif
+                        
+                        
+
+ 
                             <li>
                                 <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-laptop"></i>
