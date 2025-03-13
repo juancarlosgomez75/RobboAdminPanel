@@ -131,6 +131,18 @@
                             </li>
                             <li>
                                 <a href="#" class="toggle-submenu">
+                                    <i class="fa-solid fa-truck"></i>
+                                    <span>Producción</span>
+                                    <i class="fa-solid fa-chevron-down dropdown"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="/estudios">Estudios</a></li>
+                                    <li><a href="/modelos">Modelos</a></li>
+                                    <li><a href="/maquinas">Máquinas</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-laptop"></i>
                                     <span>Máquinas</span>
                                     <i class="fa-solid fa-chevron-down dropdown"></i>
