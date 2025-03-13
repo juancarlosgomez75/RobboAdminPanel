@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -10,10 +9,10 @@ USE Illuminate\Support\Facades\Auth;
 class Login extends Component
 {
 
-    public $username;
-    public $password;
+    public $username="";
+    public $password="";
 
-    public $prueba;
+    public $prueba="";
 
     public $error=false;
     public $response="";
@@ -30,10 +29,7 @@ class Login extends Component
         }else{
             $this->error=true;
         }
-
-        
     }
-
     public function mount(){
         $this->prueba=Hash::make("123");
     }

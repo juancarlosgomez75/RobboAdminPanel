@@ -8,6 +8,14 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
+
+// Obtener la URL base desde .env
+$appUrl = rtrim(env('APP_URL', 'http://localhost'), '/');
+
+Livewire::setUpdateRoute(function ($handle) use ($appUrl) {
+    return Route::get("$appUrl/livewire/update", $handle);
+});
 
 Route::get('/', function () {
     return view('welcome');
