@@ -52,7 +52,7 @@
                                     <td>{{ $Maquina['Location'] ?? 'No especificada' }}</td>
                                     <td>{{ $Maquina['StudyData']["StudyName"] ?? 'No especificada' }}</td>
                                     <td>
-                                        <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/">Visualizar</a>
+                                        <a type="button" class="btn btn-outline-primary btn-sm" href="maquina/{{ $Maquina['ID'] }}">Visualizar</a>
                                     </td>
                                 </tr>
                             @endforeach
