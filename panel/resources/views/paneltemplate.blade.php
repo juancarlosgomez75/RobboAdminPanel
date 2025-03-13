@@ -10,95 +10,107 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <style>
-        body {
-            background-color: #fcfcfcde;
-            font-family: 'Lato', sans-serif;
-        }
+body {
+    background-color: #fcfcfcde;
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Para que la página tome toda la altura */
+    display: flex;
+}
 
-        /* Sidebar */
-        .sidebar ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s ease-in-out;
-            width: 100%; /* Asegura que ocupa todo el ancho */
-        }
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Hace que la barra lateral ocupe toda la altura */
+}
 
-        .sidebar ul li{
-            padding: 0.5rem 1.5rem 0.5rem 2rem;
-            transition:all .2s;
+.sidebar ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    flex-grow: 1; /* Permite que los elementos crezcan y dejen espacio abajo */
+}
 
-        }
+.sidebar ul li {
+    padding: 0.5rem 1.5rem 0.5rem 2rem;
+    transition: all .2s;
+}
 
-        .sidebar > ul > li.active{
-            background-color: #e49f97;
-        }
+.sidebar > ul > li.active {
+    background-color: #e49f97;
+}
 
-        .sidebar ul li a {
-            display: flex;
-            gap: 0.5rem;
-            padding: 0.3rem 0;
-            align-items: center;
-            text-decoration: none;
-            color: #ffffff;
-            transition: all .2s;
-            cursor: pointer;
-            font-weight: 600;
-        }
+.sidebar ul li a {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    transition: all .2s;
+    cursor: pointer;
+    font-weight: 600;
+}
 
-        /* .sidebar ul li:hover > a {
-            color: #d4d4d4;
-        } */
+.sidebar ul li:hover {
+    background-color: #e49f97;
+}
 
-        .sidebar ul li:hover {
-            background-color: #e49f97;
-        }
+.sidebar ul li > a .dropdown {
+    margin-left: auto;
+    transition: transform 0.4s ease-in-out;
+}
 
-        .sidebar ul li > a .dropdown {
-            margin-left: auto;
-            transition: transform 0.4s ease-in-out;
-        }
+/* Submenú */
+.submenu {
+    list-style: none;
+    padding-left: 2.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+}
 
-        /* Submenú con animación */
-        .submenu {
-            list-style: none;
-            padding-left: 2.5rem; /* Aumenta este valor para más indentación */
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-        }
+.submenu li {
+    padding-left: 1.55rem;
+}
 
-        .submenu li {
-            padding-left: 1.55rem; /* Ajusta según sea necesario */
-        }
+.submenu li a {
+    font-weight: 500 !important;
+}
 
-        .submenu li a{
-            font-weight: 500 !important;
-        }
+.submenu li a:hover {
+    color: #D2665A;
+}
 
-        .submenu li a:hover{
-            color: #D2665A;
-        }
+.submenu.active {
+    max-height: 200px; /* Ajusta según el contenido */
+}
 
-        .submenu.active {
-            max-height: 200px; /* Ajusta según el contenido */
-        }
+/* Rotación del icono */
+.dropdown.rotate {
+    transform: rotate(180deg);
+}
 
-        /* Rotación del icono */
-        .dropdown.rotate {
-            transform: rotate(180deg);
-        }
+.shadow-custom {
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+    border: 0;
+}
 
-        .shadow-custom {
-            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15); /* Sombra menos difuminada */
-            border:0;
-        }
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
-        .action-btn{
-            display:flex; 
-            align-items: center; 
-            gap:0.5rem;
-        }
+/* Hace que el último elemento se mantenga abajo */
+.sticky-bottom {
+    margin-top: auto;
+}
+
 
     </style>
 </head>
@@ -158,6 +170,7 @@
                                     <span>Salir del panel</span>
                                 </a>
                             </li>
+                            <li class="sticky-bottom"><a href="/maquinas"><i class="fa-solid fa-laptop"></i> Máquinas</a></li>
                         </ul>
                     </nav>
  
