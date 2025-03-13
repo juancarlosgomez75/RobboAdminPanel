@@ -217,7 +217,7 @@ body {
                             <li class="sticky-bottom user-info">
                                 <img src="{{ asset('img/bb.jpg') }}" alt="Usuario" class="user-avatar">
                                 <div class="user-details">
-                                    <span class="user-name">Nombre del Usuario</span>
+                                    <span class="user-name">{{ auth()->user()->name }}</span>
                                     <span class="user-role">Rol del Usuario</span>
                                 </div>
                                 <div class="user-actions">
