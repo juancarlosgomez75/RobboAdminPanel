@@ -95,8 +95,9 @@
                                 <td>{{$Model["ModelUserName"]}}</td>
                                 <td>
                                     @if(!empty($Model["ModelPages"]))
-                                    @foreach ($Model["ModelPages"] as $Page)
-                                        <span>{{$Page["NickPage"]}}</span> |
+                                    @foreach ($Model["ModelPages"] as $index => $Page)
+                                    <span>{{ ucfirst(strtolower($Page["NickPage"])) }}</span>
+                                    @if (!$loop->last) | @endif
                                     @endforeach
                                     @else
                                     <span>Sin páginas</span>

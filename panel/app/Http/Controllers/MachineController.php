@@ -10,11 +10,73 @@ class MachineController extends Controller
 {
     public function index(){
 
-        $maquinas=[
-            ["Id"=>"102","Hardware"=>"200009","Tipo"=>"Cum","Estudio"=>"Casa"],
-            ["Id"=>"103","Hardware"=>"200010","Tipo"=>"Fuck","Estudio"=>"Sabaneta"]
-        ];
-        return view("maquinas.index",["Maquinas"=>$maquinas]);
+        //Genero la petición para obtener la información
+        $information = Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post(config('app.API_URL'), [
+            'Branch' => 'Server',
+            'Service' => "GeneralParams",
+            'Action' => "GeneralParams",
+            'Data' => ["UserId" => "1"]
+        ]);
+
+        $generalinformation=$information->json();
+        
+        //Genero la petición de informacion
+        $response = Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post(config('app.API_URL'), [
+            'Branch' => 'Server',
+            'Service' => 'Machines',
+            'Action' => 'AllView',
+            'Data' => ["UserId" => "1"]
+        ]);
+
+        $data = $response->json();
+
+        //Analizo si es válido lo que necesito
+        if (isset($data['Status']) && isset($generalinformation['Status'])) {
+            //Analizo si el status es true
+            if($data["Status"] && $generalinformation["Status"]){
+
+                // Mapear ciudades con su país
+                $cityMap = [];
+                if (isset($generalinformation['CountryList'])) {
+                    foreach ($generalinformation['CountryList'] as $country) {
+                        foreach ($country['Cities'] as $city) {
+                            $cityMap[$city['Id']] = $city['CityName'] . ', ' . $country['CountryName'];
+                        }
+                    }
+                }
+                // Agregar el campo City en ListStudyData
+                if (isset($data['Data']['Machines'])) {
+                    foreach ($data['Data']['Machines']as &$machine) {
+                        $machine['Location'] =  $cityMap[$machine['StudyData']["CityId"]] ?? 'N/R';
+                    }
+                }
+
+                usort($data['Data']['Machines'], function ($a, $b) {
+                    return strcmp($a["FirmwareID"], $b["FirmwareID"]);
+                });
+                return view("maquinas.index",["Maquinas"=>$data['Data']['Machines']]);
+
+            }
+            return "Error de status";
+            
+        }
+        
+        
+        return "Error general";
+
+
+
+
+
+
 
     }
 

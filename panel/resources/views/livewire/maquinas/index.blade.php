@@ -23,7 +23,7 @@
                             <input type="number" class="custom-input" placeholder="Filtrar por número" min="0">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="custom-input" placeholder="Filtrar por tipo">
+                            <input type="text" class="custom-input" placeholder="Filtrar por ciudad">
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="custom-input" placeholder="Filtrar por estudio">
@@ -31,13 +31,14 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <table class="table">
+                    <table class="table align-middle">
                         <thead>
                             <tr>
-                                <th class="w-10" scope="col" style="width: 7%;">#</th>
-                                <th class="w-40" scope="col">Hardware</th>
-                                <th class="w-40" scope="col">Tipo</th>
-                                <th class="w-30" scope="col">Estudio</th>
+                                <th scope="col" style="width: 7%;">#</th>
+                                <th scope="col">Hardware</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Ciudad</th>
+                                <th scope="col">Estudio</th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
@@ -45,10 +46,11 @@
                             @if(!empty($Maquinas))
                             @foreach($Maquinas as $index => $Maquina)
                                 <tr>
-                                    <th scope="row">{{ $Maquina['Id'] }}</th>
-                                    <td>{{ $Maquina["Hardware"] ?? 'N/R' }}</td>
-                                    <td>{{ $Maquina['Tipo'] ?? 'No especificada' }}</td>
-                                    <td>{{ $Maquina['Estudio'] ?? 'No especificada' }}</td>
+                                    <th scope="row">{{ $Maquina['ID'] }}</th>
+                                    <td>{{ $Maquina["FirmwareID"] ?? 'N/R' }}</td>
+                                    <td>{{ $Maquina['Tipo'] ?? 'N/R' }}</td>
+                                    <td>{{ $Maquina['Location'] ?? 'No especificada' }}</td>
+                                    <td>{{ $Maquina['StudyData']["StudyName"] ?? 'No especificada' }}</td>
                                     <td>
                                         <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/">Visualizar</a>
                                     </td>
