@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('rank'); // ✅ Debe coincidir con 'id' de ranks
             $table->foreign('rank')->references('id')->on('ranks')->onDelete('cascade');
-            $table->string('api_token');
+            $table->string('api_token')->nullable();
+            $table->boolean('activo')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

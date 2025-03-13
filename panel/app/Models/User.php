@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public function rank()
     {
-        return $this->belongsTo(Rank::class, 'rank');
+        return $this->belongsTo(Rank::class, 'rank', 'id'); // 'rank' es la clave foránea en users, 'id' es la clave primaria en ranks
     }
 }
