@@ -195,21 +195,25 @@ body {
  
                             <li>
                                 <a href="#" class="toggle-submenu">
-                                    <i class="fa-solid fa-laptop"></i>
-                                    <span>Máquinas</span>
+                                    <i class="fa-solid fa-book"></i>
+                                    <span>Administración</span>
                                     <i class="fa-solid fa-chevron-down dropdown"></i>
                                 </a>
                                 <ul class="submenu">
-                                    <li><a href="#">Crear nuevo</a></li>
-                                    <li><a href="#">Ver listado</a></li>
+                                    <li><a href="#">Cuentas de usuario</a></li>
+                                    <li><a href="#">Logs</a></li>
                                 </ul>
                             </li>
-                            <li>
+
+
+                            {{-- <li>
                                 <a href="/logout">
                                     <i class="fa-solid fa-right-from-bracket"></i>
                                     <span>Salir del panel</span>
                                 </a>
-                            </li>
+                            </li> --}}
+
+
                             <li class="sticky-bottom user-info">
                                 <img src="{{ asset('img/bb.jpg') }}" alt="Usuario" class="user-avatar">
                                 <div class="user-details">
