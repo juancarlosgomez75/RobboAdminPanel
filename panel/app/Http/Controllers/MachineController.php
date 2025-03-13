@@ -58,10 +58,7 @@ class MachineController extends Controller
                         $machine['Location'] =  $cityMap[$machine['StudyData']["CityId"]] ?? 'N/R';
                     }
                 }
-
-                usort($data['Data']['Machines'], function ($a, $b) {
-                    return strcmp($a["FirmwareID"], $b["FirmwareID"]);
-                });
+                // return view("maquinas.index",["Maquinas"=>array_slice($data['Data']['Machines'], 0, 10)]);
                 return view("maquinas.index",["Maquinas"=>$data['Data']['Machines']]);
 
             }

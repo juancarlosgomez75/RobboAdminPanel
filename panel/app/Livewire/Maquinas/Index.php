@@ -7,7 +7,7 @@ use Livewire\Component;
 class Index extends Component
 {
     public $filtroHardware = "";
-    public $filtroTipo = "";
+    public $filtroCiudad= "";
     public $filtroEstudio = "";
     public $filtrosActivos = false;
 
@@ -19,17 +19,36 @@ class Index extends Component
         
         if (!$this->filtrosActivos) {
             $this->filtroHardware = "";
-            $this->filtroTipo = "";
+            $this->filtroCiudad = "";
             $this->filtroEstudio = "";
         }
     }
 
     public function mount($Maquinas){
         $this->Maquinas = $Maquinas;
+
+        usort($this->Maquinas, function ($a, $b) {
+            return strcmp($a["FirmwareID"], $b["FirmwareID"]);
+        });
     }
 
     public function render()
     {
-        return view('livewire.maquinas.index',['filtroOn' => $this->filtrosActivos,"Maquinas"=>$this->Maquinas]);
+
+        $filtrados = array_values(array_filter($this->Maquinas, function ($dato) {
+            return 
+                (empty($this->filtroCiudad) || 
+                    (isset($dato["Location"]) && stripos(mb_strtolower($dato["Location"]), mb_strtolower($this->filtroCiudad)) !== false)) 
+                &&
+                (empty($this->filtroHardware) || 
+                    (isset($dato["FirmwareID"]) && stripos(mb_strtolower($dato["FirmwareID"]), mb_strtolower($this->filtroHardware)) !== false))
+                &&
+                (empty($this->filtroEstudio) || 
+                    (isset($dato["StudyData"]["StudyName"]) && stripos(mb_strtolower($dato["StudyData"]["StudyName"]), mb_strtolower($this->filtroEstudio)) !== false));
+        }));
+        
+        
+        
+        return view('livewire.maquinas.index',['filtroOn' => $this->filtrosActivos,"Machines"=>$filtrados]);
     }
 }
