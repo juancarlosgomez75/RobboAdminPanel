@@ -56,7 +56,7 @@ body {
     font-weight: 600;
 }
 
-.sidebar ul li:hover {
+.sidebar ul>li:not(.user-info):hover {
     background-color: #e49f97;
 }
 
@@ -110,6 +110,57 @@ body {
 .sticky-bottom {
     margin-top: auto;
 }
+
+/* Contenedor del usuario */
+.user-info {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    background-color: #8a3127;
+    /* border-top: 1px solid rgba(255, 255, 255, 0.2); */
+    gap: 0.8rem;
+}
+
+/* Imagen circular */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Contenedor de los textos */
+.user-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Nombre del usuario */
+.user-name {
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Rol del usuario */
+.user-role {
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+/* Contenedor de los iconos */
+.user-actions {
+    display: flex;
+    gap: 0.8rem;
+    font-size: 1.2rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.user-actions i:hover {
+    color: #e49f97;
+}
+
 
 
     </style>
@@ -170,7 +221,18 @@ body {
                                     <span>Salir del panel</span>
                                 </a>
                             </li>
-                            <li class="sticky-bottom"><a href="/maquinas"><i class="fa-solid fa-laptop"></i> Máquinas</a></li>
+                            <li class="sticky-bottom user-info">
+                                <img src="{{ asset('img/bb.jpg') }}" alt="Usuario" class="user-avatar">
+                                <div class="user-details">
+                                    <span class="user-name">Nombre del Usuario</span>
+                                    <span class="user-role">Rol del Usuario</span>
+                                </div>
+                                <div class="user-actions">
+                                    <i class="fa-solid fa-gear"></i>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                </div>
+                            </li>
+                            
                         </ul>
                     </nav>
  
