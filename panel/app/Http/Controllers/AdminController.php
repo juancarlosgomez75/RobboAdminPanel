@@ -23,7 +23,7 @@ class AdminController extends Controller
         if($usuario){
             //Analizo si el rango coincide o si es mi usuario
             if($usuario->rank<Auth::user()->rank||Auth::user()->id==$usuario->id){
-                return view("admin.account");
+                return view("admin.account",compact("usuario"));
             }
 
             return "Error de permisos";
