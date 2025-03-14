@@ -88,6 +88,36 @@ class Account extends Component
         }
     }
 
+    public function desactivarUsuario()
+    {
+        $this->usuario->activo = false;
+
+        //Intento salvar
+        if($this->usuario->save()){
+            $this->alerta=true;
+            $this->alerta_sucess="El usuario ha sido desactivado correctamente";
+            return;
+        }else{
+            $this->alerta=true;
+            $this->alerta_error="Error desactivando al usuario";
+        }
+    }
+
+    public function activarUsuario()
+    {
+        $this->usuario->activo = true;
+
+        //Intento salvar
+        if($this->usuario->save()){
+            $this->alerta=true;
+            $this->alerta_sucess="El usuario ha sido dactivado correctamente";
+            return;
+        }else{
+            $this->alerta=true;
+            $this->alerta_error="Error activando al usuario";
+        }
+    }
+
     public function mount($usuario){
         //Almaceno el usuario
         $this->usuario = $usuario;

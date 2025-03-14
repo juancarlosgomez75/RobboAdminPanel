@@ -54,6 +54,17 @@
                         Guardar cambios
                     </button>
                     @endif
+
+                    @if($usuario->activo)
+                    <button type="button" class="btn btn-outline-danger ms-2" wire:click="desactivarUsuario()">
+                        Desactivar usuario
+                    </button>
+                    @else
+                    <button type="button" class="btn btn-outline-success ms-2" wire:click="activarUsuario()">
+                        Activar usuario
+                    </button>
+                    @endif
+
                 </div>
             </div>
         </div>
