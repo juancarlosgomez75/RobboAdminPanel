@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Rank;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class Account extends Component
 {
@@ -23,6 +25,7 @@ class Account extends Component
     public $name="";
     public $email="";
     public $rank="0";
+    
 
     public function activarEdicion(){
         $this->editing=true;
@@ -115,6 +118,23 @@ class Account extends Component
         }else{
             $this->alerta=true;
             $this->alerta_error="Error activando al usuario";
+        }
+    }
+
+    public function reiniciarPassword()
+    {
+        $this->usuario->password = Hash::make('123');
+
+        //Intento salvar
+        if($this->usuario->save()){
+            $this->alerta=true;
+            $this->alerta_sucess="Se ha reiniciado la contraseña correctamente";
+            // Cierra sesión en todos los dispositivos
+            DB::table('sessions')->where('user_id', $this->usuario->id)->delete();
+            return;
+        }else{
+            $this->alerta=true;
+            $this->alerta_error="Se ha reiniciado la contraseña correctamente";
         }
     }
 

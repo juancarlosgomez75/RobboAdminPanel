@@ -65,6 +65,10 @@
                     </button>
                     @endif
 
+                    <button type="button" class="btn btn-outline-secondary ms-2" wire:click="reiniciarPassword()">
+                        Reiniciar contraseña
+                    </button>
+
                 </div>
             </div>
         </div>
