@@ -59,7 +59,7 @@
                                         @elseif(auth()->user()->id == $account->id)
                                         Tu cuenta
                                         @else
-                                        <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/{{ $account['Id'] }}">Visualizar</a>
+                                        <a type="button" class="btn btn-outline-primary btn-sm" href="{{route('admin.account.view',$account->id)}}">Visualizar</a>
                                         @endif
                                     </td>
                                     {{-- <td>{{ $dato["StudyName"] ?? 'Sin Nombre' }}</td>
