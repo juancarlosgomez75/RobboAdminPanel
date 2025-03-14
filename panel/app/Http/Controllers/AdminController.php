@@ -22,7 +22,7 @@ class AdminController extends Controller
         //Si encuentra
         if($usuario){
             //Analizo si el rango coincide o si es mi usuario
-            if($usuario->rank<Auth::user()->rank||Auth::user()->id==$usuario->id){
+            if($usuario->rank<Auth::user()->rank && Auth::user()->id!=$usuario->id){
                 return view("admin.account",compact("usuario"));
             }
 
