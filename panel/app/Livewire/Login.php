@@ -21,7 +21,8 @@ class Login extends Component
         //Intento validar
         $credenciales=[
             "username"=> $this->username,
-            "password"=> $this->password
+            "password"=> $this->password,
+            "activo"=>true
         ];
 
         if(Auth::attempt($credenciales)){

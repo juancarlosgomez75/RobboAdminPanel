@@ -8,7 +8,7 @@
                     <!-- ALERTA DE ERROR -->
                     @if($error)
                         <div class="alert alert-danger text-center">
-                            <strong>¡Error!</strong> Usuario o contraseña incorrectos.
+                            <strong>¡Error!</strong> Usuario o contraseña incorrectos, o la cuenta fue desactivada.
                         </div>
                     @endif
 
