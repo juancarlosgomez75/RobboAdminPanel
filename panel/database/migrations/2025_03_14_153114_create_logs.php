@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreign('author')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
 
             $table->string('ip_address', 45);
+            $table->boolean(("result"))->default(true);
             $table->timestamps();
 
 

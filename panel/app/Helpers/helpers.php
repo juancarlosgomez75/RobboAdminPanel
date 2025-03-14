@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request; // Importar Request
 
 if (!function_exists('logAccion')) {
-    function registrarLog($menu,$section, $action, $details)
+    function registrarLog($menu,$section, $action, $details,$result=true)
     {
         //Analizo si estoy logueado
         if(Auth::check()){
@@ -18,6 +18,7 @@ if (!function_exists('logAccion')) {
             $log->details = $details;
             $log->author=Auth::user()->id;
             $log->ip_address=Request::ip();
+            $log->result=$result;
 
             $log->save();
         }

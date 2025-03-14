@@ -91,6 +91,8 @@ class Account extends Component
             }else{
                 $this->alerta=true;
                 $this->alerta_error="Error modificando al usuario";
+
+                registrarLog("Administracion","Cuenta","Modificar","Ha intentado modificar al usuario: ".$this->usuario->name." (".$this->usuario->id.")");
             }
         }
     }
@@ -105,12 +107,13 @@ class Account extends Component
             $this->alerta_sucess="El usuario ha sido desactivado correctamente";
 
             //Genero el log
-            registrarLog("Administracion","Cuenta","Desactivar","Se ha desactivado al usuario: ".$this->usuario->name." (".$this->usuario->id.")");
+            registrarLog("Administracion","Cuenta","Desactivar","Se ha desactivado al usuario: ".$this->usuario->name." (".$this->usuario->id.")",true);
 
             return;
         }else{
             $this->alerta=true;
             $this->alerta_error="Error desactivando al usuario";
+            registrarLog("Administracion","Cuenta","Desactivar","Ha intentado desactivar al usuario: ".$this->usuario->name." (".$this->usuario->id.")",false);
         }
     }
 
@@ -125,12 +128,13 @@ class Account extends Component
 
 
             //Genero el log
-            registrarLog("Administracion","Cuenta","Activar","Se ha activado al usuario: ".$this->usuario->name." (".$this->usuario->id.")");
+            registrarLog("Administracion","Cuenta","Activar","Se ha activado al usuario: ".$this->usuario->name." (".$this->usuario->id.")",true);
 
             return;
         }else{
             $this->alerta=true;
             $this->alerta_error="Error activando al usuario";
+            registrarLog("Administracion","Cuenta","Desactivar","Ha intentado activar al usuario: ".$this->usuario->name." (".$this->usuario->id.")",false);
         }
     }
 
@@ -144,10 +148,16 @@ class Account extends Component
             $this->alerta_sucess="Se ha reiniciado la contraseña correctamente";
             // Cierra sesión en todos los dispositivos
             DB::table('sessions')->where('user_id', $this->usuario->id)->delete();
+
+            registrarLog("Administracion","Cuenta","Reiniciar contraseña","Se ha reiniciado la contraseña al usuario: ".$this->usuario->name." (".$this->usuario->id.")",true);
             return;
         }else{
             $this->alerta=true;
-            $this->alerta_error="Se ha reiniciado la contraseña correctamente";
+            $this->alerta_error="Error intentando reiniciar la contraseña";
+
+            registrarLog("Administracion","Cuenta","Reiniciar contraseña","Se ha intentado reiniciar la contraseña al usuario: ".$this->usuario->name." (".$this->usuario->id.")",false);
+
+
         }
     }
 
