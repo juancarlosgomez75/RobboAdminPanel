@@ -175,7 +175,7 @@ body {
 
                     <nav class="sidebar">
                         <ul>
-                            @if(auth()->check() && auth()->user()->rank >= 4)
+                            
                             <li>
                                 <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-truck"></i>
@@ -188,11 +188,10 @@ body {
                                     <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
                                 </ul>
                             </li>
-                            @endif
                         
                         
 
- 
+                            @if(auth()->check() && auth()->user()->rank >= 4)
                             <li>
                                 <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-book"></i>
@@ -204,6 +203,7 @@ body {
                                     <li><a href="{{ route('admin.logs') }}">Logs</a></li>
                                 </ul>
                             </li>
+                            @endif
 
 
                             {{-- <li>
