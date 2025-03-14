@@ -10,6 +10,9 @@ USE Illuminate\Support\Facades\Auth;
 class logincontroller extends Controller
 {
     public function login(){
+        if (Auth::check()) {
+            return redirect(route("estudios.index"));
+        }
         return view("login");
     }
 
