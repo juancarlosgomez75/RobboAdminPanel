@@ -175,7 +175,7 @@ body {
 
                     <nav class="sidebar">
                         <ul>
-                            @if(auth()->check() && auth()->user()->rank >= 2)
+                            @if(auth()->check() && auth()->user()->rank >= 4)
                             <li>
                                 <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-truck"></i>
@@ -200,7 +200,7 @@ body {
                                     <i class="fa-solid fa-chevron-down dropdown"></i>
                                 </a>
                                 <ul class="submenu">
-                                    <li><a href="#">Cuentas de usuario</a></li>
+                                    <li><a href="{{ route('admin.accounts') }}">Cuentas de usuario</a></li>
                                     <li><a href="#">Logs</a></li>
                                 </ul>
                             </li>

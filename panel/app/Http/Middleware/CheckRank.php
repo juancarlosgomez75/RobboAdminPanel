@@ -12,7 +12,7 @@ class CheckRank
     {
         $user = Auth::user(); // Obtener usuario autenticado
 
-        if (!$user || $user->rank !== $rank) {
+        if (!$user || $user->rank < $rank) {
             abort(403, 'No tienes permisos para acceder a esta página.');
         }
 

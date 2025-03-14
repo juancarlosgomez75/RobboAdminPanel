@@ -1,4 +1,19 @@
 <div>
+    @if($alerta)
+        @if($alerta_sucess!="")
+        <div class="alert alert-success" role="alert">
+            {{$alerta_sucess}}
+        </div>
+        @elseif($alerta_error!="")
+        <div class="alert alert-danger" role="alert">
+            {{$alerta_error}}
+        </div>
+        @elseif($alerta_warning!="")
+        <div class="alert alert-warning" role="alert">
+            {{$alerta_warning}}
+        </div>
+        @endif
+    @endif
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -94,7 +109,7 @@
                     <select class="form-select" wire:model="rank" required>
                         <option selected disabled value="0">Selecciona un rango</option>
                         @foreach($rangos as $rank)
-                        <option value="{{$rank["Id"]}}">{{$rank["name"]}}</option>
+                        <option value="{{$rank["id"]}}">{{$rank["name"]}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -102,7 +117,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Crear cuenta</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="registrar()">Crear cuenta</button>
         </div>
       </div>
     </div>
