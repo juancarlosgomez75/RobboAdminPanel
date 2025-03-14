@@ -58,7 +58,7 @@ class User extends Authenticatable
             ->implode('');
     }
 
-    public function rank()
+    public function rank_info()
     {
         return $this->belongsTo(Rank::class, 'rank', 'id'); // 'rank' es la clave foránea en users, 'id' es la clave primaria en ranks
     }

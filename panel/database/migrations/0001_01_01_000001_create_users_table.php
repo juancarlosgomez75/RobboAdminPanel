@@ -17,8 +17,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('password');
-            $table->unsignedBigInteger('rank'); // ✅ Debe coincidir con 'id' de ranks
-            $table->foreign('rank')->references('id')->on('ranks')->onDelete('cascade');
+
+            $table->unsignedBigInteger('rank')->nullable(); // ✅ Debe coincidir con 'id' de ranks
+            $table->foreign('rank')->references('id')->on('ranks')->onDelete('set null')->onUpdate('cascade');
+            
             $table->string('api_token')->nullable();
             $table->boolean('activo')->default(true);
             $table->timestamp('email_verified_at')->nullable();
@@ -48,7 +50,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
+        // Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
 };

@@ -3,6 +3,9 @@
 
 </style>
 @section("contenido")
-{{-- @livewire("estudios.create",['Ciudades' => $Ciudades]) --}}
+@foreach($accounts as $user)
+    <p>Usuario: {{ $user->name }} - Rango: {{ $user->rank->name }}</p>
+@endforeach
+@livewire("admin.accounts")
 
 @endsection

@@ -145,7 +145,7 @@ body {
 
 /* Rol del usuario */
 .user-role {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: #ccc;
 }
 
@@ -218,10 +218,8 @@ body {
                                 <img src="{{ asset('img/bb.jpg') }}" alt="Usuario" class="user-avatar">
                                 <div class="user-details">
                                     <span class="user-name">{{ auth()->user()->name }}</span>
-                                    @php
-    auth()->user()->load('rank');
-@endphp
-                                    <span class="user-role">{{ auth()->user()->rank?->name ?? 'Sin rango' }}
+                                    <span class="user-role">
+                                        {{ auth()->user()->rank_info->name ?? 'Sin rango' }}
                                     </span>
                                 </div>
                                 <div class="user-actions">
