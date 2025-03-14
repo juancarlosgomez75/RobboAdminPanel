@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\ModelController;
@@ -41,6 +42,10 @@ Route::middleware('auth')->controller(MachineController::class)->group(function(
 
 Route::middleware('auth')->controller(ModelController::class)->group(function(){
     Route::get('/modelo/{idmodelo}', 'viewedit')->name('modelos.viewedit');
+});
+
+Route::middleware('auth')->controller(AdminController::class)->group(function(){
+    Route::get('/cuentas', 'accounts')->name('admin.accounts');
 });
 
 // Route::view('dashboard', 'dashboard')
