@@ -71,10 +71,10 @@ class Logs extends Component
                 return $query->whereRaw("LOWER(created_at) LIKE ?", [strtolower($this->filtroFecha) . '%']);
             })
             ->when($this->filtroAccion, function ($query) {
-                return $query->whereRaw("LOWER(action) LIKE ?", ['%' . strtolower($this->filtroAccion) . '%']);
+                return $query->whereRaw("LOWER(action) LIKE ?", [strtolower($this->filtroAccion) . '%']);
             })
             ->when($this->filtroAutor, function ($query) {
-                return $query->whereRaw("LOWER(author) LIKE ?", ['%' . strtolower($this->filtroAutor) . '%']);
+                return $query->whereRaw("LOWER(author) LIKE ?", [strtolower($this->filtroAutor) . '%']);
             })
             ->paginate(20);
 
