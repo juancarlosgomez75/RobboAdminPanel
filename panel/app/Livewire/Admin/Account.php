@@ -83,6 +83,10 @@ class Account extends Component
                 $this->alerta=true;
                 $this->alerta_sucess="El usuario ha sido modificado correctamente";
                 $this->editing=false;
+
+                //Genero el log
+                registrarLog("Administracion","Cuenta","Editar","Se ha editado al usuario: ".$this->usuario->name." (".$this->usuario->id."), detalles: ".$this->usuario->toJson());
+
                 return;
             }else{
                 $this->alerta=true;
@@ -99,6 +103,10 @@ class Account extends Component
         if($this->usuario->save()){
             $this->alerta=true;
             $this->alerta_sucess="El usuario ha sido desactivado correctamente";
+
+            //Genero el log
+            registrarLog("Administracion","Cuenta","Desactivar","Se ha desactivado al usuario: ".$this->usuario->name." (".$this->usuario->id.")");
+
             return;
         }else{
             $this->alerta=true;
@@ -113,7 +121,12 @@ class Account extends Component
         //Intento salvar
         if($this->usuario->save()){
             $this->alerta=true;
-            $this->alerta_sucess="El usuario ha sido dactivado correctamente";
+            $this->alerta_sucess="El usuario ha sido activado correctamente";
+
+
+            //Genero el log
+            registrarLog("Administracion","Cuenta","Activar","Se ha activado al usuario: ".$this->usuario->name." (".$this->usuario->id.")");
+
             return;
         }else{
             $this->alerta=true;

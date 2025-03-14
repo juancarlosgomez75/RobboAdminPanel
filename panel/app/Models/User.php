@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Rank::class, 'rank', 'id'); // 'rank' es la clave foránea en users, 'id' es la clave primaria en ranks
     }
+
+    public function logs()
+    {
+        return $this->hasMany(Log::class, 'author');
+    }
 }
