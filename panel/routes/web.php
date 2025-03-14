@@ -46,7 +46,8 @@ Route::middleware(['auth','checkuserstatus'])->controller(ModelController::class
 
 Route::middleware(['auth','checkuserstatus'])->controller(AdminController::class)->group(function(){
     Route::middleware('checkrank:4')->get('/cuentas', 'accounts')->name('admin.accounts');
-    Route::get('/cuenta/{idcuenta}', 'account')->name('admin.account.view');
+    Route::middleware('checkrank:4')->get('/cuenta/{idcuenta}', 'account')->name('admin.account.view');
+    Route::middleware('checkrank:4')->get('/logs', 'logs')->name('admin.logs');
 });
 
 // Route::view('dashboard', 'dashboard')

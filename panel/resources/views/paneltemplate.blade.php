@@ -201,7 +201,7 @@ body {
                                 </a>
                                 <ul class="submenu">
                                     <li><a href="{{ route('admin.accounts') }}">Cuentas de usuario</a></li>
-                                    <li><a href="#">Logs</a></li>
+                                    <li><a href="{{ route('admin.logs') }}">Logs</a></li>
                                 </ul>
                             </li>
 

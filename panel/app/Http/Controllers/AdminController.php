@@ -31,4 +31,8 @@ class AdminController extends Controller
 
         return "Error";
     }
+
+    public function logs(){
+        return view("admin.logs");
+    }
 }
