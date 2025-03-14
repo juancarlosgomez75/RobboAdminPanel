@@ -78,10 +78,15 @@ class Accounts extends Component
                 $this->name="";
                 $this->email="";
                 $this->rank="0";
+
+                registrarLog("Administracion","Cuentas","Crear","Se ha creado al usuario: ".$usuario->name." (".$usuario->id."), detalles: ".$usuario->toJson(),true);
+
                 return;
             }else{
                 $this->alerta=true;
                 $this->alerta_error="Error registrando al usuario";
+
+                registrarLog("Administracion","Cuentas","Crear","Se ha intentado crear al usuario: ".$usuario->name." (".$usuario->id."), detalles: ".$usuario->toJson(),false);
             }
         }
     }

@@ -73,6 +73,8 @@ class ManagerCreate extends Component
 
             if (isset($data['Status'])) {
                 if($data['Status']){
+                    registrarLog("Producción","Managers","Crear Manager","Se ha creado el manager: ".$this->nombre.", del estudio #".$this->idEstudio,true);
+
                     $this->resetExcept(['idEstudio']);
                     $this->alerta=true;
                     $this->alerta_sucess= "Se ha registrado a este manager correctamente";
@@ -82,6 +84,7 @@ class ManagerCreate extends Component
                 }else{
                     $this->alerta=true;
                     $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                    registrarLog("Producción","Managers","Crear Manager","Se ha intentado crear al manager: ".$this->nombre.", del estudio #".$this->idEstudio,false);
                     return;
                 }
             }

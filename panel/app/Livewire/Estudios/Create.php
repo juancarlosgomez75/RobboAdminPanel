@@ -147,11 +147,14 @@ class Create extends Component
 
             if (isset($data['Status'])) {
                 if($data['Status']){
+                    registrarLog("Producción","Estudios","Crear estudio","Se ha creado el estudio: ".$this->nombre,true);
                     $this->resetExcept('ciudades');
                     $this->alerta=true;
                     $this->alerta_sucess= "Se ha registrado el estudio de forma satisfactoria";
+                    
                     return;
                 }else{
+                    registrarLog("Producción","Estudios","Crear estudio","Se ha intentado crear el estudio: ".$this->nombre,false);
                     $this->alerta=true;
                     $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
                     return;

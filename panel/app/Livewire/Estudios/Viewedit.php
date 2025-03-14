@@ -123,12 +123,7 @@ class Viewedit extends Component
     {
         if($this->validar()){
  
-            //Genero la petición de informacion
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), [
+            $apidata=[
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
                 'Action' => 'CreateUpdateStudy',
@@ -147,7 +142,14 @@ class Viewedit extends Component
                 "Data"=>[
                     "UserId"=>"1"
                 ]
-            ]);
+                ];
+
+            //Genero la petición de informacion
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post(config('app.API_URL'), $apidata);
 
             $data = $response->json();
 
@@ -158,10 +160,14 @@ class Viewedit extends Component
                     $this->alerta=true;
                     $this->alerta_sucess= "Se ha modificado el estudio de forma satisfactoria";
 
+                    registrarLog("Producción","Estudios","Editar","Se ha modificado al estudio #".$this->informacion["Id"].", detalles: ".json_encode($apidata));
+
                     return;
                 }else{
                     $this->alerta=true;
                     $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+
+                    registrarLog("Producción","Estudios","Editar","Se ha intentado modificar al estudio #".$this->informacion["Id"].", detalles: ".json_encode($apidata),false);
                     return;
                 }
             }

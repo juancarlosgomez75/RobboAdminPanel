@@ -50,12 +50,7 @@ class ManagerViewedit extends Component
     public function guardarEdicion(){
         if($this->verificarCampos()){
 
-            //Genero la modificación
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), [
+            $apidata=[
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
                 'Action' => 'CreateEditUser',
@@ -72,7 +67,14 @@ class ManagerViewedit extends Component
                 "DataStudy"=>[
                     "Id"=>$this->Study["Id"]
                 ]
-            ]);
+                ];
+
+            //Genero la modificación
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post(config('app.API_URL'), $apidata);
 
             $data = $response->json();
 
@@ -81,13 +83,18 @@ class ManagerViewedit extends Component
                     $this->alerta=true;
                     $this->alerta_sucess= "Se ha actualizado correctamente la información";
                     $this->editing=false;
+
+                    registrarLog("Producción","Managers","Editar Manager","Se ha modificado al manager #".$this->Information["Id"].", del estudio #".$this->Study["Id"].", detalles: ".json_encode($apidata),true);
                     
                     return;
 
                 }else{
                     $this->alerta=true;
                     $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                    registrarLog("Producción","Managers","Editar Manager","Se ha intentado modificar al manager #".$this->Information["Id"].", del estudio #".$this->Study["Id"].", detalles: ".json_encode($apidata),false);
                     return;
+
+                    
                 }
             }
 
@@ -136,11 +143,14 @@ class ManagerViewedit extends Component
                 $this->alerta_sucess= "Se ha activado esta cuenta satisfactoriamente";
                 $this->activo=true;
                 
+                registrarLog("Producción","Managers","Activar Manager","Se ha activado al manager #".$this->Information["Id"].", del estudio #".$this->Study["Id"],true);
+
                 return;
 
             }else{
                 $this->alerta=true;
                 $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                registrarLog("Producción","Managers","Activar Manager","Se ha intentado activar al manager #".$this->Information["Id"].", del estudio #".$this->Study["Id"],false);
                 return;
             }
         }
@@ -183,11 +193,14 @@ class ManagerViewedit extends Component
                 $this->alerta_sucess= "Se ha desactivado esta cuenta satisfactoriamente";
                 $this->activo=false;
                 
+                registrarLog("Producción","Managers","Desactivar Manager","Se ha desactivado al manager #".$this->Information["Id"].", del estudio #".$this->Study["Id"],true);
+
                 return;
 
             }else{
                 $this->alerta=true;
                 $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                registrarLog("Producción","Managers","Desactivar Manager","Se ha intentado desactivar al manager #".$this->Information["Id"].", del estudio #".$this->Study["Id"],false);
                 return;
             }
         }
