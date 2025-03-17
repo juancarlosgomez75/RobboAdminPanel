@@ -55,6 +55,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(AdminController::class
 
 Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class)->group(function(){
     Route::get('/panel/perfil', 'profile_view')->name('panel.perfil.view');
+    Route::get('/panel', 'index')->name('panel.index');
 });
 
 // Route::view('dashboard', 'dashboard')

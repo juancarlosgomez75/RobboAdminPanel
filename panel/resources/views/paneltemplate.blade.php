@@ -224,7 +224,7 @@ body {
                                 </div>
                                 <div class="user-actions">
 
-                                    <a href="/profile"><i class="fa-solid fa-gear"></i></a>
+                                    <a href="{{route("panel.perfil.view")}}"><i class="fa-solid fa-gear"></i></a>
                                     <a href="{{ route('logout') }}" class="ps-1"><i class="fa-solid fa-right-from-bracket"></i></a>
                                 </div>
                             </li>

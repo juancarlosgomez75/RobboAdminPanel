@@ -4,7 +4,9 @@ namespace App\Livewire\Perfiles;
 
 use App\Models\User;
 use Livewire\Component;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class Perfil extends Component
 {
@@ -21,6 +23,9 @@ class Perfil extends Component
     public $name="";
     public $email="";
     public $rank="";
+    public $password;
+    public $passwordnew;
+    public $passwordnewagain;
 
     public function activarEdicion(){
         $this->editing=true;
@@ -66,6 +71,44 @@ class Perfil extends Component
 
 
         }
+    }
+
+    public function modificarPassword(){
+        $user = Auth::user();
+
+        // Verificar si la contraseña actual es correcta
+        if (!Hash::check($this->password, $user->password)) {
+            $this->alerta=true;
+            $this->alerta_error="Tu contraseña actual no coincide";
+            return;
+        }
+        elseif($this->passwordnew!=$this->passwordnewagain){
+            $this->alerta=true;
+            $this->alerta_error="Las contraseñas nuevas no coinciden";
+            return;
+        }
+    
+        // Verificar que la nueva contraseña sea diferente a la actual
+        elseif (Hash::check($this->passwordnew, $user->password)) {
+            $this->alerta=true;
+            $this->alerta_error="No puedes asignar la misma contraseña";
+            return;
+        }
+    
+        // Actualizar la contraseña
+        $usuario=User::find(Auth::user()->id);
+        $usuario->password = Hash::make($this->passwordnew);
+        $usuario->save();
+    
+        $this->alerta=true;
+        $this->alerta_sucess="Se ha cambiado tu contraseña, por favor inicia sesión nuevamente";
+
+        Auth::logout();
+
+        session()->invalidate();
+        session()->regenerateToken();
+
+        redirect('/logout');
     }
 
     public function mount(){

@@ -26,7 +26,7 @@ class Login extends Component
         ];
 
         if(Auth::attempt($credenciales)){
-            return redirect("estudios");
+            return redirect(route("panel.index"));
         }else{
             $this->error=true;
         }
