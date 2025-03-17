@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\ModelController;
+use App\Http\Controllers\PanelController;
 use App\Http\Controllers\StudyController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -26,10 +27,10 @@ Route::controller(LoginController::class)->group(function(){
 
 Route::middleware(['auth','checkuserstatus'])->controller(StudyController::class)->group(function () {
     Route::get('/panel/estudios', 'index')->name('estudios.index');
-    Route::get('/panel/estudios/crear', 'create')->name('estudios.create');
+    Route::middleware('checkrank:4')->get('/panel/estudios/crear', 'create')->name('estudios.create');
     // Route::middleware('checkrank:2')->get('/estudios/crear', 'create')->name('estudios.create');
 
-    Route::get('/panel/estudio/manager/crear/{idestudio}', 'manager_create')->name('manager.create');
+    Route::middleware('checkrank:4')->get('/panel/estudio/manager/crear/{idestudio}', 'manager_create')->name('manager.create');
     Route::get('/panel/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
     
     Route::get('/panel/estudio/{idestudio}', 'viewedit')->name('estudio.ver');
@@ -42,7 +43,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(MachineController::cla
 
 Route::middleware(['auth','checkuserstatus'])->controller(ModelController::class)->group(function(){
     Route::get('/panel/modelos', 'view')->name('modelos.view');
-    Route::get('/panel/modelos/crear', 'create')->name('modelos.create');
+    Route::middleware('checkrank:4')->get('/panel/modelos/crear', 'create')->name('modelos.create');
     Route::get('/panel/modelo/{idmodelo}', 'viewedit')->name('modelo.viewedit');
 });
 
@@ -50,6 +51,10 @@ Route::middleware(['auth','checkuserstatus'])->controller(AdminController::class
     Route::middleware('checkrank:4')->get('/panel/cuentas', 'accounts')->name('admin.accounts');
     Route::middleware('checkrank:4')->get('/panel/cuenta/{idcuenta}', 'account')->name('admin.account.view');
     Route::middleware('checkrank:4')->get('/panel/logs', 'logs')->name('admin.logs');
+});
+
+Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class)->group(function(){
+    Route::get('/panel/perfil', 'profile_view')->name('panel.perfil.view');
 });
 
 // Route::view('dashboard', 'dashboard')
