@@ -8,6 +8,18 @@ use Illuminate\Support\Facades\Http;
 
 class ModelController extends Controller
 {
+    
+    public function view(){
+
+
+
+
+
+
+        
+        return view("modelos.listado");
+    }
+    
     public function create(){
         
         return view("modelos.create");

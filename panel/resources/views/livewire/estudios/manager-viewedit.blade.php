@@ -104,7 +104,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a type="button" class="btn btn-outline-primary btn-sm" href="{{route("modelos.viewedit",$Model["ModelId"])}}">Visualizar</a>
+                                    <a type="button" class="btn btn-outline-primary btn-sm" href="{{route("modelo.viewedit",$Model["ModelId"])}}">Visualizar</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -119,6 +119,11 @@
                         </tbody>
                     </table>
                     
+                </div>
+                <div class="col-md-12 text-center">
+                    <a type="button" class="btn btn-outline-secondary" href="{{route("modelos.create")}}">
+                        Crear modelo
+                    </a>
                 </div>
 
             </div>

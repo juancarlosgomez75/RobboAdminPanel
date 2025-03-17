@@ -41,8 +41,9 @@ Route::middleware(['auth','checkuserstatus'])->controller(MachineController::cla
 });
 
 Route::middleware(['auth','checkuserstatus'])->controller(ModelController::class)->group(function(){
-    Route::get('/panel/modelo/crear', 'create')->name('modelos.create');
-    Route::get('/panel/modelo/{idmodelo}', 'viewedit')->name('modelos.viewedit');
+    Route::get('/panel/modelos', 'view')->name('modelos.view');
+    Route::get('/panel/modelos/crear', 'create')->name('modelos.create');
+    Route::get('/panel/modelo/{idmodelo}', 'viewedit')->name('modelo.viewedit');
 });
 
 Route::middleware(['auth','checkuserstatus'])->controller(AdminController::class)->group(function(){

@@ -184,7 +184,7 @@ body {
                                 </a>
                                 <ul class="submenu">
                                     <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
-                                    <li><a href="{{ url('/modelos') }}">Modelos</a></li>
+                                    {{-- <li><a href="{{ route('modelos.view') }}">Modelos</a></li> --}}
                                     <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
                                 </ul>
                             </li>
