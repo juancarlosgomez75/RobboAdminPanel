@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Http;
 
 class ModelController extends Controller
 {
+    public function create(){
+        
+        return view("modelos.create");
+    }
+
     public function viewedit($idmodelo){
 
         //Genero la petición de información del modelo para ver si existe

@@ -5,13 +5,8 @@ namespace App\Livewire\Modelos;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 
-class Viewedit extends Component
+class Create extends Component
 {
-    //Variables que se cargan
-    public $ModelInformation;
-    public $ManagerInformation;
-    public $StudyInformation;
-    public $editing=false;
     public $alerta=false;
 
     public $alerta_sucess="";
@@ -27,11 +22,11 @@ class Viewedit extends Component
     public $active=false;
     public $paginas=[];
 
-    public $paginasDisponibles=[];
-
     //Genero la variable de lista de managers y estudios
     public $listadoestudios;
     public $listadomanagers;
+
+    public $paginasDisponibles=[];
 
     public function validar(){
         $this->alerta_warning="";
@@ -81,7 +76,7 @@ class Viewedit extends Component
 
         if(!$managerencontrado){
             $this->alerta=true;
-            $this->alerta_warning="No se ha seleccionado un manager válido";
+            $this->alerta_warning="No se ha seleccionado un manager válido, actual es:".$this->manageractual. " y busca a: ".json_encode($this->listadomanagers);
             return;
         }
 
@@ -114,18 +109,17 @@ class Viewedit extends Component
         return true;
     }
 
-    public function guardarEdicion(){
+    public function guardar(){
         if($this->validar()){
 
             //Cargo la data
             $enviar=[
                 'Branch' => 'Server',
                 'Service' => 'SelfModels',
-                'Action' => 'Edit',
+                'Action' => 'Create',
                 "Data"=>[
                     "UserId"=>"1",
                     "ModelData"=>[
-                        "ModelId"=>$this->ModelInformation["ModelId"],
                         "ModelUserName"=>$this->drivername,
                         "ModelPersonalCm"=>($this->usecustomname == "1"),
                         "ModelPersonalCmName"=>$this->customname,
@@ -149,18 +143,18 @@ class Viewedit extends Component
 
             if (isset($data['Status'])) {
                 if($data['Status']){
+                    $this->resetExcept("listadoestudios","paginasdisponibles");
                     $this->alerta=true;
-                    $this->alerta_sucess= "Se ha modificado esta cuenta de forma correcta";
-                    $this->editing=false;
+                    $this->alerta_sucess= "Se ha creado este modelo de forma correcta";
                     
-                    registrarLog("Producción","Modelos","Editar","Se ha editado al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),true);
+                    registrarLog("Producción","Modelos","Crear","Se ha registrado al modelo con información: ".json_encode($enviar),true);
 
                     return;
 
                 }else{
                     $this->alerta=true;
                     $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
-                    registrarLog("Producción","Modelos","Editar","Se ha intentado editar al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),false);
+                    registrarLog("Producción","Modelos","Crear","Se ha intentado registrar al con información: ".json_encode($enviar),false);
                     return;
                 }
             }
@@ -170,26 +164,16 @@ class Viewedit extends Component
         }
     }
 
+
     public function nuevaPagina(){
-        if($this->editing){
-            $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
-        }
+        $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
         
     }
 
     public function eliminarPagina($index)
     {
-        // $this->paginas[$index]["NickName"]="Index es: ".$index;
-        if($this->editing){
-            unset($this->paginas[$index]); // Elimina el elemento del array
-            $this->paginas = array_values($this->paginas); // Reorganiza los índices
-        }
-
-    }
-    
-    public function activarEdicion(){
-        $this->editing=true;
-
+        unset($this->paginas[$index]); // Elimina el elemento del array
+        $this->paginas = array_values($this->paginas); // Reorganiza los índices
     }
 
     public function obtenerEstudios(){
@@ -267,42 +251,45 @@ class Viewedit extends Component
     }
 
     public function obtenerManagers($idestudio){
-        //Genero la petición de informacion
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
-            'Branch' => 'Server',
-            'Service' => 'PlatformUser',
-            'Action' => 'StudyInfo',
-            'Data' => ["UserId" => "1"],
-            "DataStudy"=> ["Id"=> $idestudio]
-        ]);
+        if($idestudio!= "" && $idestudio!= 0){
+            //Genero la petición de informacion
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post(config('app.API_URL'), [
+                'Branch' => 'Server',
+                'Service' => 'PlatformUser',
+                'Action' => 'StudyInfo',
+                'Data' => ["UserId" => "1"],
+                "DataStudy"=> ["Id"=> $idestudio]
+            ]);
 
-        $data = $response->json();
+            $data = $response->json();
 
-        //Analizo si todo okay
-        if(isset($data["Status"])){
-            //Analizo si el status es okay
-            if($data["Status"]){
+            //Analizo si todo okay
+            if(isset($data["Status"])){
+                //Analizo si el status es okay
+                if($data["Status"]){
 
-                if(isset($data["ListUserData"])){
-                    //Significa que está bien, entonces proceso la lista
-                    $this->listadomanagers=$data["ListUserData"];
+                    if(isset($data["ListUserData"])){
+                        //Significa que está bien, entonces proceso la lista
+                        $this->listadomanagers=$data["ListUserData"];
 
-                    usort($this->listadomanagers, function ($a, $b) {
-                        return strcmp($a["Name"], $b["Name"]);
-                    });
+                        usort($this->listadomanagers, function ($a, $b) {
+                            return strcmp($a["Name"], $b["Name"]);
+                        });
 
-                    return true;
+                        return true;
+                    }
                 }
             }
+
+            $this->alerta=true;
+            $this->alerta_error="Error obteniendo los managers";
+            return false;
         }
 
-        $this->alerta=true;
-        $this->alerta_error="Error obteniendo los managers";
-        return false;
     }
 
     public function updatedestudioactual($valor)
@@ -312,22 +299,7 @@ class Viewedit extends Component
         $this->obtenerManagers($this->estudioactual);
     }
 
-    public function mount($ModelInformation,$ManagerInformation,$StudyInformation){
-        //Cargo la información principal
-        $this->ModelInformation = $ModelInformation;
-        $this->ManagerInformation = $ManagerInformation;
-        $this->StudyInformation = $StudyInformation;
-
-        //Cargo la información de la modelo
-        $this->drivername = $ModelInformation["ModelUserName"];
-
-        $this->usecustomname = ($ModelInformation["ModelPersonalCm"] ?? false) ? 1 : 0;
-        $this->customname = $ModelInformation["ModelPersonalCmName"]??"";
-        $this->active= $ModelInformation["ModelActive"];
-        $this->estudioactual = $StudyInformation["Id"];
-        $this->manageractual = $ManagerInformation["Id"];
-        $this->paginas=$ModelInformation["ModelPages"];
-
+    public function mount(){
         //Trato de obtener los estudios
         if($this->obtenerEstudios()){
             //Trato de obtener los managers
@@ -335,10 +307,11 @@ class Viewedit extends Component
 
             }
         }
-
     }
+
     public function render()
     {
-        return view('livewire.modelos.viewedit');
+        
+        return view('livewire.modelos.create');
     }
 }
