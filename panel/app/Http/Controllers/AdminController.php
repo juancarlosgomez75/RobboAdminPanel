@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,5 +35,16 @@ class AdminController extends Controller
 
     public function logs(){
         return view("admin.logs");
+    }
+
+    public function log($logid){
+        $log=Log::find($logid);
+
+        if($log){
+            return view("admin.log",compact("log"));
+        }else{
+            return redirect(route('admin.logs'));
+        }
+        
     }
 }
