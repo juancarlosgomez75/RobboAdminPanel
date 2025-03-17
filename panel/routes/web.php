@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\ModelController;
@@ -57,6 +58,10 @@ Route::middleware(['auth','checkuserstatus'])->controller(AdminController::class
 Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class)->group(function(){
     Route::get('/panel/perfil', 'profile_view')->name('panel.perfil.view');
     Route::get('/panel', 'index')->name('panel.index');
+});
+
+Route::middleware(['auth','checkuserstatus'])->controller(InventoryController::class)->group(function(){
+    Route::get('/panel/productos', 'index')->name('inventario.index');
 });
 
 // Route::view('dashboard', 'dashboard')
