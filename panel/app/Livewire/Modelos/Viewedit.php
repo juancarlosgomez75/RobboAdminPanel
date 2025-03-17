@@ -116,9 +116,57 @@ class Viewedit extends Component
 
     public function guardarEdicion(){
         if($this->validar()){
+
+            //Cargo la data
+            $enviar=[
+                'Branch' => 'Server',
+                'Service' => 'SelfModels',
+                'Action' => 'Edit',
+                "Data"=>[
+                    "UserId"=>"1",
+                    "ModelData"=>[
+                        "ModelId"=>$this->ModelInformation["ModelId"],
+                        "ModelUserName"=>$this->drivername,
+                        "ModelPersonalCm"=>($this->usecustomname == "1"),
+                        "ModelPersonalCmName"=>$this->customname,
+                        "ModelPages"=>$this->paginas
+                    ],
+                    "UserData"=>[
+                        "Id"=>86
+                    ]
+                ],
+            ];
+
+            //Genero la modificación
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post(config('app.API_URL'), $enviar);
+
+
+            $data = $response->json();
+
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    $this->alerta=true;
+                    $this->alerta_sucess= "Se ha modificado esta cuenta de forma correcta";
+                    $this->editing=false;
+                    
+                    registrarLog("Producción","Modelos","Editar modelo","Se ha editado al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),true);
+
+                    return;
+
+                }else{
+                    $this->alerta=true;
+                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                    registrarLog("Producción","Modelos","Editar modelo","Se ha intentado editar al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),false);
+                    return;
+                }
+            }
+
             $this->alerta=true;
-            $this->alerta_sucess="El usuario ha sido modificado correctamente";
-            $this->editing=false;
+            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
         }
     }
 

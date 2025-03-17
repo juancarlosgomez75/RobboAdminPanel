@@ -33,6 +33,9 @@ class Account extends Component
     }
 
     public function validar(){
+        $this->alerta_warning="";
+        $this->alerta_error="";
+        $this->alerta_sucess="";
         //Valido los campos
         if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $this->username) && !empty(trim($this->username)))){
             $this->alerta=true;
