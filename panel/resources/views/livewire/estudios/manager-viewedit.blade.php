@@ -104,7 +104,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a type="button" class="btn btn-outline-primary btn-sm" href="/modelo/{{$Model["ModelId"]}}">Visualizar</a>
+                                    <a type="button" class="btn btn-outline-primary btn-sm" href="{{route("modelos.viewedit",$Model["ModelId"])}}">Visualizar</a>
                                 </td>
                             </tr>
                             @endforeach

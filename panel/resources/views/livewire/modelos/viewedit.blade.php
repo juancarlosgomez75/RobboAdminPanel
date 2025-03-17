@@ -1,5 +1,5 @@
 <div>
-    {{-- @if($alerta)
+    @if($alerta)
         @if($alerta_sucess!="")
         <div class="alert alert-success" role="alert">
             {{$alerta_sucess}}
@@ -13,7 +13,7 @@
             {{$alerta_warning}}
         </div>
         @endif
-    @endif --}}
+    @endif
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -74,7 +74,7 @@
                                 @if(!empty($listadomanagers))
                                 <option disabled value="0">Seleccionar un manager</option>
                                 @foreach($listadomanagers as $manager)
-                                <option value="{{$manager["Id"]}}">{{$manager["Name"]}}</option>
+                                <option value="{{$manager["Name"]}}">{{$manager["Name"]}}</option>
                                 @endforeach
                                 @else
                                 <option disabled value="0"></option>
@@ -82,35 +82,23 @@
                             </select>
                             <br>
                         </div>
-                        <div class="col-md-12 text-center">
-                            {{-- @if(!$editing)
-                            <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
-                                Editar información
-                            </button>
-                            @else
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                Guardar cambios
-                            </button>
-                            @endif
-
-                            @if($activo)
-                            <button type="button" class="btn btn-outline-danger ms-2" wire:click="desactivarUsuario()">
-                                Desactivar usuario
-                            </button>
-                            @else
-                            <button type="button" class="btn btn-outline-success ms-2" wire:click="activarUsuario()">
-                                Activar usuario
-                            </button>
-                            @endif --}}
-                        </div>
                         
                     </div>
                     
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-9">
                     <h5 class="card-title">Páginas que usa</h5>
                     <p class="card-text">Estas son las páginas que el modelo indica que usa</p><br>
+                </div>
+                
+                <div class="col-md-3 text-end pe-4">
+                    <br><br>
+                    @if($editing)
+                    <button type="button" class="btn btn-outline-secondary" wire:click="nuevaPagina()">
+                        Añadir página
+                    </button>
+                    @endif
                 </div>
                 <div class="col-md-12">
                     
@@ -119,15 +107,31 @@
                             <tr>
                                 <th class="w-10" scope="col" style="width: 7%;">#</th>
                                 <th class="w-40" scope="col">Página</th>
-                                <th class="w-30" scope="col">Nickname</th>
-                                <th scope="col" style="width: 15%;"></th>
+                                <th class="w-30" scope="col">Nickname en página</th>
+                                <th scope="col" style="width: 10%;"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @if(!empty($ModelInformation["ModelPages"]))
-                            @foreach ($ModelInformation["ModelPages"] as $Page)
+                        <tbody class="align-middle">
+                            @if(!empty($paginas))
+                            @foreach ($paginas as $indice=> $Page)
                             <tr>
-                                <td>a</td>
+                                <td>{{ $indice + 1 }}</td>
+                                <td>
+                                    <select class="form-select" wire:model="paginas.{{ $indice }}.NickPage" @if(!$editing) disabled @endif>
+                                        <option disabled value="-1">Selecciona una página</option>
+                                        @foreach($paginasDisponibles as $index=>$pag)
+                                        <option value="{{$pag}}">{{$pag}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" wire:model="paginas.{{ $indice}}.NickName" placeholder="Ejemplo: usuario.chatb" @if(!$editing) disabled @endif>
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-danger btn-sm" wire:click="eliminarPagina({{ $indice }})">
+                                        Eliminar
+                                    </a>
+                                </td>
                             </tr>
                             @endforeach
                             @else
@@ -142,6 +146,28 @@
                         </tbody>
                     </table>
                     
+                    
+                </div>
+                <div class="col-md-12 text-center">
+                    @if(!$editing)
+                    <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
+                        Editar información
+                    </button>
+                    @else
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Guardar cambios
+                    </button>
+                    @endif
+
+                    {{-- @if($activo)
+                    <button type="button" class="btn btn-outline-danger ms-2" wire:click="desactivarUsuario()">
+                        Desactivar usuario
+                    </button>
+                    @else
+                    <button type="button" class="btn btn-outline-success ms-2" wire:click="activarUsuario()">
+                        Activar usuario
+                    </button>
+                    @endif --}}
                 </div>
 
             </div>
@@ -158,12 +184,12 @@
             </div>
             <div class="modal-body">
                 <p>
-                    Al presionar en confirmar edición, confirma que la información aquí contenida es correcta.
+                    Al presionar en confirmar cambios, confirma que la información aquí contenida es correcta.
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="guardarEdicion" >Confirmar edición</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="guardarEdicion" >Confirmar cambios</button>
             </div>
         </div>
         </div>

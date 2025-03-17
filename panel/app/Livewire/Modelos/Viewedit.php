@@ -11,7 +11,7 @@ class Viewedit extends Component
     public $ModelInformation;
     public $ManagerInformation;
     public $StudyInformation;
-    public $editing=true;
+    public $editing=false;
     public $alerta=false;
 
     public $alerta_sucess="";
@@ -25,10 +25,124 @@ class Viewedit extends Component
     public $estudioactual=0;
     public $manageractual=0;
     public $active=false;
+    public $paginas=[];
+
+    public $paginasDisponibles=[];
 
     //Genero la variable de lista de managers y estudios
     public $listadoestudios;
     public $listadomanagers;
+
+    public function validar(){
+        $this->alerta_warning="";
+        $this->alerta_error="";
+        $this->alerta_sucess="";
+
+        //Valido el nombre de usuario
+        if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $this->drivername) && !empty(trim($this->drivername)))){
+            $this->alerta=true;
+            $this->alerta_warning="Alerta: El nombre de usuario no es válido";
+            return;
+        }
+        //Valido el nombre personalizado
+        elseif (!empty(trim($this->customname)) && !preg_match('/^[a-zA-Z0-9._-]+$/', $this->customname)){
+            $this->alerta=true;
+            $this->alerta_warning="Alerta: El nombre personalizado no es válido";
+            return;
+        }
+        //Valido si usa o no
+        elseif(!($this->usecustomname=="0") && !($this->usecustomname=="1")){
+            $this->alerta=true;
+            $this->alerta_warning="No se ha indicado si usar o no el nombre personalizado";
+            return;
+        }
+
+        //Valido si está en un estudio correcto
+        $estudioencontrado=false;
+        foreach($this->listadoestudios as $estudio){
+            if($estudio["Id"]==$this->estudioactual){
+                $estudioencontrado=true;
+            }
+        }
+
+        if(!$estudioencontrado){
+            $this->alerta=true;
+            $this->alerta_warning="No se ha seleccionado un estudio válido";
+            return;
+        }
+
+        //Valido si tengo un manager correcto
+        $managerencontrado=false;
+        foreach($this->listadomanagers as $manager){
+            if($manager["Id"]==$this->manageractual){
+                $managerencontrado=true;
+            }
+        }
+
+        if(!$managerencontrado){
+            $this->alerta=true;
+            $this->alerta_warning="No se ha seleccionado un manager válido";
+            return;
+        }
+
+        //Valido todas las páginas ingresadas
+        foreach($this->paginas as $pagina){
+            
+            //Analizo el nickname
+            if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $pagina["NickName"]) && !empty(trim($pagina["NickName"])))){
+                $this->alerta=true;
+                $this->alerta_warning="Alerta: El nombre de usuario: ".$pagina["NickName"]." no es válido";
+                return;
+            }
+
+            //Analizo el id de la página
+            $paginaencontrada=false;
+            foreach($this->paginasDisponibles as $pagbus){
+                if($pagina["NickPage"]==$pagbus){
+                    $paginaencontrada=true;
+                }
+            }
+
+            if(!$paginaencontrada){
+                $this->alerta=true;
+                $this->alerta_warning="Alerta: La página: ".$pagina["NickPage"]." no es válida";
+                return;
+            }
+
+        }
+
+        return true;
+    }
+
+    public function guardarEdicion(){
+        if($this->validar()){
+            $this->alerta=true;
+            $this->alerta_sucess="El usuario ha sido modificado correctamente";
+            $this->editing=false;
+        }
+    }
+
+    public function nuevaPagina(){
+        if($this->editing){
+            $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
+        }
+        
+    }
+
+    public function eliminarPagina($index)
+    {
+        // $this->paginas[$index]["NickName"]="Index es: ".$index;
+        if($this->editing){
+            unset($this->paginas[$index]); // Elimina el elemento del array
+            $this->paginas = array_values($this->paginas); // Reorganiza los índices
+        }
+
+    }
+    
+    public function activarEdicion(){
+        $this->editing=true;
+
+    }
 
     public function obtenerEstudios(){
 
@@ -90,6 +204,9 @@ class Viewedit extends Component
                     usort($this->listadoestudios, function ($a, $b) {
                         return strcmp($a["FullName"], $b["FullName"]);
                     });
+
+                    //Obtengo las páginas disponibles
+                    $this->paginasDisponibles=$generalinformation['WebPagesList'];
 
                     return true;
                 }
@@ -161,6 +278,7 @@ class Viewedit extends Component
         $this->active= $ModelInformation["ModelActive"];
         $this->estudioactual = $StudyInformation["Id"];
         $this->manageractual = $ManagerInformation["Id"];
+        $this->paginas=$ModelInformation["ModelPages"];
 
         //Trato de obtener los estudios
         if($this->obtenerEstudios()){
