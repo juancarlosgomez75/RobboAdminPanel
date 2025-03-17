@@ -30,7 +30,7 @@ return new class extends Migration
             $table->text('check_notes')->nullable();
 
             //Información de empaquetado
-            $table->unsignedBigInteger('preparered_by')->nullable();
+            $table->unsignedBigInteger('prepared_by')->nullable();
             $table->foreign('prepared_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->timestamp('preparation_date')->nullable();
             $table->text('preparation_notes')->nullable();

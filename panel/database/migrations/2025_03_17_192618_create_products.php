@@ -47,7 +47,7 @@ return new class extends Migration
 
             //Información de categoría del producto
             $table->unsignedBigInteger('product_id')->nullable();
-            $table->foreign('product_id')->references('id')->on('product')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null')->onUpdate('cascade');
 
             //Variables de stock
             $table->integer('stock_available')->default(0);
@@ -81,7 +81,7 @@ return new class extends Migration
 
             //Ahora información de la orden, si existe
             $table->unsignedBigInteger('order_id')->nullable(); //Queda pendiente de amarrarse
-            $table->foreign('order_id')->references('id')->on('order')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('set null')->onUpdate('cascade');
 
             //Timestamp
             $table->timestamps();
