@@ -176,7 +176,21 @@ body {
 
                     <nav class="sidebar">
                         <ul>
-                            
+                            @if(auth()->check() && auth()->user()->rank >= 2)
+                            <li>
+                                <a href="#" class="toggle-submenu">
+                                    <i class="fa-solid fa-box"></i>
+                                    <span>Alistamiento e inventario</span>
+                                    <i class="fa-solid fa-chevron-down dropdown"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="{{ route('maquinas.index') }}">Inventario</a></li>
+                                    
+                                </ul>
+                            </li>
+                            @endif
+
+                            @if(auth()->check() && auth()->user()->rank >= 3)
                             <li>
                                 <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-truck"></i>
@@ -189,7 +203,7 @@ body {
                                     <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
                                 </ul>
                             </li>
-                        
+                            @endif
                         
 
                             @if(auth()->check() && auth()->user()->rank >= 4)
