@@ -180,11 +180,11 @@ body {
                             <li>
                                 <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-box"></i>
-                                    <span>Alistamiento e inventario</span>
+                                    <span>Inventario</span>
                                     <i class="fa-solid fa-chevron-down dropdown"></i>
                                 </a>
                                 <ul class="submenu">
-                                    <li><a href="{{ route('maquinas.index') }}">Inventario</a></li>
+                                    <li><a href="{{ route('inventario.index') }}">Productos</a></li>
                                     
                                 </ul>
                             </li>
