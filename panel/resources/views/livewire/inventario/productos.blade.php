@@ -38,7 +38,7 @@
                     @endif
                 </td>
                 <td>
-                    <a type="button" class="btn btn-outline-secondary btn-sm">Ver detalles</a>
+                    <a type="button" class="btn btn-outline-secondary btn-sm" href="{{route("inventario.viewedit",$producto->id)}}">Ver detalles</a>
                 </td>
             </tr>
             @endforeach
