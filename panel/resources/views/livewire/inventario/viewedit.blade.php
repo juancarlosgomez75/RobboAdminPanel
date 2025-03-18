@@ -70,7 +70,7 @@
                 <table class="table text-center" >
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">Fecha</th>
                             <th scope="col">Razón</th>
                             <th scope="col">Cantidad</th>
                             <th scope="col">Stock antes</th>
@@ -83,7 +83,7 @@
                         @if(!$Movimientos->isempty())
                         @foreach ($Movimientos as $movimiento)
                         <tr>
-                            <th scope="row">{{$movimiento->id}}</th>
+                            <td scope="row">{{$movimiento->created_at}}</td>
                             <td scope="row">{{$movimiento->reason}}</td>
                             <td scope="row">
                                 @if($movimiento->type=="expense")
@@ -113,6 +113,9 @@
 
                     </tbody>
                 </table>
+            </div>
+            <div class="col-md-12">
+                {{ $Movimientos->links() }}
             </div>
         </div>
     </div>
