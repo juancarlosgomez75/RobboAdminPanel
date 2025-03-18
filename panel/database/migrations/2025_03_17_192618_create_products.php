@@ -24,7 +24,7 @@ return new class extends Migration
         //Luego la tabla de productos
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->text('description');
 
             //Información de categoría del producto

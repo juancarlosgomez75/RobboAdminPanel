@@ -1,6 +1,7 @@
 @extends('paneltemplate')
 @section('title','Productos')
 @section("contenido")
+@livewire('alerts')
 <div class="card shadow-custom">
     <div class="card-body">
         <div class="row">
@@ -14,4 +15,5 @@
         </div>
     </div>
 </div>
+
 @endsection
