@@ -74,6 +74,35 @@ class Viewedit extends Component
 
 
     }
+
+    public function desactivar(){
+        $this->producto=Product::find($this->producto->id);
+        $this->producto->available=false;
+        if($this->producto->save()){
+            $this->dispatch('mostrarToast', 'Desactivar producto', 'Se ha desactivado el producto correctamente');
+            registrarLog("Inventario","Productos","Desactivar producto","Se ha desactivado al producto #".$this->producto->id,true);
+            $this->activo=false;
+        }else{
+            $this->dispatch('mostrarToast', 'Desactivar producto', 'No se ha logrado desactivar el producto');
+            registrarLog("Inventario","Productos","Desactivar producto","Se ha intentado desactivar al producto #".$this->producto->id,false);
+        }
+
+    }
+
+    public function activar(){
+        $this->producto=Product::find($this->producto->id);
+        $this->producto->available=true;
+        if($this->producto->save()){
+            $this->dispatch('mostrarToast', 'Activar producto', 'Se ha activado el producto correctamente');
+            registrarLog("Inventario","Productos","Activar producto","Se ha activado al producto #".$this->producto->id,true);
+            $this->activo=true;
+        }else{
+            $this->dispatch('mostrarToast', 'Activar producto', 'No se ha logrado activar el producto');
+            registrarLog("Inventario","Productos","Activar producto","Se ha intentado activar al producto #".$this->producto->id,false);
+        }
+
+    }
+
     public function guardarEdicion(){
         if($this->validar()){
             //Edito la información, primero la del producto
