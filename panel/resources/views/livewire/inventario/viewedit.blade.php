@@ -30,6 +30,14 @@
                         <label class="form-label">Referencia</label>
                         <input type="text" class="form-control" placeholder="Ejemplo: 001RG" wire:model="ref" required @if(!$editing) disabled @endif>
                     </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Stock disponible</label>
+                        <input type="number" class="form-control" wire:model="stock" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Stock mínimo (Para alerta)</label>
+                        <input type="number" class="form-control" wire:model="stockmin" min="0" step="1" required @if(!$editing) disabled @endif>
+                    </div>
                     <div class="col-md-12 text-center">
                         @if(!$editing)
                         <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
@@ -108,4 +116,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de modificación</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Al presionar en confirmar edición, confirma que la información aquí contenida es correcta.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="guardarEdicion" >Confirmar edición</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
 </div>

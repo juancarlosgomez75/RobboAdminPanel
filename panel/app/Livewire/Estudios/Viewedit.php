@@ -202,8 +202,8 @@ class Viewedit extends Component
 
     public function activarEdicion(){
         $this->editing=true;
-
     }
+    
     public function render()
     {
         return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades]);

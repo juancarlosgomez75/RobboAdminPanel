@@ -35,7 +35,11 @@ class Categorias extends Component
         if($product){
             if($product->delete()){
                 $this->dispatch('mostrarToast', 'Eliminar categoría', 'Se ha eliminado la categoría');
+                registrarLog("Inventario","Productos","Eliminar categoria","Se ha eliminado la categoría #".$id,true);
                 return;
+            }
+            else{
+                registrarLog("Inventario","Productos","Eliminar categoria","Se ha intentado eliminar la categoría #".$id,true);
             }
         }
 
