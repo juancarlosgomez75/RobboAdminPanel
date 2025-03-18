@@ -44,7 +44,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Nombre de la categoría</label>
-                    <input type="email" class="form-control" placeholder="Ejemplo: Juguetes" wire:model="name">
+                    <input type="text" class="form-control" placeholder="Ejemplo: Juguetes" wire:model="name">
                 </div>
                 <div class="mb-3">
                     <labelclass="form-label">Descripción</label>

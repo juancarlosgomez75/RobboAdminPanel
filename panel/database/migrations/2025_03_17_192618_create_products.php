@@ -52,7 +52,20 @@ return new class extends Migration
             //Variables de stock
             $table->integer('stock_available')->default(0);
             $table->integer('stock_min')->default(0);
-            $table->integer('stock_rec')->default(0);
+
+            //Timestamp
+            $table->timestamps();
+        });
+
+        //Luego la tabla de transacciones
+        Schema::create('product_transactions', function (Blueprint $table) {
+            $table->id();
+
+            //Información de creación
+            $table->unsignedBigInteger('creator')->nullable();
+            $table->foreign('creator')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->text('notes')->nullable();
+            $table->json('details');
 
             //Timestamp
             $table->timestamps();
@@ -80,8 +93,8 @@ return new class extends Migration
             $table->foreign('author')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
 
             //Ahora información de la orden, si existe
-            $table->unsignedBigInteger('order_id')->nullable(); //Queda pendiente de amarrarse
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('set null')->onUpdate('cascade');
+            $table->unsignedBigInteger('transaction_id')->nullable(); //Queda pendiente de amarrarse
+            $table->foreign('transaction_id')->references('id')->on('product_transactions')->onDelete('set null')->onUpdate('cascade');
 
             //Timestamp
             $table->timestamps();
@@ -94,6 +107,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('product_inventory_movements');
+        Schema::dropIfExists('product_transactions');
         Schema::dropIfExists('product_inventory');
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_categories');
