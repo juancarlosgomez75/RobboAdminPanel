@@ -23,7 +23,7 @@ class Categorias extends Component
             $this->name_edit=$elemento->name;
             $this->description_edit=$elemento->description;
             $this->edit_cat=$elemento;
-            $this->dispatch('abrirModal');
+            $this->dispatch('abrirModalEdit');
         }else{
             $this->dispatch('mostrarToast', 'Editar categoría', 'Error: No se localiza la categoría');
         }
@@ -51,7 +51,7 @@ class Categorias extends Component
 
                 if($existe){
                     $this->dispatch('mostrarToast', 'Editar categoría', 'Error: Este nombre de categoría ya existe, usa otro');
-                    $this->dispatch('cerrarModal'); 
+                    $this->dispatch('cerrarModalEdit'); 
                     return;
                 }
             }
@@ -72,7 +72,7 @@ class Categorias extends Component
             $this->edit_cat="";
 
         }
-        $this->dispatch('cerrarModal'); 
+        $this->dispatch('cerrarModalEdit'); 
     }
 
     public function validar(){

@@ -64,7 +64,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Edición de catgoría</h5>
+                    <h5 class="modal-title" id="modalLabel">Edición de categoría</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
@@ -92,12 +92,12 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        Livewire.on('abrirModal', () => {
+        Livewire.on('abrirModalEdit', () => {
             let modal = new bootstrap.Modal(document.getElementById('editModal'));
             modal.show();
         });
 
-        Livewire.on('cerrarModal', () => {
+        Livewire.on('cerrarModalEdit', () => {
             let modalEl = document.getElementById('editModal');
             let modal = bootstrap.Modal.getInstance(modalEl);
             if (modal) modal.hide();
