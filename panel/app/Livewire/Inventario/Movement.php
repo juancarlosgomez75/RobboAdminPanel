@@ -61,14 +61,20 @@ class Movement extends Component
                 //Ahora intento modificar el inventario
                 $this->inventory->stock_available=$movimiento->stock_after;
                 if($this->inventory->save()){
+
+                    registrarLog("Inventario","Productos","Crear movimiento","Se ha creado un movimiento con la siguiente información: ".json_encode($movimiento),true);
+
                     $this->dispatch('mostrarToast', 'Crear movimiento', 'Se ha creado el movimiento de forma satisfactoria');
                     $this->resetExcept("inventory");
+                    return;
                 }else{
                     $this->dispatch('mostrarToast', 'Crear movimiento', 'Se ha generado un error al actualizar el inventario');
                 }
             }else{
                 $this->dispatch('mostrarToast', 'Crear movimiento', 'Se ha generado un error al registrar el movimiento');
             }
+
+            registrarLog("Inventario","Productos","Crear movimiento","Se ha intentado crear un movimiento con la siguiente información: ".json_encode($movimiento),false);
 
 
         }
