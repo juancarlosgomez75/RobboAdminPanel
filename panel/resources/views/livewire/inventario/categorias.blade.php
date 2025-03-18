@@ -11,9 +11,11 @@
             @if(!$categorias->isEmpty())
             @foreach ($categorias as $categoria)
             <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td><a type="button" class="btn btn-outline-secondary btn-sm">Eliminar</a></td>
+                <th scope="row">{{$categoria->id}}</th>
+                <td>{{$categoria->name}}</td>
+                <td>
+                    <a type="button" class="btn btn-outline-secondary btn-sm" wire:click="editar({{$categoria->id}})">Editar</a>
+                </td>
             </tr>
             @endforeach
 
@@ -56,6 +58,52 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Edición de catgoría</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Al presionar en guardar, la información será almacenada automáticamente
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la categoría</label>
+                        <input type="email" class="form-control" placeholder="Ejemplo: Juguetes" wire:model="name_edit">
+                    </div>
+                    <div class="mb-3">
+                        <labelclass="form-label">Descripción</label>
+                        <textarea class="form-control" rows="2" placeholder="Aquí describe de forma corta qué productos estarán contenidos en esta categoría" wire:model="description_edit"></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" wire:click="guardarCambios()">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Livewire.on('abrirModal', () => {
+            let modal = new bootstrap.Modal(document.getElementById('editModal'));
+            modal.show();
+        });
+
+        Livewire.on('cerrarModal', () => {
+            let modalEl = document.getElementById('editModal');
+            let modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+        });
+    });
+</script>
     
     
 </div>
