@@ -59,7 +59,7 @@ return new class extends Migration
         });
 
         //Luego la tabla de movimientos
-        Schema::create('inventory_movements', function (Blueprint $table) {
+        Schema::create('product_inventory_movements', function (Blueprint $table) {
             $table->id();
 
             //Información de la relación con el inventario
@@ -93,6 +93,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('product_inventory_movements');
         Schema::dropIfExists('product_inventory');
         Schema::dropIfExists('products');
         Schema::dropIfExists('product_categories');
