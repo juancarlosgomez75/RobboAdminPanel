@@ -28,6 +28,20 @@ class Categorias extends Component
             $this->dispatch('mostrarToast', 'Editar categoría', 'Error: No se localiza la categoría');
         }
     }
+
+    public function eliminar($id){
+        $product = ProductCategory::find($id);
+
+        if($product){
+            if($product->delete()){
+                $this->dispatch('mostrarToast', 'Eliminar categoría', 'Se ha eliminado la categoría');
+                return;
+            }
+        }
+
+        $this->dispatch('mostrarToast', 'Eliminar categoría', 'Error: No se ha eliminado la categoría');
+    }
+
     public function validar_edit(){
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name_edit) && !empty(trim($this->name_edit)))){

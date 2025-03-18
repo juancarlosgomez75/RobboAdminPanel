@@ -15,6 +15,7 @@
                 <td>{{$categoria->name}}</td>
                 <td>
                     <a type="button" class="btn btn-outline-secondary btn-sm" wire:click="editar({{$categoria->id}})">Editar</a>
+                    <a type="button" class="btn btn-outline-danger btn-sm" wire:click="eliminar({{$categoria->id}})">Eliminar</a>
                 </td>
             </tr>
             @endforeach
