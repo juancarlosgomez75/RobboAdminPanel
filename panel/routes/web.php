@@ -62,6 +62,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class
 
 Route::middleware(['auth','checkuserstatus'])->controller(InventoryController::class)->group(function(){
     Route::get('/panel/productos', 'index')->name('inventario.index');
+    Route::get('/panel/producto/movimiento/{idinventario}', 'movement')->name('inventario.movimiento');
     Route::get('/panel/producto/{idproducto}', 'viewedit')->name('inventario.viewedit');
 });
 

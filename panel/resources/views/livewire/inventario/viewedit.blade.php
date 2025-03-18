@@ -62,9 +62,14 @@
                     </div>
                 </div> 
             </div>
-            <div class="col-md-12">
+            <div class="col-md-8 pt-3">
                 <h5 class="card-title">Historial de movimientos</h5>
                 <p class="card-text">Estos son los últimos movimientos que se han efectuado para este producto.</p>
+            </div>
+            <div class="col-md-4 pt-4 text-end">
+                <a class="btn btn-outline-secondary btn-sm" href="{{route("inventario.movimiento",$inventario->id)}}">
+                    Crear un movimiento
+                </a>
             </div>
             <div class="col-md-12 pt-2">
                 <table class="table text-center" >

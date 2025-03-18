@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductInventory;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -17,6 +18,17 @@ class InventoryController extends Controller
         $producto=Product::find($idproducto);
         if($producto){
             return view("inventario.viewedit",compact("producto"));
+        }else{
+            return redirect(route("inventario.index"));
+        }
+        
+    }
+
+    public function movement($idinventario){
+        //Consulto si el producto existe
+        $inventario=ProductInventory::find($idinventario);
+        if($inventario){
+            return view("inventario.movement",["idinventory"=>$idinventario]);
         }else{
             return redirect(route("inventario.index"));
         }
