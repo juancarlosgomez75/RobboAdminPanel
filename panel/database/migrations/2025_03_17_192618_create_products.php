@@ -67,7 +67,7 @@ return new class extends Migration
             $table->foreign('inventory_id')->references('id')->on('product_inventory')->onDelete('set null')->onUpdate('cascade');
 
             //Ahora el tipo
-            $table->enum('payment_method', ['income', 'expense'])->nullable();
+            $table->enum('type', ['income', 'expense'])->nullable();
 
             //Ahora información del movimiento
             $table->text('reason');
