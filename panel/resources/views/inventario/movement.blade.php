@@ -3,6 +3,6 @@
 @section("contenido")
 
 @livewire('alerts')
-@livewire("inventario.movement",compact("idinventory"))
+@livewire("inventario.movement",compact("inventory"))
 
 @endsection

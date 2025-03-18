@@ -28,7 +28,7 @@ class InventoryController extends Controller
         //Consulto si el producto existe
         $inventario=ProductInventory::find($idinventario);
         if($inventario){
-            return view("inventario.movement",["idinventory"=>$idinventario]);
+            return view("inventario.movement",["inventory"=>$inventario]);
         }else{
             return redirect(route("inventario.index"));
         }
