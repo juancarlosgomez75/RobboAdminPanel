@@ -6,8 +6,8 @@ use Livewire\Component;
 
 class Alerts extends Component
 {
-    public $toasts = []; // Almacena los mensajes
-    protected $listeners = ['mostrarToast']; // Escucha eventos Livewire
+    public $toasts = [];
+    protected $listeners = ['mostrarToast'];
 
     public function mostrarToast($titulo,$mensaje)
     {

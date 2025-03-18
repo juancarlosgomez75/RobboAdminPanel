@@ -16,13 +16,3 @@
         @endforeach
     </div>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        Livewire.on('ocultarToast', () => {
-            setTimeout(() => {
-                Livewire.dispatch('eliminarToast');
-            }, 3000);
-        });
-    });
-</script>
