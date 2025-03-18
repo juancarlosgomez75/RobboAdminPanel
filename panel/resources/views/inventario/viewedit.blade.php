@@ -1,3 +1,8 @@
-<div>
-    <!-- The only way to do great work is to love what you do. - Steve Jobs -->
-</div>
+@extends('paneltemplate')
+@section('title','Detalles de producto')
+@section("contenido")
+
+@livewire('alerts')
+@livewire("inventario.viewedit",compact("producto"))
+
+@endsection

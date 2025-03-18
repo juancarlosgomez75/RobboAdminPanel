@@ -81,7 +81,7 @@
                         <div class="col-md-12 text-center">
                             @if(!$editing)
                             <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
-                                Editar información básica
+                                Editar información
                             </button>
                             @else
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">

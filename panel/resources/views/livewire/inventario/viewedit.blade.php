@@ -1,0 +1,111 @@
+<div class="card shadow-custom">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="card-title">Información básica</h5>
+                <p class="card-text">Esta es la información que está almacenada para este producto.</p>
+            </div>
+            <div class="col-md-12 pt-3">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" placeholder="Ejemplo: Juguetes" wire:model="name" required @if(!$editing) disabled @endif>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <labelclass="form-label">Descripción</label>
+                        <textarea class="form-control" rows="3" placeholder="Aquí describe de forma corta qué es este producto, esta información es de uso personal para referenciación u otros." wire:model="description" required @if(!$editing) disabled @endif></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Categoría</label>
+                        <select class="form-select" wire:model="category" required @if(!$editing) disabled @endif>
+                            <option selected disabled value="-1">Seleccionar una categoría</option>
+                            <option value="0">Ninguna</option>
+                            @foreach ($categorias as $categoria)
+                            <option value="{{$categoria->id}}">{{$categoria->name}}</option>
+                            @endforeach
+                            
+                        </select>
+                    </div>                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Referencia</label>
+                        <input type="text" class="form-control" placeholder="Ejemplo: 001RG" wire:model="ref" required @if(!$editing) disabled @endif>
+                    </div>
+                    <div class="col-md-12 text-center">
+                        @if(!$editing)
+                        <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
+                            Editar información básica
+                        </button>
+                        @else
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Guardar cambios
+                        </button>
+                        @endif
+
+                        @if($activo)
+                        <button type="button" class="btn btn-outline-danger ms-2" wire:click="desactivar()">
+                            Desactivar producto
+                        </button>
+                        @else
+                        <button type="button" class="btn btn-outline-success ms-2" wire:click="activar()">
+                            Activar producto
+                        </button>
+                        @endif
+
+                    </div>
+                </div> 
+            </div>
+            <div class="col-md-12">
+                <h5 class="card-title">Historial de movimientos</h5>
+                <p class="card-text">Estos son los últimos movimientos que se han efectuado para este producto.</p>
+            </div>
+            <div class="col-md-12 pt-2">
+                <table class="table text-center" >
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Razón</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Stock antes</th>
+                            <th scope="col">Stock despues</th>
+                            <th scope="col">Autor</th>
+                            <th scope="col">Transacción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-center">
+                        @if(!$Movimientos->isempty())
+                        @foreach ($Movimientos as $movimiento)
+                        <tr>
+                            <th scope="row">{{$movimiento->id}}</th>
+                            <td scope="row">{{$movimiento->reason}}</td>
+                            <td scope="row">
+                                @if($movimiento->type=="expense")
+                                <span style="color:#be0000">-{{$movimiento->amount}}</span>
+                                @else
+                                <span style="color:#33a100">{{$movimiento->amount}}</span>
+                                @endif
+                                
+                            </td>
+                            <td scope="row">{{$movimiento->stock_before}}</td>
+                            <td scope="row">{{$movimiento->stock_after}}</td>
+                            <td scope="row">{{$movimiento->author_info->username}}</td>
+                            <td>
+                                @if($movimiento->transaction_id)
+                                @else
+                                No
+                                @endif
+                            </td>
+                        </tr>
+                        
+                        @endforeach
+                        @else
+                        <tr>
+                            <td colspan="7">No hay movimientos registrados aún</td>
+                        </tr>
+                        @endif
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
