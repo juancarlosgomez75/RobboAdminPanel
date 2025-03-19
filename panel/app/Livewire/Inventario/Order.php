@@ -281,7 +281,7 @@ class Order extends Component
             }
 
             //Genero los detalles de creación
-            $orden->creator=Auth::id();
+            $orden->created_by=Auth::id();
             $orden->creation_notes=$this->details;
             $orden->creation_list=json_encode($this->listProducts);
 

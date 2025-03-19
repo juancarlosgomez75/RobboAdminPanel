@@ -24,8 +24,8 @@ return new class extends Migration
             $table->unsignedBigInteger('study_id')->nullable();
 
             //Información de creación
-            $table->unsignedBigInteger('creator')->nullable();
-            $table->foreign('creator')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->text('creation_notes')->nullable();
             $table->json("creation_list");
 
@@ -37,6 +37,8 @@ return new class extends Migration
             $table->text('preparation_notes')->nullable();
             
             //Información de envío
+            $table->unsignedBigInteger('sended_by')->nullable();
+            $table->foreign('sended_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->string('tracking')->nullable();
             $table->string('enterprise')->nullable();
             $table->decimal('shipping_cost', 10, 2)->nullable();
