@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductInventory;
+use App\Models\ProductOrder;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -44,6 +45,13 @@ class InventoryController extends Controller
     }
 
     public function order_view($idorden){
-        return view("inventario.order_list");
+        //Localizar la orden
+        $orden=ProductOrder::find($idorden);
+        if($orden){
+            return view("inventario.order_view",compact("orden"));
+        }else{
+            return redirect(route("ordenes"));
+        }
+        
     }
 }
