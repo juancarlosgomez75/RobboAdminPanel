@@ -67,7 +67,9 @@ Route::middleware(['auth','checkuserstatus'])->controller(InventoryController::c
     Route::get('/panel/producto/{idproducto}', 'viewedit')->name('inventario.viewedit');
 
     //órdenes
-    Route::get('/panel/ordenes/crear', 'order_create')->name('orden.create');
+    Route::get('/panel/ordenes', 'order_list')->name('ordenes');
+    Route::get('/panel/ordenes/crear', 'order_create')->name('ordenes.create');
+    Route::get('/panel/orden/{idorden}', 'order_view')->name('orden.ver');
 });
 
 // Route::view('dashboard', 'dashboard')

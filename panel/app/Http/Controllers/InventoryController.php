@@ -38,4 +38,12 @@ class InventoryController extends Controller
     public function order_create(){
         return view("inventario.order");
     }
+
+    public function order_list(){
+        return view("inventario.order_list");
+    }
+
+    public function order_view($idorden){
+        return view("inventario.order_list");
+    }
 }
