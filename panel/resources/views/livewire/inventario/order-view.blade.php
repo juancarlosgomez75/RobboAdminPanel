@@ -493,6 +493,32 @@
                     </table>
                 </div>
                 @endif
+
+                @if($orden->status=="waiting")
+                <div class="col-md-12 pt-2">
+                    <div class="text-center">
+                        <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reportRecogida">Reportar recogida del paquete</a>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="reportRecogida" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportRecogidaLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="reportRecogidaLabel">Reportar recogida del paquete</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Al reportar la recogida, el paquete se reporta como completado y la orden se cierra.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="completarEnvio()">Completar envío</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>

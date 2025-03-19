@@ -133,6 +133,8 @@ class OrderView extends Component
         if($this->orden->save()){
             $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Alistamiento completado');
             $this->preparando=false;
+        }else{
+            $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Error completando el alistamiento, contacte con soporte');
         }
     }
 
@@ -161,6 +163,21 @@ class OrderView extends Component
         //Si almaceno
         if($this->orden->save()){
             $this->dispatch('mostrarToast', 'Reportar guía', 'Se ha reportado la guía del envío');
+            $this->enviando=false;
+        }else{
+            $this->dispatch('mostrarToast', 'Reportar guía', 'Error reportando la guía, contacta con soporte');
+        }
+    }
+
+    public function completarEnvio(){
+        //Edito la información
+        $this->orden->sended_by=Auth::id();
+        $this->orden->send_date=now();
+        $this->orden->status="sended";
+
+        //Si almaceno
+        if($this->orden->save()){
+            $this->dispatch('mostrarToast', 'Reportar envío', 'Se ha completado el envío');
             $this->enviando=false;
         }
     }
