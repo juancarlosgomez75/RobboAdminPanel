@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('couriers', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
+            $table->string('name')->unique();
             $table->string('page');
             $table->timestamps();
         });
