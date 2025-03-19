@@ -4,6 +4,7 @@ namespace App\Livewire\Inventario;
 
 use App\Models\Courier;
 use App\Models\Product;
+use App\Models\ProductInventoryMovement;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -133,8 +134,45 @@ class OrderView extends Component
 
         //Si almaceno
         if($this->orden->save()){
+            //Genero los descargos
+            foreach($this->preparacion_list as $element){
+                //Obtengo el producto
+                $pto=Product::find($element["id"]);
+
+                //Siempre verifico todo
+                if($pto){
+                    //Genero un nuevo movimiento
+                    $mov=new ProductInventoryMovement();
+
+                    //Almaceno la información
+                    $mov->inventory_id=$pto->inventory->id;
+                    $mov->type="expense";
+                    $mov->reason="Alistamiento de orden";
+                    $mov->amount=$element["amount"];
+                    $mov->stock_before=$pto->inventory->stock_available;
+                    $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
+                    $mov->author=Auth::id();
+                    $mov->order_id=$this->orden->id;
+
+                    //Guardo
+                    if(!$mov->save()){
+                        $this->dispatch('mostrarToast', 'Reportar movimiento', 'Se ha generado un error, contacte a soporte');
+                    }
+
+                    //Ahora modifico el stock
+                    $pto->inventory->stock_available=$mov->stock_after;
+
+                    if(!$pto->inventory->save()){
+                        $this->dispatch('mostrarToast', 'Reportar stock', 'Se ha generado un error, contacte a soporte');
+                    }
+                }
+
+            }
+
+
             $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Alistamiento completado');
             $this->preparando=false;
+
         }else{
             $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Error completando el alistamiento, contacte con soporte');
         }
