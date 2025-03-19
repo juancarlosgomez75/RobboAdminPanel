@@ -95,7 +95,7 @@
                                 <th scope="col">Stock antes</th>
                                 <th scope="col">Stock despues</th>
                                 <th scope="col">Autor</th>
-                                <th scope="col">Transacción</th>
+                                <th scope="col"># Orden</th>
                             </tr>
                         </thead>
                         <tbody class="align-center">
@@ -116,7 +116,8 @@
                                 <td scope="row">{{$movimiento->stock_after}}</td>
                                 <td scope="row">{{$movimiento->author_info->username}}</td>
                                 <td>
-                                    @if($movimiento->transaction_id)
+                                    @if($movimiento->order_id)
+                                    <a href="{{route("orden.ver",$movimiento->order_id)}}">{{$movimiento->order_id}}</a>
                                     @else
                                     No
                                     @endif
