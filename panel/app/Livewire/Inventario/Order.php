@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Inventario;
 
+use App\Models\Product;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 
@@ -14,6 +15,7 @@ class Order extends Component
     public $studyId="";
     public $studyInfo=[];
     public $study_name="";
+    public $activeBasic=false;
 
     //Información de campos de información básica
     public $toStudy="-1";
@@ -22,8 +24,13 @@ class Order extends Component
     public $receiver="";
     public $phone="";
 
-    //Campos activos
-    public $activeBasic=false;
+    //Información de los productos
+    public $listProducts=[];
+    public $addingProduct=false;
+
+    public $product_name="";
+    public $product_amount=1;
+
 
     //El elemento de updated
     public function updatedtoStudy($valor)
@@ -147,6 +154,63 @@ class Order extends Component
         $this->activeBasic=false;
         $this->studyId="";
         $this->studyFind=false;
+    }
+
+    public function startAdding(){
+        $this->addingProduct=true;
+    }
+
+    public function cancelAdding(){
+        $this->addingProduct=false;
+
+        //Reinicio los campos
+        $this->product_name="";
+        $this->product_amount=1;
+    }
+
+    public function removeProduct($index)
+    {
+        unset($this->listProducts[$index]); // Elimina el elemento del array
+        $this->listProducts = array_values($this->listProducts); // Reorganiza los índices
+        $this->dispatch('mostrarToast', 'Quitar producto', 'Se ha quitado el producto del carrito');
+
+    }
+
+    public function addProduct(){
+        if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->product_name) && !empty(trim($this->product_name)))){
+            
+            $this->dispatch('mostrarToast', 'Añadir producto', 'El campo no es válido');
+
+            return;
+        }
+
+        //Busco el producto
+        $busqueda=Product::where("name", "LIKE", "%".$this->product_name."%")
+        ->where("available", "=", "1")
+        ->first();
+
+        if($busqueda){
+            //Añado el producto
+            $this->listProducts[]=[
+                "id"=>$busqueda->id,
+                "name"=>$busqueda->name,
+                "amount"=>$this->product_amount
+            ];
+
+            //Reinicio los campos
+            $this->product_name="";
+            $this->product_amount=1;
+
+            //Cierro el editando
+            $this->addingProduct=false;
+
+            //Notifico que se ha añadido
+            $this->dispatch('mostrarToast', 'Añadir producto', 'Se ha añadido el producto al carrito');
+
+        }else{
+            $this->dispatch('mostrarToast', 'Añadir producto', 'No se ha localizado el producto');
+        }
+ 
     }
 
     public function render()

@@ -77,28 +77,58 @@
                         @endif
                     </div> 
                 </div>
-                <div class="col-md-8 pt-3">
-                    <h5 class="card-title">Historial de movimientos</h5>
-                    <p class="card-text">Estos son los últimos movimientos que se han efectuado para este producto.</p>
+                <div class="col-md-12 pt-3">
+                    <h5 class="card-title">Inventario de envío</h5>
+                    <p class="card-text">Este es el listado de elementos que se deberán enviar en esta orden.</p>
                 </div>
-                <div class="col-md-4 pt-4 text-end">
-                    <a class="btn btn-outline-secondary btn-sm">
-                        Crear un movimiento
-                    </a>
+                <div class="col-md-12 pt-3">
+                    @if(!$addingProduct)
+                    <div class="text-center d-grid">
+                        <a class="btn btn-outline-secondary btn-sm" wire:click="startAdding()">Añadir item</a>
+                    </div>    
+                    @else
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label">Nombre producto</label>
+                            <input type="text" class="form-control" placeholder="Ejemplo: Neutro" wire:model="product_name" >
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" min="0" class="form-control" placeholder="Ejemplo: 2" wire:model="product_amount" >
+                        </div>
+                        <div class="col-md-2 mb-3 pt-2 d-grid">
+                            <br>
+                            <button type="button" class="btn btn-outline-primary btn-sm" wire:click="addProduct()">Añadir</button>
+                        </div>
+                        <div class="col-md-2 mb-3 pt-2 d-grid">
+                            <br>
+                            <button type="button" class="btn btn-outline-danger btn-sm" wire:click="cancelAdding()">Cancelar</button>
+                        </div>
+                    </div>
+                    @endif
                 </div>
                 <div class="col-md-12 pt-2">
                     <table class="table text-center" >
                         <thead>
                             <tr>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Razón</th>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
                                 <th scope="col">Cantidad</th>
-                                <th scope="col">Stock antes</th>
-                                <th scope="col">Stock despues</th>
-                                <th scope="col">Autor</th>
-                                <th scope="col">Transacción</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
+                        <tbody>
+                            @foreach ($listProducts as $index=>$pd)
+                                <tr>
+                                    <td>{{$index+1}}</td>
+                                    <td>{{$pd["name"]}}</td>
+                                    <td>{{$pd["amount"]}}</td>
+                                    <td>
+                                        <a class="btn btn-outline-danger btn-sm" wire:click="removeProduct({{$index}})">Eliminar</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
