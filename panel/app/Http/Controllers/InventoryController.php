@@ -34,4 +34,8 @@ class InventoryController extends Controller
         }
         
     }
+
+    public function order_create(){
+        return view("inventario.order");
+    }
 }

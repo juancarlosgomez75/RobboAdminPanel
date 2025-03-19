@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 100%;
+        }
+    
+        .progressbar {
+            display: flex;
+            background-color: lightgray;
+            justify-content: center;
+            align-items: center;
+            gap: 10vw; /* Espacio entre los elementos */
+            padding: 20px 0; /* Espaciado superior e inferior */
+            position: relative;
+        }
+    
+        /* Estilo de los elementos de la barra de progreso */
+        .progressbar li {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.5em;
+            position: relative;
+        }
+    
+        /* Círculo alrededor del ícono */
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            background-color: #007bff; /* Color de fondo */
+            border-radius: 50%; /* Hace el div completamente circular */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1; /* Asegura que esté encima de la línea */
+        }
+    
+        /* Ícono dentro del círculo */
+        .progressbar i {
+            font-size: clamp(16px, 1.7vw, 18px);
+            color: white; /* Color del ícono */
+        }
+    
+        /* Línea de conexión entre los círculos */
+        .progressbar li::after {
+            content: "";
+            position: absolute;
+            top: 25px;
+            width: 15vw; /* Ajusta el tamaño de la línea */
+            height: 5px; /* Grosor de la línea */
+            background-color: gray; /* Color de la línea */
+            left: 50%;
+            z-index: 0; /* Detrás de los círculos */
+        }
+    
+        /* Elimina la línea del último elemento */
+        .progressbar li:last-child::after {
+            content: none;
+        }
+    
+        /* Estilos para los pasos completados */
+        .progressbar li.current ~ li .icon-circle {
+            background-color: gray; /* Pasos después del actual en gris */
+        }
+    
+        .progressbar li.current .icon-circle {
+            background-color: yellow; /* Paso actual en amarillo */
+        }
+    
+        .progressbar li:not(.current) .icon-circle {
+            background-color: green; /* Pasos completados en verde */
+        }
+    
+        /* Línea de conexión verde hasta el paso actual */
+        .progressbar li.current ~ li::after {
+            background-color: gray; /* Mantiene la línea gris después del paso actual */
+        }
+    
+        .progressbar li:not(.current)::after {
+            background-color: green; /* Línea verde hasta el paso actual */
+        }
+    </style>
+    
+        
+        
+</head>
+<body>
+    <div class="container">
+        <ul class="progressbar">
+            <li>
+                <div class="icon-circle">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+                <span>Home</span>
+            </li>
+            <li>
+                <div class="icon-circle">
+                    <i class="fa-solid fa-truck"></i>
+                </div>
+                <span>Delivery</span>
+            </li>
+            <li class="current">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <span>Completed</span>
+            </li>
+            <li>
+                <div class="icon-circle">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <span>Completed</span>
+            </li>
+            <li>
+                <div class="icon-circle">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <span>Completed</span>
+            </li>
+        </ul>
+    </div>    
+</body>
+</html>
