@@ -78,34 +78,8 @@
                     </div> 
                 </div>
                 <div class="col-md-12 pt-3">
-                    <h5 class="card-title">Inventario de envío</h5>
+                    <h5 class="card-title">Listado de productos</h5>
                     <p class="card-text">Este es el listado de elementos que se deberán enviar en esta orden.</p>
-                </div>
-                <div class="col-md-12 pt-3">
-                    @if(!$addingProduct)
-                    <div class="text-center d-grid">
-                        <a class="btn btn-outline-secondary btn-sm" wire:click="startAdding()">Añadir item</a>
-                    </div>    
-                    @else
-                    <div class="row">
-                        <div class="col-md-5 mb-3">
-                            <label class="form-label">Nombre producto</label>
-                            <input type="text" class="form-control" placeholder="Ejemplo: Neutro" wire:model="product_name" >
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label">Cantidad</label>
-                            <input type="number" min="0" class="form-control" placeholder="Ejemplo: 2" wire:model="product_amount" >
-                        </div>
-                        <div class="col-md-2 mb-3 pt-2 d-grid">
-                            <br>
-                            <button type="button" class="btn btn-outline-primary btn-sm" wire:click="addProduct()">Añadir</button>
-                        </div>
-                        <div class="col-md-2 mb-3 pt-2 d-grid">
-                            <br>
-                            <button type="button" class="btn btn-outline-danger btn-sm" wire:click="cancelAdding()">Cancelar</button>
-                        </div>
-                    </div>
-                    @endif
                 </div>
                 <div class="col-md-12 pt-2">
                     <table class="table text-center" >
@@ -118,6 +92,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(!empty($listProducts))
                             @foreach ($listProducts as $index=>$pd)
                                 <tr>
                                     <td>{{$index+1}}</td>
@@ -128,8 +103,53 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="4" class="text-center">Aún no se han añadido productos</td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
+                </div>
+                <div class="col-md-12">
+                    @if(!$addingProduct)
+                    <div class="text-center">
+                        <a class="btn btn-outline-secondary btn-sm" wire:click="startAdding()">Añadir item</a>
+                    </div>    
+                    @else
+                    <div class="row">
+                        <div class="col-md-7 mb-3">
+                            <label class="form-label">Nombre producto</label>
+                            <input type="text" class="form-control" placeholder="Ejemplo: Neutro" wire:model="product_name" >
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" min="0" class="form-control" placeholder="Ejemplo: 2" wire:model="product_amount" >
+                        </div>
+                        <div class="col-md-1 mb-3 pt-2 d-grid text-center">
+                            <br>
+                            <button type="button" class="btn btn-outline-primary btn-sm" wire:click="addProduct()">Añadir</button>
+                        </div>
+                        <div class="col-md-1 mb-3 pt-2 d-grid text-center">
+                            <br>
+                            <button type="button" class="btn btn-outline-danger btn-sm" wire:click="cancelAdding()">Cancelar</button>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+                <div class="col-md-12 pt-3">
+                    <h5 class="card-title">Observaciones</h5>
+                    <p class="card-text">Aquí podrás añadir las observaciones que consideres importantes para esta orden.</p>
+                    
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="3" wire:model="details"></textarea>
+                    </div>
+
+                </div>
+                <div class="col-md-12">
+                    <div class="text-center">
+                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Registrar pedido en sistema</a>
+                    </div>   
                 </div>
             </div>
         </div>
@@ -139,17 +159,17 @@
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de modificación</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de creación de pedido</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>
-                        Al presionar en confirmar edición, confirma que la información aquí contenida es correcta.
+                        Al presionar en confirmar, aceptas que toda la información aquí descrita está bien. Por seguridad, la información no podrá ser editada manualmente.
                     </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="guardarEdicion" >Confirmar edición</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="crear()" >Crear pedido</button>
                 </div>
             </div>
             </div>

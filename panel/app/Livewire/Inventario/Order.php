@@ -31,6 +31,8 @@ class Order extends Component
     public $product_name="";
     public $product_amount=1;
 
+    //Información de los detalles
+    public $details="";
 
     //El elemento de updated
     public function updatedtoStudy($valor)
@@ -153,6 +155,10 @@ class Order extends Component
         $this->dispatch('mostrarToast', 'Buscar estudio', 'No se localizó el estudio');
         $this->activeBasic=false;
         $this->studyId="";
+        $this->address="";
+        $this->city= "";
+        $this->receiver="";
+        $this->phone="";        
         $this->studyFind=false;
     }
 
@@ -213,6 +219,56 @@ class Order extends Component
  
     }
 
+    public function validar(){
+        //Analizo los campos si no es un estudio
+        if(!$this->studyFind){
+            if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->address) && !empty(trim($this->address)))){
+                $this->dispatch('mostrarToast', 'Crear pedido', 'La dirección no es válida');
+                return false;
+            }
+            elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->city) && !empty(trim($this->city)))){
+                $this->dispatch('mostrarToast', 'Crear pedido', 'La ciudad no es válida');
+                return false;
+            }
+            elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->receiver) && !empty(trim($this->receiver)))){
+                $this->dispatch('mostrarToast', 'Crear pedido', 'El nombre de quién recibe no es válido');
+                return false;
+            }
+            elseif(!(preg_match('/^[\d+\-]+$/', $this->phone) && !empty(trim($this->phone)))){
+                $this->dispatch('mostrarToast', 'Crear pedido', 'El teléfono de contacto no es válido');
+                return false;
+            }
+        }
+        //Si es un estudio, recargo toda la info por seguridad
+        else{
+            $this->address=$this->studyInfo['Address'];
+            $this->city=$this->studyInfo['City'];
+            $this->receiver=$this->studyInfo['Contact'];
+            $this->phone=$this->studyInfo['Phone'];
+        }
+
+        //Ahora valido si tiene o no producto añadidos
+        if(empty($this->listProducts)){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'El carrito de compras está vacío');
+            return false;
+        }
+
+        //Ahora valido las observaciones
+        if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'Las observaciones no son válidas');
+            return false;
+        }
+
+        return true;
+    }
+
+    public function crear(){
+
+        if($this->validar()){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'Todo okay');
+        }
+
+    }
     public function render()
     {
         return view('livewire.inventario.order');
