@@ -19,6 +19,8 @@ class OrderView extends Component
     public $preparacion_count=[];
     public $details="";
 
+    public $enviando=false;
+
     public function removeProduct($index)
     {
         //Disminuyo
@@ -127,6 +129,10 @@ class OrderView extends Component
             $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Alistamiento completado');
             $this->preparando=false;
         }
+    }
+
+    public function iniciarEnvio(){
+        $this->enviando=true;
     }
 
     public function mount($orden){

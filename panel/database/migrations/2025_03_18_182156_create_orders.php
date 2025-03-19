@@ -40,7 +40,8 @@ return new class extends Migration
             $table->unsignedBigInteger('sended_by')->nullable();
             $table->foreign('sended_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->string('tracking')->nullable();
-            $table->string('enterprise')->nullable();
+            $table->unsignedBigInteger('enterprise')->nullable();
+            $table->foreign('enterprise')->references('id')->on('couriers')->onDelete('set null')->onUpdate('cascade');
             $table->decimal('shipping_cost', 10, 2)->nullable();
 
             //Información de estado

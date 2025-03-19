@@ -142,7 +142,7 @@
                     <p class="card-text">Esta es la información que está almacenada para este producto.</p>
                 </div>
                 <div class="col-md-12 pt-4">
-                    <ul class="progressbar @if($orden->status=="canceled") cancelled @elseif($orden->status=="sended") completed @endif">
+                    <ul class="progressbar @if($orden->status=="canceled") cancelled @endif">
                         <li>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-star"></i>
@@ -235,8 +235,12 @@
                             </tr>
 
                             <tr>
-                                <th scope="row">Credor</th>
+                                <th scope="row">Creador</th>
                                 <td>{{$orden->creator_info->name." (".$orden->creator_info->id." - ".$orden->creator_info->username.")"}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Comentarios</th>
+                                <td>{{$orden->creation_notes}}</td>
                             </tr>
 
                         </tbody>
@@ -367,8 +371,95 @@
 
 
                     @endif
+                @else
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de alistamiento</h5>
+                    <p class="card-text">Esta es la información relacionada con la creación de la orden.</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de alistamiento</th>
+                                <td>{{$orden->preparation_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién alistó?</th>
+                                <td>{{$orden->preparator_info->name." (".$orden->creator_info->id." - ".$orden->creator_info->username.")"}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Comentarios</th>
+                                <td>{{$orden->preparation_notes}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <p class="card-text">Esta estos son los productos que fueron enviados</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table text-center" >
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Firmware</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (json_decode($orden->preparation_list) as $index=>$pd)
+                                <tr>
+                                    <td>{{$index+1}}</td>
+                                    <td>{{$pd->name}}</td>
+                                    <td>{{$pd->amount}}</td>
+                                    <td>{{$pd->firmware??"No"}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @endif
+
+                @if($orden->status=="prepared")
+                    @if(!$enviando)
+                    <div class="col-md-12 pt-2">
+                        <div class="text-center">
+                            <a class="btn btn-outline-primary" wire:click="iniciarEnvio()">Reportar recogida de orden</a>
+                        </div>   
+                    </div>
+                    @else
+                    <div class="col-md-12 pt-2">
+                        <h5 class="card-title">Información de recogida</h5>
+                        <p class="card-text">Por favor completa toda la información para reportar la recogida</p>
+                    </div>
+                    <div class="col-md-12 pt-2">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label class="form-label">Empresa</label>
+                                <select class="form-select" wire:model="preparacion_product">
+                                    <option selected disabled value="0">Seleccionar un producto</option>
+                                    <option selected disabled value="1">Seleccionar un producto</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Cantidad</label>
+                                <input class="form-control" type="number" min="1" wire:model="preparacion_amount">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Firmware Id</label>
+                                <input class="form-control" type="text" wire:model="preparacion_firmware">
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                @elseif($orden->status!="prepared" && $orden->status=="created")
                 @endif
             </div>
         </div>
     </div>
+    <br>
 </div>
