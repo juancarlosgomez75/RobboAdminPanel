@@ -4,6 +4,7 @@ namespace App\Livewire\Inventario;
 
 use App\Models\Product;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class OrderView extends Component
 {
@@ -16,6 +17,7 @@ class OrderView extends Component
     public $preparacion_amount="1";
     public $preparacion_firmware="";
     public $preparacion_count=[];
+    public $details="";
 
     public function removeProduct($index)
     {
@@ -106,7 +108,26 @@ class OrderView extends Component
         $this->preparando=true;
     }
 
+    public function completarAlistamiento(){
+        //Ahora valido las observaciones
+        if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
+            $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Las observaciones no son válidas');
+            return false;
+        }
 
+        //Edito la información
+        $this->orden->prepared_by=Auth::id();
+        $this->orden->preparation_list=json_encode($this->preparacion_list);
+        $this->orden->preparation_date=now();
+        $this->orden->preparation_notes=$this->details;
+        $this->orden->status="prepared";
+
+        //Si almaceno
+        if($this->orden->save()){
+            $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Alistamiento completado');
+            $this->preparando=false;
+        }
+    }
 
     public function mount($orden){
         $this->orden = $orden;

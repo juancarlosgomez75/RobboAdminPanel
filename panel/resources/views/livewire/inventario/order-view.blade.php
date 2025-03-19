@@ -313,7 +313,7 @@
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div class="col-md-12 pt-2">
                         <div class="text-center">
                             <a class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#addProduct">Añadir producto al listado</a>
@@ -355,6 +355,10 @@
                             </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-12 pt-2">
+                        <label class="form-label">Observaciones de alistamiento</label>
+                        <textarea class="form-control" rows="3" wire:model="details"></textarea>
                     </div>
                     <div class="col-md-12 pt-4">
                         <div class="text-center">
