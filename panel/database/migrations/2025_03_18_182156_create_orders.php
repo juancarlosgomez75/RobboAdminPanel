@@ -37,12 +37,18 @@ return new class extends Migration
             $table->text('preparation_notes')->nullable();
             
             //Información de envío
-            $table->unsignedBigInteger('sended_by')->nullable();
-            $table->foreign('sended_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->unsignedBigInteger('enlisted_by')->nullable();
+            $table->foreign('enlisted_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->timestamp('enlist_date')->nullable();
             $table->string('tracking')->nullable();
             $table->unsignedBigInteger('enterprise')->nullable();
             $table->foreign('enterprise')->references('id')->on('couriers')->onDelete('set null')->onUpdate('cascade');
             $table->decimal('shipping_cost', 10, 2)->nullable();
+
+            //Información de envío
+            $table->unsignedBigInteger('sended_by')->nullable();
+            $table->foreign('sended_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->timestamp('send_date')->nullable();
 
             //Información de estado
             $table->enum('status', ['created', 'prepared', 'waiting', 'sended', 'canceled'])->default('created');

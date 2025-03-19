@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Inventario;
 
+use App\Models\Courier;
 use App\Models\Product;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,10 @@ class OrderView extends Component
     public $details="";
 
     public $enviando=false;
+    public $mensajerias;
+
+    public $courier_enterprise="0";
+    public $tracking_code="";
 
     public function removeProduct($index)
     {
@@ -135,8 +140,36 @@ class OrderView extends Component
         $this->enviando=true;
     }
 
+    public function reportarGuia(){
+        //Valido la guia
+        if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->tracking_code) && !empty(trim($this->tracking_code)))){
+            $this->dispatch('mostrarToast', 'Reportar guía', 'La guía no es válida');
+            return false;
+        }
+        elseif(!(Courier::find($this->courier_enterprise))){
+            $this->dispatch('mostrarToast', 'Reportar guía', 'La empresa de mensajería no es válida');
+            return false;
+        }
+
+        //Edito la información
+        $this->orden->enlisted_by=Auth::id();
+        $this->orden->enlist_date=now();
+        $this->orden->tracking=$this->tracking_code;
+        $this->orden->enterprise=$this->courier_enterprise;
+        $this->orden->status="waiting";
+
+        //Si almaceno
+        if($this->orden->save()){
+            $this->dispatch('mostrarToast', 'Reportar guía', 'Se ha reportado la guía del envío');
+            $this->enviando=false;
+        }
+    }
+
     public function mount($orden){
         $this->orden = $orden;
+
+        //Consulto las mensajerias
+        $this->mensajerias=Courier::all();
     }
 
     public function render()

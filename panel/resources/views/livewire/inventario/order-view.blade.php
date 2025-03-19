@@ -48,7 +48,7 @@
             content: "";
             position: absolute;
             top: 25px;
-            width: 16vw; /* Ajusta el tamaño de la línea */
+            width: 15.2vw; /* Ajusta el tamaño de la línea */
             height: 5px; /* Grosor de la línea */
             background-color: #c0c0c0; /* Color de la línea */
             left: 50%;
@@ -167,11 +167,11 @@
                             </div>
                             <span>
                                 @if($orden->status=="prepared")
-                                Esperando recogida
+                                Esperando guía
                                 @elseif($orden->status!="created")
-                                Recogida confirmada
+                                Guía generada
                                 @else
-                                Recogida de orden
+                                Generación de guía
                                 @endif
                             </span>
                         </li>
@@ -386,7 +386,7 @@
 
                             <tr>
                                 <th scope="row">¿Quién alistó?</th>
-                                <td>{{$orden->preparator_info->name." (".$orden->creator_info->id." - ".$orden->creator_info->username.")"}}</td>
+                                <td>{{$orden->preparator_info->name." (".$orden->preparator_info->id." - ".$orden->preparator_info->username.")"}}</td>
                             </tr>
 
                             <tr>
@@ -428,35 +428,70 @@
                     @if(!$enviando)
                     <div class="col-md-12 pt-2">
                         <div class="text-center">
-                            <a class="btn btn-outline-primary" wire:click="iniciarEnvio()">Reportar recogida de orden</a>
+                            <a class="btn btn-outline-primary" wire:click="iniciarEnvio()">Reportar guía de envío</a>
                         </div>   
                     </div>
                     @else
                     <div class="col-md-12 pt-2">
-                        <h5 class="card-title">Información de recogida</h5>
+                        <h5 class="card-title">Información de guía de envío</h5>
                         <p class="card-text">Por favor completa toda la información para reportar la recogida</p>
                     </div>
                     <div class="col-md-12 pt-2">
                         <div class="row">
                             <div class="col-md-5">
                                 <label class="form-label">Empresa</label>
-                                <select class="form-select" wire:model="preparacion_product">
+                                <select class="form-select" wire:model="courier_enterprise">
                                     <option selected disabled value="0">Seleccionar un producto</option>
-                                    <option selected disabled value="1">Seleccionar un producto</option>
+                                    @foreach ($mensajerias as $mensajeria)
+                                        <option value="{{$mensajeria->id}}">{{$mensajeria->name}}</option>
+                                    @endforeach
+                                    
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Cantidad</label>
-                                <input class="form-control" type="number" min="1" wire:model="preparacion_amount">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Firmware Id</label>
-                                <input class="form-control" type="text" wire:model="preparacion_firmware">
+                            <div class="col-md-7">
+                                <label class="form-label">Guía de seguimiento</label>
+                                <input class="form-control" type="text" wire:model="tracking_code">
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-12 pt-3">
+                        <div class="text-center">
+                            <a class="btn btn-primary" wire:click="reportarGuia()">Guardar información</a>
+                        </div>   
+                    </div>
                     @endif
-                @elseif($orden->status!="prepared" && $orden->status=="created")
+                @elseif($orden->status!="prepared" && $orden->status!="created")
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de recogida</h5>
+                    <p class="card-text">Esta es la información relacionada con la generación de la guía de seguimiento.</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de generación</th>
+                                <td>{{$orden->enlist_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién reportó la guía?</th>
+                                <td>{{$orden->enlister_info->name." (".$orden->enlister_info->id." - ".$orden->enlister_info->username.")"}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Empresa</th>
+                                <td>{{$orden->courier_info->name}}</td>
+                            </tr>
+
+
+                            <tr>
+                                <th scope="row">Guía de seguimiento</th>
+                                <td><a href="#">{{$orden->tracking}}</a></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
                 @endif
             </div>
         </div>

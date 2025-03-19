@@ -23,6 +23,11 @@ class ProductOrder extends Model
         return $this->belongsTo(User::class, 'sended_by', 'id');
     }
 
+    public function enlister_info()
+    {
+        return $this->belongsTo(User::class, 'enlisted_by', 'id');
+    }
+
     public function courier_info()
     {
         return $this->belongsTo(Courier::class, 'enterprise', 'id');
