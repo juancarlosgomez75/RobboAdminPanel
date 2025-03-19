@@ -26,6 +26,8 @@ class OrderView extends Component
     public $courier_enterprise="0";
     public $tracking_code="";
 
+    public $reasonCancel="";
+
     public function removeProduct($index)
     {
         //Disminuyo
@@ -179,6 +181,34 @@ class OrderView extends Component
         if($this->orden->save()){
             $this->dispatch('mostrarToast', 'Reportar envío', 'Se ha completado el envío');
             $this->enviando=false;
+        }else{
+            $this->dispatch('mostrarToast', 'Reportar envío', 'Error reportando el envío, contacta a soporte');
+        }
+    }
+
+    public function cancelarOrden(){
+        //Valido la razon
+        if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->reasonCancel) && !empty(trim($this->reasonCancel)))){
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'La razón tiene caracteres no válidos');
+            return false;
+        }
+
+        if($this->orden->status=="sended"){
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'No se puede cancelar una orden enviada');
+            return false;
+        }
+
+        //Edito la información
+        $this->orden->canceled_by=Auth::id();
+        $this->orden->cancel_date=now();
+        $this->orden->cancellation_reason=$this->reasonCancel;
+        $this->orden->status="canceled";
+
+        //Si almaceno
+        if($this->orden->save()){
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'Se ha cancelado la orden');
+        }else{
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'Error cancelando la orden, contacta con soporte');
         }
     }
 

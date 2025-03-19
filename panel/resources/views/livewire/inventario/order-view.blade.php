@@ -191,6 +191,11 @@
                         </li>
                     </ul>
                 </div>
+                @if($orden->status=="canceled")
+                <div class="col-md-12 pb-1 text-center">
+                    <h5 style="color:red">Orden cancelada</h5>
+                </div>
+                @endif
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de creación</h5>
                     <p class="card-text">Esta es la información relacionada con la creación de la orden.</p>
@@ -371,7 +376,7 @@
 
 
                     @endif
-                @else
+                @elseif($orden->status!="canceled")
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de alistamiento</h5>
                     <p class="card-text">Esta es la información relacionada con la creación de la orden.</p>
@@ -540,6 +545,65 @@
                     </table>
                 </div>
                 @endif
+
+                @if(($orden->status=="prepared" || $orden->status=="created" || $orden->status!="waiting")&&$orden->status!="canceled")
+                <div class="col-md-12 pt-3">
+                    <div class="text-center">
+                        <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelarOrden">Reportar cancelación de la orden</a>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="cancelarOrden" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelarOrdenLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="cancelarOrdenLabel">Cancelar la orden</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    Al reportar la cancelación de la orden, esta se cerrará inmediatamente y no permitirá ingresar el resto de valores. Por favor reporta la razón de por qué se canceló la orden.
+                                </p>
+                                <div class="mb-3">
+                                    <label class="form-label">Motivo de cancelación</label>
+                                    <textarea class="form-control" rows="3" wire:model="reasonCancel"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" wire:click="cancelarOrden()">Cancelar orden</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                @elseif($orden->status=="canceled")
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de cancelación</h5>
+                    <p class="card-text">Esta es la información relacionada con la cancelación de la orden</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de cancelación</th>
+                                <td>{{$orden->cancel_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién canceló la orden?</th>
+                                <td>{{$orden->canceler_info->name." (".$orden->canceler_info->id." - ".$orden->canceler_info->username.")"}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Razón de cancelación</th>
+                                <td>{{$orden->cancellation_reason}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                @endif
+
             </div>
         </div>
     </div>
