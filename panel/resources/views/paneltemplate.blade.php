@@ -185,7 +185,6 @@ body {
                                 </a>
                                 <ul class="submenu">
                                     <li><a href="{{ route('inventario.index') }}">Productos</a></li>
-                                    
                                 </ul>
                             </li>
                             @endif
@@ -201,6 +200,7 @@ body {
                                     <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
                                     {{-- <li><a href="{{ route('modelos.view') }}">Modelos</a></li> --}}
                                     <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
+                                    <li><a href="{{ route('ordenes') }}">Órdenes</a></li>
                                 </ul>
                             </li>
                             @endif
