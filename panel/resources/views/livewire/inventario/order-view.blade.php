@@ -134,7 +134,6 @@
             color: #d8a6a1 !important; /* Texto rojo para coherencia */
         }
     </style>
-    {{json_encode($preparacion_count)}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
