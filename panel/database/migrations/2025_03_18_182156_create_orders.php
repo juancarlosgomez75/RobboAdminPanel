@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('product_orders', function (Blueprint $table) {
             $table->id();
 
             //Información del cliente
@@ -20,40 +20,29 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
 
-            //Información de la orden
-            
-
-            //Información de revisión
-            $table->unsignedBigInteger('checked_by')->nullable();
-            $table->foreign('checked_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
-            $table->timestamp('check_date')->nullable();
-            $table->text('check_notes')->nullable();
-
-            //Información de empaquetado
-            $table->unsignedBigInteger('prepared_by')->nullable();
-            $table->foreign('prepared_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
-            $table->timestamp('preparation_date')->nullable();
-            $table->text('preparation_notes')->nullable();
-
-            //Información de despacho
-            $table->unsignedBigInteger('dispatched_by')->nullable();
-            $table->foreign('dispatched_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
-            $table->timestamp('dispatch_date')->nullable();
-            $table->text('dispatch_notes')->nullable();
-            
-            //Información de envío
-            $table->string('tracking');
-            $table->string('enterprise');
-            $table->decimal('shipping_cost', 10, 2)->nullable();
+            //Información del estudio, si la hay
+            $table->unsignedBigInteger('study_id')->nullable();
 
             //Información de creación
             $table->unsignedBigInteger('creator')->nullable();
             $table->foreign('creator')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->text('creation_notes')->nullable();
-            $table->json('creation_details');
+            $table->json("creation_list");
+
+            //Información de empaquetado
+            $table->unsignedBigInteger('prepared_by')->nullable();
+            $table->foreign('prepared_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->json("preparation_list")->nullable();
+            $table->timestamp('preparation_date')->nullable();
+            $table->text('preparation_notes')->nullable();
+            
+            //Información de envío
+            $table->string('tracking')->nullable();
+            $table->string('enterprise')->nullable();
+            $table->decimal('shipping_cost', 10, 2)->nullable();
 
             //Información de estado
-            $table->enum('status', ['pending', 'checked', 'prepared', 'dispatched', 'canceled'])->default('pending');
+            $table->enum('status', ['created', 'prepared', 'waiting', 'sended', 'canceled'])->default('created');
 
             //Cancelación
             $table->unsignedBigInteger('canceled_by')->nullable();
@@ -72,6 +61,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('product_orders');
     }
 };

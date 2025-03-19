@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Inventario;
 
+use App\Models\ProductOrder;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 
@@ -265,7 +267,33 @@ class Order extends Component
     public function crear(){
 
         if($this->validar()){
-            $this->dispatch('mostrarToast', 'Crear pedido', 'Todo okay');
+            //Creo el objeto
+            $orden=new ProductOrder();
+
+            //Cargo la información básica
+            $orden->address=$this->address;
+            $orden->city=$this->city;
+            $orden->name=$this->receiver;
+            $orden->phone=$this->phone;
+
+            if($this->studyFind){
+                $orden->study_id=$this->studyId;
+            }
+
+            //Genero los detalles de creación
+            $orden->creator=Auth::id();
+            $orden->creation_notes=$this->details;
+            $orden->creation_list=json_encode($this->listProducts);
+
+            //Intento guardar
+            if($orden->save()){
+                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado el pedido satisfactoriamente');
+                $this->resetExcept("estudios");
+            }else{
+                $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar el pedido, contacte a soporte');
+            }
+
+            
         }
 
     }
