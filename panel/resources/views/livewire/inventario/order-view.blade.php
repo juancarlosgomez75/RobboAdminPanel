@@ -134,6 +134,7 @@
             color: #d8a6a1 !important; /* Texto rojo para coherencia */
         }
     </style>
+    {{json_encode($preparacion_count)}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -242,8 +243,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-12 pt-2">
-                    <h5 class="card-title">Información de productos a enviar</h5>
+                <div class="col-md-12">
                     <p class="card-text">Esta estos son los productos que se deben enviar</p>
                 </div>
                 <div class="col-md-12 pt-2">
@@ -266,6 +266,100 @@
                         </tbody>
                     </table>
                 </div>
+                @if($orden->status=="created")
+                    @if(!$preparando)
+                    <div class="col-md-12 pt-2">
+                        <div class="text-center">
+                            <a class="btn btn-outline-primary" wire:click="iniciarAlistamiento()">Reportar alistamiento de orden</a>
+                        </div>   
+                    </div>
+                    @else
+                    <div class="col-md-12 pt-2">
+                        <h5 class="card-title">Información de alistamiento</h5>
+                        <p class="card-text">Por favor completa toda la información para reportar el alistamiento</p>
+                    </div>
+                    <div class="col-md-12 pt-2">
+                        <table class="table text-center" >
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Firmware</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(!empty($preparacion_list))
+                                @foreach ($preparacion_list as $index=>$prod)
+                                <tr>
+                                    <td>a</td>
+                                    <td>{{$prod["name"]}}</td>
+                                    <td>{{$prod["amount"]}}</td>
+                                    <td>{{$prod["firmware"]??"No"}}</td>
+                                    <td>
+                                        <a class="btn btn-outline-danger btn-sm" wire:click="removeProduct({{$index}})">Eliminar</a>
+                                    </td>
+                                </tr>
+                                
+                                @endforeach
+                                @else
+                                <tr>
+                                    <td colspan="5">
+                                        Aún no has alistado productos
+                                    </td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    @if(!$adding)
+                    <div class="col-md-12 pt-2">
+                        <div class="text-center">
+                            <a class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#addProduct">Añadir producto al listado</a>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="addProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addProductLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="addProductLabel">Añadir producto al alistamiento</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Por favor completa los campos para registrar el alistamiento:</p>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label class="form-label">Producto para alistar</label>
+                                            <select class="form-select" wire:model="preparacion_product">
+                                                <option selected disabled value="0">Seleccionar un producto</option>
+                                                @foreach (json_decode($orden->creation_list) as $index=>$pd)
+                                                <option value="{{$pd->id}}">{{$pd->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Cantidad</label>
+                                            <input class="form-control" type="number" min="1" wire:model="preparacion_amount">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Firmware Id</label>
+                                            <input class="form-control" type="text" wire:model="preparacion_firmware">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="preparacionAdd()">Añadir</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    @else
+                    @endif
+                    @endif
+                @endif
             </div>
         </div>
     </div>
