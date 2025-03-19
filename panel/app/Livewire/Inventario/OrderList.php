@@ -13,7 +13,8 @@ class OrderList extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $filtroNombre = "";
-    public $filtroCiudad = "";
+    public $filtroFecha = "";
+    public $filtroEstado="";
     public $filtrosActivos = false;
 
     public function switchFiltros()
@@ -25,7 +26,19 @@ class OrderList extends Component
     }
     public function render()
     {
-        $pedidos=ProductOrder::orderBy("created_at", "desc")->paginate(10);
+        $pedidos = ProductOrder::orderBy("created_at", "desc")
+        ->when(!empty($this->filtroFecha), function ($query) {
+            return $query->whereRaw("LOWER(created_at) LIKE ?", [strtolower($this->filtroFecha) . '%']);
+        })
+        ->when(!empty($this->filtroCiudad), function ($query) {
+            return $query->whereRaw("city LIKE ?", [strtolower($this->filtroCiudad) . '%']);
+        })
+        ->when(!empty($this->filtroEstado), function ($query) {
+            return $query->where("status", $this->filtroEstado);
+        })
+        ->paginate(20);
+
+
         return view('livewire.inventario.order-list',compact("pedidos"));
     }
 }
