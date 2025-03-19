@@ -69,8 +69,12 @@
             background-color: #D2665A; /* Paso actual en amarillo */
         }
 
+        .progressbar li.current span {
+            color: #D2665A !important; /* Paso actual en amarillo */
+        }
+
         .progressbar li:not(.current) ~ li span {
-            color: #D2665A; /* Restaura el color original en los pasos después del actual */
+            color: #d8a6a1; /* Restaura el color original en los pasos después del actual */
         }
 
         .progressbar li:not(.current) .icon-circle {
@@ -98,11 +102,11 @@
 
         /* Si la clase 'cancelled' está presente, todo se vuelve rojo */
         .progressbar.cancelled li::after {
-            background-color: #3f3f3f !important; /* Línea roja */
+            background-color: #c0c0c0 !important; /* Línea roja */
         }
 
         .progressbar.cancelled li .icon-circle {
-            background-color: #3f3f3f !important; /* Círculos rojos */
+            background-color: #c0c0c0 !important; /* Círculos rojos */
         }
 
         .progressbar.cancelled i {
@@ -110,7 +114,24 @@
         }
 
         .progressbar.cancelled li span {
-            color: #3f3f3f !important; /* Texto rojo para coherencia */
+            color: #c0c0c0 !important; /* Texto rojo para coherencia */
+        }
+
+        /* Si la clase 'cancelled' está presente, todo se vuelve rojo */
+        .progressbar.completed li::after {
+            background-color: #d8a6a1 !important; /* Línea roja */
+        }
+
+        .progressbar.completed li .icon-circle {
+            background-color: #d8a6a1 !important; /* Círculos rojos */
+        }
+
+        .progressbar.completed i {
+            color: white !important; /* Íconos blancos para contraste */
+        }
+
+        .progressbar.completed li span {
+            color: #d8a6a1 !important; /* Texto rojo para coherencia */
         }
     </style>
     <div class="card shadow-custom">
@@ -121,30 +142,52 @@
                     <p class="card-text">Esta es la información que está almacenada para este producto.</p>
                 </div>
                 <div class="col-md-12 pt-3">
-                    <ul class="progressbar @if($orden->status=="canceled") cancelled @endif">
-                        <li @if($orden->status=="created") class="current" @endif>
+                    <ul class="progressbar @if($orden->status=="canceled") cancelled @elseif($orden->status=="sended") completed @endif">
+                        <li>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-star"></i>
                             </div>
-                            <span>Creación</span>
+                            <span>Creada</span>
                         </li>
-                        <li @if($orden->status=="prepared") class="current" @endif>
+                        <li @if($orden->status=="created") class="current" @endif>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-box"></i>
                             </div>
-                            <span>Preparación</span>
+                            <span>
+                                @if($orden->status=="created")
+                                Preparando
+                                @else
+                                Preparado
+                                @endif
+                            </span>
                         </li>
-                        <li @if($orden->status=="waiting") class="current" @endif>
+                        <li @if($orden->status=="prepared") class="current" @endif>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-hourglass-half"></i>
                             </div>
-                            <span>Esperando recogida</span>
+                            <span>
+                                @if($orden->status=="prepared")
+                                Esperando recogida
+                                @elseif($orden->status!="created")
+                                Recogida confirmada
+                                @else
+                                Recogida de orden
+                                @endif
+                            </span>
                         </li>
-                        <li @if($orden->status=="sended") class="current" @endif>
+                        <li @if($orden->status=="waiting") class="current" @endif>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-truck"></i>
                             </div>
-                            <span>Enviado</span>
+                            <span>
+                                @if($orden->status=="waiting")
+                                Enviando
+                                @elseif($orden->status=="sended")
+                                Enviado
+                                @else
+                                Envío
+                                @endif
+                            </span>
                         </li>
                     </ul>
                 </div>
