@@ -138,10 +138,10 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
-                    <h5 class="card-title">Información de la orden</h5>
+                    <h4 class="card-title">Información de la orden</h4>
                     <p class="card-text">Esta es la información que está almacenada para este producto.</p>
                 </div>
-                <div class="col-md-12 pt-3">
+                <div class="col-md-12 pt-4">
                     <ul class="progressbar @if($orden->status=="canceled") cancelled @elseif($orden->status=="sended") completed @endif">
                         <li>
                             <div class="icon-circle">
@@ -190,6 +190,81 @@
                             </span>
                         </li>
                     </ul>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de creación</h5>
+                    <p class="card-text">Esta es la información relacionada con la creación de la orden.</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Nombre de destinatario</th>
+                                <td>{{$orden->name}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Teléfono</th>
+                                <td>{{$orden->phone}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Ciudad</th>
+                                <td>{{$orden->city}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Dirección</th>
+                                <td>{{$orden->address}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Asociado a estudio?</th>
+                                <td>
+                                    @if($orden->study_id)
+                                    <a href="{{route("estudio.ver",$orden->study_id)}}">Ver estudio</a>
+                                    @else
+                                    No
+                                    @endif
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Fecha de creación</th>
+                                <td>{{$orden->created_at}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Credor</th>
+                                <td>{{$orden->creator_info->name." (".$orden->creator_info->id." - ".$orden->creator_info->username.")"}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de productos a enviar</h5>
+                    <p class="card-text">Esta estos son los productos que se deben enviar</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table text-center" >
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (json_decode($orden->creation_list) as $index=>$pd)
+                                <tr>
+                                    <td>{{$index+1}}</td>
+                                    <td>{{$pd->name}}</td>
+                                    <td>{{$pd->amount}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
