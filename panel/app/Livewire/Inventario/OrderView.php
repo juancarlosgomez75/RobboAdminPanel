@@ -16,10 +16,12 @@ class OrderView extends Component
     public $preparacion_amount="1";
     public $preparacion_firmware="";
     public $preparacion_count=[];
-    public $adding=false;
 
     public function removeProduct($index)
     {
+        //Disminuyo
+        $this->preparacion_count[$this->preparacion_list[$index]["id"]]-= $this->preparacion_list[$index]["amount"];
+
         unset($this->preparacion_list[$index]); // Elimina el elemento del array
         $this->preparacion_list = array_values($this->preparacion_list); // Reorganiza los índices
         $this->dispatch('mostrarToast', 'Quitar producto', 'Se ha quitado el producto del alistamiento');
@@ -103,6 +105,8 @@ class OrderView extends Component
     public function iniciarAlistamiento(){
         $this->preparando=true;
     }
+
+
 
     public function mount($orden){
         $this->orden = $orden;
