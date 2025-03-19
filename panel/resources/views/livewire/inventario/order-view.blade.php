@@ -460,9 +460,9 @@
                         </div>   
                     </div>
                     @endif
-                @elseif($orden->status!="prepared" && $orden->status!="created")
+                @elseif($orden->status!="prepared" && $orden->status!="created" && $orden->status!="canceled")
                 <div class="col-md-12 pt-2">
-                    <h5 class="card-title">Información de recogida</h5>
+                    <h5 class="card-title">Información de reporte de guía</h5>
                     <p class="card-text">Esta es la información relacionada con la generación de la guía de seguimiento.</p>
                 </div>
                 <div class="col-md-12 pt-2">
@@ -517,6 +517,27 @@
                         </div>
                     </div>
                     </div>
+                </div>
+                @elseif($orden->status!="prepared" && $orden->status!="created" && $orden->status!="waiting" && $orden->status!="canceled")
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de envío</h5>
+                    <p class="card-text">Esta es la información relacionada con el envío del paquete</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de generación</th>
+                                <td>{{$orden->send_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién reportó el envío?</th>
+                                <td>{{$orden->sender_info->name." (".$orden->sender_info->id." - ".$orden->sender_info->username.")"}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
                 </div>
                 @endif
             </div>
