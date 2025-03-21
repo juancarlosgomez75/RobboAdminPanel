@@ -24,3 +24,24 @@ if (!function_exists('logAccion')) {
         }
     }
 }
+
+if (!function_exists('compressString')) {
+    function compressString(string $string): string
+    {
+        $compressed = gzencode($string);
+        return $compressed !== false ? base64_encode($compressed) : '';
+    }
+}
+
+if (!function_exists('decompressString')) {
+    function decompressString(string $encoded): string
+    {
+        $decoded = base64_decode($encoded, true);
+        if ($decoded === false) {
+            return '';
+        }
+
+        $decompressed = gzdecode($decoded);
+        return $decompressed !== false ? $decompressed : '';
+    }
+}
