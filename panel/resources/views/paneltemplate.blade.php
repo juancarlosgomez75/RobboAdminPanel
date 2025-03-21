@@ -185,11 +185,12 @@ body {
                                 </a>
                                 <ul class="submenu">
                                     <li><a href="{{ route('inventario.index') }}">Productos</a></li>
+                                    <li><a href="{{ route('ordenes') }}">Órdenes</a></li>
                                 </ul>
                             </li>
                             @endif
 
-                            @if(auth()->check() && auth()->user()->rank >= 3)
+                            @if(auth()->check() && auth()->user()->rank >= 1)
                             <li>
                                 <a href="#" class="toggle-submenu">
                                     <i class="fa-solid fa-truck"></i>
@@ -198,9 +199,7 @@ body {
                                 </a>
                                 <ul class="submenu">
                                     <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
-                                    {{-- <li><a href="{{ route('modelos.view') }}">Modelos</a></li> --}}
                                     <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
-                                    <li><a href="{{ route('ordenes') }}">Órdenes</a></li>
                                 </ul>
                             </li>
                             @endif

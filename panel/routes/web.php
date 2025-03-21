@@ -29,7 +29,6 @@ Route::controller(LoginController::class)->group(function(){
 Route::middleware(['auth','checkuserstatus'])->controller(StudyController::class)->group(function () {
     Route::get('/panel/estudios', 'index')->name('estudios.index');
     Route::middleware('checkrank:4')->get('/panel/estudios/crear', 'create')->name('estudios.create');
-    // Route::middleware('checkrank:2')->get('/estudios/crear', 'create')->name('estudios.create');
 
     Route::middleware('checkrank:4')->get('/panel/estudio/manager/crear/{idestudio}', 'manager_create')->name('manager.create');
     Route::get('/panel/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
@@ -39,7 +38,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(StudyController::class
 
 Route::middleware(['auth','checkuserstatus'])->controller(MachineController::class)->group(function(){
     Route::get('/panel/maquinas', 'index')->name('maquinas.index');
-    Route::get('/panel/maquinas/crear', 'create')->name('maquinas.create');
+    Route::middleware('checkrank:5')->get('/panel/maquinas/crear', 'create')->name('maquinas.create');
 });
 
 Route::middleware(['auth','checkuserstatus'])->controller(ModelController::class)->group(function(){
@@ -48,11 +47,11 @@ Route::middleware(['auth','checkuserstatus'])->controller(ModelController::class
     Route::get('/panel/modelo/{idmodelo}', 'viewedit')->name('modelo.viewedit');
 });
 
-Route::middleware(['auth','checkuserstatus'])->controller(AdminController::class)->group(function(){
-    Route::middleware('checkrank:4')->get('/panel/cuentas', 'accounts')->name('admin.accounts');
-    Route::middleware('checkrank:4')->get('/panel/cuenta/{idcuenta}', 'account')->name('admin.account.view');
-    Route::middleware('checkrank:4')->get('/panel/logs', 'logs')->name('admin.logs');
-    Route::middleware('checkrank:4')->get('/panel/log/{idlog}', 'log')->name('admin.log');
+Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:4')->controller(AdminController::class)->group(function(){
+    Route::get('/panel/cuentas', 'accounts')->name('admin.accounts');
+    Route::get('/panel/cuenta/{idcuenta}', 'account')->name('admin.account.view');
+    Route::get('/panel/logs', 'logs')->name('admin.logs');
+    Route::get('/panel/log/{idlog}', 'log')->name('admin.log');
 });
 
 Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class)->group(function(){
@@ -60,7 +59,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class
     Route::get('/panel', 'index')->name('panel.index');
 });
 
-Route::middleware(['auth','checkuserstatus'])->controller(InventoryController::class)->group(function(){
+Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->controller(InventoryController::class)->group(function(){
     //Productos
     Route::get('/panel/productos', 'index')->name('inventario.index');
     Route::get('/panel/producto/movimiento/{idinventario}', 'movement')->name('inventario.movimiento');
