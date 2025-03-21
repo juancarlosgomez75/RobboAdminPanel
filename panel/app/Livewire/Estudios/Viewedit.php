@@ -231,7 +231,7 @@ class Viewedit extends Component
         if (isset($data['Status'])) {
             if($data['Status']){
                 $this->alerta=true;
-                $this->alerta_sucess= "Se ha vinculado la máquina $".$this->moveFirmwareId." con este estudio correctamente";
+                $this->alerta_sucess= "Se ha vinculado la máquina #".$this->moveFirmwareId." con este estudio correctamente";
 
                 registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"],true);
 
@@ -272,6 +272,48 @@ class Viewedit extends Component
         if($this->informacion["Id"]!=1){
             //Obtengo la maquina por el index
             $maquina=$this->maquinas[$index];
+
+            $apiData=[
+                'Branch' => 'Server',
+                'Service' => 'Machines',
+                'Action' => 'Assign',
+                "Data"=>[
+                    "UserId"=>"1",
+                    "Machines"=>[
+                        ["ID"=>$maquina["ID"]]
+                    ]
+                    ],
+                'DataStudy' => [
+                    "Id"=>"1",
+                ]
+                ];
+    
+    
+    
+            //Genero la petición de informacion
+            $response = Http::withHeaders([
+                'Authorization' => 'AAAA'
+            ])->withOptions([
+                'verify' => false // Desactiva la verificación SSL
+            ])->post(config('app.API_URL'), $apiData);
+    
+            $data = $response->json();
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    $this->alerta=true;
+                    $this->alerta_sucess= "Se ha desvinculado la máquina #".$maquina["ID"]." de este estudio correctamente";
+    
+                    registrarLog("Producción","Estudios","Desvincular","Se ha desvinculado la máquina #".$maquina["ID"]." del estudio #".$this->informacion["Id"],true);
+
+                    unset($this->maquinas[$index]); // Elimina el elemento del array
+                    $this->maquinas = array_values($this->maquinas); // Reorganiza los índices
+    
+                }else{
+                    $this->alerta=true;
+                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                    registrarLog("Producción","Estudios","Desvincular","Se ha intentado desvincular la máquina #".$maquina["ID"]." del estudio #".$this->informacion["Id"].", los datos fueron: ".json_encode($apiData),false);
+                }
+            }
         }
 
     }
