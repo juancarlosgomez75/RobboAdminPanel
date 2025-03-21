@@ -118,12 +118,34 @@ class Create extends Component
         if($this->validar()){
 
             
-            //Genero la petición de informacion
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), [
+            // //Genero la petición de informacion
+            // $response = Http::withHeaders([
+            //     'Authorization' => 'AAAA'
+            // ])->withOptions([
+            //     'verify' => false // Desactiva la verificación SSL
+            // ])->post(config('app.API_URL'), [
+            //     'Branch' => 'Server',
+            //     'Service' => 'PlatformUser',
+            //     'Action' => 'CreateUpdateStudy',
+            //     'DataStudy' => [
+            //         "StudyName"=>$this->nombre,
+            //         "RazonSocial"=>$this->razonsocial,
+            //         "Nit"=>$this->nit,
+            //         "CityId"=>$this->idciudad,
+            //         "Address"=>$this->direccion,
+            //         "Contact"=>$this->responsable,
+            //         "Phone"=>$this->telcontacto,
+            //         "Phone2"=>$this->telcontacto2,
+            //         "Email"=>$this->email
+            //     ],
+            //     "Data"=>[
+            //         "UserId"=>"1"
+            //     ]
+            // ]);
+
+            // $data = $response->json();
+
+            $data_send=[
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
                 'Action' => 'CreateUpdateStudy',
@@ -141,9 +163,9 @@ class Create extends Component
                 "Data"=>[
                     "UserId"=>"1"
                 ]
-            ]);
-
-            $data = $response->json();
+            ];
+            $data=sendBack($data_send);
+    
 
             if (isset($data['Status'])) {
                 if($data['Status']){

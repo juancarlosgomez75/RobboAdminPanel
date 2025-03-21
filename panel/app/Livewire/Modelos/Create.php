@@ -131,15 +131,17 @@ class Create extends Component
                 ],
             ];
 
-            //Genero la modificación
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), $enviar);
+            // //Genero la modificación
+            // $response = Http::withHeaders([
+            //     'Authorization' => 'AAAA'
+            // ])->withOptions([
+            //     'verify' => false // Desactiva la verificación SSL
+            // ])->post(config('app.API_URL'), $enviar);
 
 
-            $data = $response->json();
+            // $data = $response->json();
+
+            $data=sendBack($enviar);
 
             if (isset($data['Status'])) {
                 if($data['Status']){
@@ -178,33 +180,49 @@ class Create extends Component
 
     public function obtenerEstudios(){
 
-        //Genero la petición para obtener la información
-        $information = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición para obtener la información
+        // $information = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => "GeneralParams",
+        //     'Action' => "GeneralParams",
+        //     'Data' => ["UserId" => "1"]
+        // ]);
+
+        // $generalinformation=$information->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => "GeneralParams",
             'Action' => "GeneralParams",
             'Data' => ["UserId" => "1"]
-        ]);
+        ];
+        $generalinformation=sendBack($data_send);
 
-        $generalinformation=$information->json();
+        // //Genero la petición de informacion
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'StudyList',
+        //     'Data' => ["UserId" => "1"]
+        // ]);
 
-        //Genero la petición de informacion
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // $data = $response->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'StudyList',
             'Data' => ["UserId" => "1"]
-        ]);
-
-        $data = $response->json();
+        ];
+        $data=sendBack($data_send);
 
         //Analizo si todo okay
         if(isset($data['Status']) && isset($generalinformation['Status'])){
@@ -252,20 +270,29 @@ class Create extends Component
 
     public function obtenerManagers($idestudio){
         if($idestudio!= "" && $idestudio!= 0){
-            //Genero la petición de informacion
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), [
+            // //Genero la petición de informacion
+            // $response = Http::withHeaders([
+            //     'Authorization' => 'AAAA'
+            // ])->withOptions([
+            //     'verify' => false // Desactiva la verificación SSL
+            // ])->post(config('app.API_URL'), [
+            //     'Branch' => 'Server',
+            //     'Service' => 'PlatformUser',
+            //     'Action' => 'StudyInfo',
+            //     'Data' => ["UserId" => "1"],
+            //     "DataStudy"=> ["Id"=> $idestudio]
+            // ]);
+
+            // $data = $response->json();
+
+            $data_send=[
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
                 'Action' => 'StudyInfo',
                 'Data' => ["UserId" => "1"],
                 "DataStudy"=> ["Id"=> $idestudio]
-            ]);
-
-            $data = $response->json();
+            ];
+            $data=sendBack($data_send);
 
             //Analizo si todo okay
             if(isset($data["Status"])){

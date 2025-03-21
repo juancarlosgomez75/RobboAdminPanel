@@ -10,33 +10,50 @@ class MachineController extends Controller
 {
     public function index(){
 
-        //Genero la petición para obtener la información
-        $information = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición para obtener la información
+        // $information = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => "GeneralParams",
+        //     'Action' => "GeneralParams",
+        //     'Data' => ["UserId" => "1"]
+        // ]);
+
+        // $generalinformation=$information->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => "GeneralParams",
             'Action' => "GeneralParams",
             'Data' => ["UserId" => "1"]
-        ]);
-
-        $generalinformation=$information->json();
+        ];
+        $generalinformation=sendBack($data_send);
         
-        //Genero la petición de informacion
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición de informacion
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'Machines',
+        //     'Action' => 'AllView',
+        //     'Data' => ["UserId" => "1"]
+        // ]);
+
+        // $data = $response->json();
+
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'Machines',
             'Action' => 'AllView',
             'Data' => ["UserId" => "1"]
-        ]);
-
-        $data = $response->json();
+        ];
+        $data=sendBack($data_send);
 
         //Analizo si es válido lo que necesito
         if (isset($data['Status']) && isset($generalinformation['Status'])) {
@@ -79,33 +96,50 @@ class MachineController extends Controller
 
     public function create(){
 
-        //Genero la petición para obtener la información
-        $information = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición para obtener la información
+        // $information = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => "GeneralParams",
+        //     'Action' => "GeneralParams",
+        //     'Data' => ["UserId" => "1"]
+        // ]);
+
+
+        // $generalinformation=$information->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => "GeneralParams",
             'Action' => "GeneralParams",
             'Data' => ["UserId" => "1"]
-        ]);
-
-        $generalinformation=$information->json();
+        ];
+        $generalinformation=sendBack($data_send);
         
-        //Genero la petición de informacion
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición de informacion
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'StudyList',
+        //     'Data' => ["UserId" => "1"]
+        // ]);
+
+        // $data = $response->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'StudyList',
             'Data' => ["UserId" => "1"]
-        ]);
-
-        $data = $response->json();
+        ];
+        $data=sendBack($data_send);
 
         //Analizo si es válido lo que necesito
         if (isset($data['Status']) && isset($generalinformation['Status'])) {

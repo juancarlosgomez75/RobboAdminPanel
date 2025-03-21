@@ -72,14 +72,16 @@ class ManagerViewedit extends Component
                 ]
                 ];
 
-            //Genero la modificación
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), $apidata);
+            // //Genero la modificación
+            // $response = Http::withHeaders([
+            //     'Authorization' => 'AAAA'
+            // ])->withOptions([
+            //     'verify' => false // Desactiva la verificación SSL
+            // ])->post(config('app.API_URL'), $apidata);
 
-            $data = $response->json();
+            // $data = $response->json();
+
+            $data=sendBack($apidata);
 
             if (isset($data['Status'])) {
                 if($data['Status']){
@@ -113,12 +115,34 @@ class ManagerViewedit extends Component
 
     public function activarUsuario(){
 
-        //Genero la modificación
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la modificación
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'CreateEditUser',
+        //     "Data"=>[
+        //         "UserId"=>"1",
+        //         "UserData"=>[
+        //             "Id"=>$this->Information["Id"],
+        //             "Name"=>$this->nombre,
+        //             "Phone"=> $this->telefono,
+        //             "Email"=> $this->email,
+        //             "RolID"=>"1",
+        //             "Activo"=>true
+        //             ]
+        //         ],
+        //     "DataStudy"=>[
+        //         "Id"=>$this->Study["Id"]
+        //     ]
+        // ]);
+
+        // $data = $response->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'CreateEditUser',
@@ -136,9 +160,8 @@ class ManagerViewedit extends Component
             "DataStudy"=>[
                 "Id"=>$this->Study["Id"]
             ]
-        ]);
-
-        $data = $response->json();
+        ];
+        $data=sendBack($data_send);
 
         if (isset($data['Status'])) {
             if($data['Status']){
@@ -164,11 +187,33 @@ class ManagerViewedit extends Component
 
     public function desactivarUsuario(){
         //Genero la modificación
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'CreateEditUser',
+        //     "Data"=>[
+        //         "UserId"=>"1",
+        //         "UserData"=>[
+        //             "Id"=>$this->Information["Id"],
+        //             "Name"=>$this->nombre,
+        //             "Phone"=> $this->telefono,
+        //             "Email"=> $this->email,
+        //             "RolID"=>"1",
+        //             "Activo"=>false
+        //             ]
+        //         ],
+        //     "DataStudy"=>[
+        //         "Id"=>$this->Study["Id"]
+        //     ]
+        // ]);
+
+        // $data = $response->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'CreateEditUser',
@@ -186,9 +231,8 @@ class ManagerViewedit extends Component
             "DataStudy"=>[
                 "Id"=>$this->Study["Id"]
             ]
-        ]);
-
-        $data = $response->json();
+        ];
+        $data=sendBack($data_send);
 
         if (isset($data['Status'])) {
             if($data['Status']){

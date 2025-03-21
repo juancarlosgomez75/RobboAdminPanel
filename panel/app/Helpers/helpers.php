@@ -2,7 +2,8 @@
 
 use App\Models\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request; // Importar Request
+use Illuminate\Support\Facades\Request; // Importar Request;
+use Illuminate\Support\Facades\Http;
 
 if (!function_exists('logAccion')) {
     function registrarLog($menu,$section, $action, $details,$result=true)
@@ -43,5 +44,29 @@ if (!function_exists('decompressString')) {
 
         $decompressed = gzdecode($decoded);
         return $decompressed !== false ? $decompressed : '';
+    }
+}
+
+if (!function_exists('sendBack')) {
+    function sendBack($data,$code="AAA")
+    {
+
+        $response = Http::withHeaders([
+            'Authorization' => $code
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post(config('app.API_URL'), $data);
+
+        // Obtener la respuesta como string comprimido
+        $compressedResponse = $response->body(); 
+
+        // Descomprimir la respuesta
+        $decompressedResponse = decompressString($compressedResponse);
+
+        // Convertir el JSON descomprimido a array
+        $data  = json_decode($decompressedResponse, true);
+
+
+        return $data;
     }
 }

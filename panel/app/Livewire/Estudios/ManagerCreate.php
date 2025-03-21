@@ -46,12 +46,32 @@ class ManagerCreate extends Component
     public function guardar(){
         if($this->verificarCampos()){
 
-            //Genero la petición de informacion
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), [
+            // //Genero la petición de informacion
+            // $response = Http::withHeaders([
+            //     'Authorization' => 'AAAA'
+            // ])->withOptions([
+            //     'verify' => false // Desactiva la verificación SSL
+            // ])->post(config('app.API_URL'), [
+            //     'Branch' => 'Server',
+            //     'Service' => 'PlatformUser',
+            //     'Action' => 'CreateEditUser',
+            //     "Data"=>[
+            //         "UserId"=>"1",
+            //         "UserData"=>[
+            //             "Name"=>$this->nombre,
+            //             "Phone"=> $this->telefono,
+            //             "Email"=> $this->email,
+            //             "RolID"=>"1"
+            //         ]
+            //         ],
+            //     "DataStudy"=>[
+            //             "Id"=>$this->idEstudio
+            //     ]
+            // ]);
+
+            // $data = $response->json();
+
+            $data_send=[
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
                 'Action' => 'CreateEditUser',
@@ -67,9 +87,8 @@ class ManagerCreate extends Component
                 "DataStudy"=>[
                         "Id"=>$this->idEstudio
                 ]
-            ]);
-
-            $data = $response->json();
+            ];
+            $data=sendBack($data_send);
 
             if (isset($data['Status'])) {
                 if($data['Status']){

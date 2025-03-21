@@ -10,33 +10,50 @@ class StudyController extends Controller
 {
     public function index(){
 
-        //Genero la petición para obtener la información
-        $information = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición para obtener la información
+        // $information = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => "GeneralParams",
+        //     'Action' => "GeneralParams",
+        //     'Data' => ["UserId" => "1"]
+        // ]);
+
+        // $generalinformation=$information->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => "GeneralParams",
             'Action' => "GeneralParams",
             'Data' => ["UserId" => "1"]
-        ]);
-
-        $generalinformation=$information->json();
+        ];
+        $generalinformation=sendBack($data_send);
         
-        //Genero la petición de informacion
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición de informacion
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'StudyList',
+        //     'Data' => ["UserId" => "1"]
+        // ]);
+
+        // $data = $response->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'StudyList',
             'Data' => ["UserId" => "1"]
-        ]);
-
-        $data = $response->json();
+        ];
+        $data=sendBack($data_send);
+        
 
         //Analizo si es válido lo que necesito
         if (isset($data['Status']) && isset($generalinformation['Status'])) {
@@ -71,19 +88,27 @@ class StudyController extends Controller
 
     public function create(){
 
-        //Genero la petición para obtener la información
-        $information = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
-            'Branch' => 'Server',
-            'Service' => "GeneralParams",
-            'Action' => "GeneralParams",
-            'Data' => ["UserId" => "1"]
-        ]);
+        // //Genero la petición para obtener la información
+        // $information = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => "GeneralParams",
+        //     'Action' => "GeneralParams",
+        //     'Data' => ["UserId" => "1"]
+        // ]);
 
-        $generalinformation=$information->json();
+        // $generalinformation=$information->json();
+
+        $data_send=[
+                'Branch' => 'Server',
+                'Service' => "GeneralParams",
+                'Action' => "GeneralParams",
+                'Data' => ["UserId" => "1"]
+            ];
+        $generalinformation=sendBack($data_send);
 
         //Analizo si es válido lo que necesito
         if (isset($generalinformation['Status'])) {
@@ -120,34 +145,50 @@ class StudyController extends Controller
 
     public function viewedit($idestudio){
 
-        //Genero la petición de buscar a los managers de ese estudio
-        $responseStudio = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición de buscar a los managers de ese estudio
+        // $responseStudio = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'StudyInfo',
+        //     'Data' => ["UserId" => "1"],
+        //     "DataStudy"=>["Id"=>$idestudio]
+        // ]);
+
+        // $dataStudio = $responseStudio->json();
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'StudyInfo',
             'Data' => ["UserId" => "1"],
             "DataStudy"=>["Id"=>$idestudio]
-        ]);
+        ];
+        $dataStudio=sendBack($data_send);
 
-        $dataStudio = $responseStudio->json();
+        // //Genero la petición para obtener la información general
+        // $information = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => "GeneralParams",
+        //     'Action' => "GeneralParams",
+        //     'Data' => ["UserId" => "1"]
+        // ]);
 
-        //Genero la petición para obtener la información general
-        $information = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // $generalinformation=$information->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => "GeneralParams",
             'Action' => "GeneralParams",
             'Data' => ["UserId" => "1"]
-        ]);
-
-        $generalinformation=$information->json();
+        ];
+        $generalinformation=sendBack($data_send);
 
         //Si se recibe la informacion
         if (isset($dataStudio['Status']) && isset($generalinformation["Status"])){
@@ -175,11 +216,25 @@ class StudyController extends Controller
 
     public function manager_viewedit($idmanager){
         //Genero la petición de buscar a los managers de ese estudio
-        $response= Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // $response= Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'ViewUser',
+        //     'Data' => [
+        //         "UserId" => "1",
+        //         "UserData"=>[
+        //             "Id"=>$idmanager
+        //         ]
+        //     ]
+        // ]);
+
+        // $dataManager = $response->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'ViewUser',
@@ -189,9 +244,8 @@ class StudyController extends Controller
                     "Id"=>$idmanager
                 ]
             ]
-        ]);
-
-        $dataManager = $response->json();
+        ];
+        $dataManager=sendBack($data_send);
 
         //Si se recibe la informacion
         if (isset($dataManager['Status'])){
@@ -207,20 +261,29 @@ class StudyController extends Controller
     }
 
     public function manager_create($idestudio){
-        //Genero la petición de buscar a los managers de ese estudio
-        $responseStudio = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición de buscar a los managers de ese estudio
+        // $responseStudio = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'StudyInfo',
+        //     'Data' => ["UserId" => "1"],
+        //     "DataStudy"=>["Id"=>$idestudio]
+        // ]);
+
+        // $dataStudio = $responseStudio->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'StudyInfo',
             'Data' => ["UserId" => "1"],
             "DataStudy"=>["Id"=>$idestudio]
-        ]);
-
-        $dataStudio = $responseStudio->json();
+        ];
+        $dataStudio=sendBack($data_send);
 
         //Si se recibe la informacion
         if (isset($dataStudio['Status'])){

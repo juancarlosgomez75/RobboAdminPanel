@@ -124,7 +124,16 @@ class Viewedit extends Component
     public function modificar()
     {
         if($this->validar()){
- 
+            
+            // //Genero la petición de informacion
+            // $response = Http::withHeaders([
+            //     'Authorization' => 'AAAA'
+            // ])->withOptions([
+            //     'verify' => false // Desactiva la verificación SSL
+            // ])->post(config('app.API_URL'), $apidata);
+
+            // $data = $response->json();
+
             $apidata=[
                 'Branch' => 'Server',
                 'Service' => 'PlatformUser',
@@ -145,15 +154,7 @@ class Viewedit extends Component
                     "UserId"=>"1"
                 ]
                 ];
-
-            //Genero la petición de informacion
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), $apidata);
-
-            $data = $response->json();
+            $data=sendBack($apidata);
 
             if (isset($data['Status'])) {
                 if($data['Status']){
@@ -220,14 +221,17 @@ class Viewedit extends Component
 
 
 
-        //Genero la petición de informacion
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), $apiData);
+        // //Genero la petición de informacion
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), $apiData);
 
-        $data = $response->json();
+        // $data = $response->json();
+
+        $data=sendBack($apiData);
+
         if (isset($data['Status'])) {
             if($data['Status']){
                 $this->alerta=true;
@@ -237,20 +241,29 @@ class Viewedit extends Component
 
                 $this->moveFirmwareId="";
 
-                //Recargo la info de la máquina
-                $responseStudio = Http::withHeaders([
-                    'Authorization' => 'AAAA'
-                ])->withOptions([
-                    'verify' => false // Desactiva la verificación SSL
-                ])->post(config('app.API_URL'), [
+                // //Recargo la info de la máquina
+                // $responseStudio = Http::withHeaders([
+                //     'Authorization' => 'AAAA'
+                // ])->withOptions([
+                //     'verify' => false // Desactiva la verificación SSL
+                // ])->post(config('app.API_URL'), [
+                //     'Branch' => 'Server',
+                //     'Service' => 'PlatformUser',
+                //     'Action' => 'StudyInfo',
+                //     'Data' => ["UserId" => "1"],
+                //     "DataStudy"=>["Id"=>$this->informacion["Id"]]
+                // ]);
+
+                // $dataStudio = $responseStudio->json();
+
+                $data_send=[
                     'Branch' => 'Server',
                     'Service' => 'PlatformUser',
                     'Action' => 'StudyInfo',
                     'Data' => ["UserId" => "1"],
                     "DataStudy"=>["Id"=>$this->informacion["Id"]]
-                ]);
-
-                $dataStudio = $responseStudio->json();
+                ];
+                $dataStudio=sendBack($data_send);
 
                 if (isset($dataStudio['Status'])){
                     if($dataStudio['Status']){
@@ -290,14 +303,17 @@ class Viewedit extends Component
     
     
     
-            //Genero la petición de informacion
-            $response = Http::withHeaders([
-                'Authorization' => 'AAAA'
-            ])->withOptions([
-                'verify' => false // Desactiva la verificación SSL
-            ])->post(config('app.API_URL'), $apiData);
+            // //Genero la petición de informacion
+            // $response = Http::withHeaders([
+            //     'Authorization' => 'AAAA'
+            // ])->withOptions([
+            //     'verify' => false // Desactiva la verificación SSL
+            // ])->post(config('app.API_URL'), $apiData);
     
-            $data = $response->json();
+            // $data = $response->json();
+
+            $data=sendBack($apiData);
+
             if (isset($data['Status'])) {
                 if($data['Status']){
                     $this->alerta=true;

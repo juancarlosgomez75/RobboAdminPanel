@@ -27,12 +27,26 @@ class ModelController extends Controller
 
     public function viewedit($idmodelo){
 
-        //Genero la petición de información del modelo para ver si existe
-        $response = Http::withHeaders([
-            'Authorization' => 'AAAA'
-        ])->withOptions([
-            'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), [
+        // //Genero la petición de información del modelo para ver si existe
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'ModelInfo',
+        //     'Data' => [
+        //         "UserId" => "1",
+        //         "ModelData"=>[
+        //             "ModelId"=>$idmodelo
+        //         ]
+        //     ]
+        // ]);
+
+        // $data = $response->json();
+
+        $data_send=[
             'Branch' => 'Server',
             'Service' => 'PlatformUser',
             'Action' => 'ModelInfo',
@@ -42,9 +56,8 @@ class ModelController extends Controller
                     "ModelId"=>$idmodelo
                 ]
             ]
-        ]);
-
-        $data = $response->json();
+        ];
+        $data=sendBack($data_send);
 
         //Analizo si es válido lo que necesito
         if (isset($data['Status'])) {
