@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request; // Importar Request;
 use Illuminate\Support\Facades\Http;
 
-if (!function_exists('logAccion')) {
+if (!function_exists('registrarLog')) {
     function registrarLog($menu,$section, $action, $details,$result=true)
     {
         //Analizo si estoy logueado
