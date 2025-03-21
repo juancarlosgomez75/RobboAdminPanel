@@ -18,7 +18,7 @@ Livewire::setUpdateRoute(function ($handle) {
 });
 
 Route::get('/', function () {
-    return redirect(route("login"))
+    return redirect(route("login"));
 })->name('home');
 
 Route::controller(LoginController::class)->group(function(){
