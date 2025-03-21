@@ -164,9 +164,15 @@
                                     <td>{{ $maquina["ID"] ?? 'N/R' }}</td>
                                     <td>{{ $maquina["FirmwareID"] ?? 'N/E' }}</td>
                                     <td>{{ $maquina["Tipo"] ?? 'No especificado' }}</td>
+                                    
                                     <td>
-                                        <a type="button" class="btn btn-outline-danger btn-sm">Desvincular</a>
+                                        @if($informacion["Id"]!=1)
+                                        <a type="button" class="btn btn-outline-danger btn-sm" wire:click="desvincular({{$index}})">Desvincular</a>
+                                        @else
+                                        Sin acciones
+                                        @endif
                                     </td>
+                                    
                                 </tr>
                             @endforeach
                             @else
@@ -179,14 +185,40 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- <div class="col-md-12 text-center">
-                    <a type="button" class="btn btn-outline-secondary" href="manager/crear/">
-                        Crear nuevo manager
+                <div class="col-md-12 text-center">
+                    <a type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#vincularMachine">
+                        Vincular máquina
                     </a>
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="vincularMachine" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="vincularMachineLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="vincularMachineLabel">Vincular máquina con estudio</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Al vincular una máquina con este estudio, permites que el estudio pueda hacer uso de ella. Por favor ingresa el firmware id de la máquina para moverla.
+                </p>
+                <div class="mb-3">
+                    <label class="form-label">Firmware Id</label>
+                    <input type="number" class="form-control" placeholder="Ejemplo: 100000" wire:model="moveFirmwareId" min="100000" max="999999">
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="moveMachine()">Vincular máquina</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -217,6 +249,8 @@
     myInput.focus()
     })
 </script>
+
+
     <br>
 
 

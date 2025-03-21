@@ -34,6 +34,8 @@ class Viewedit extends Component
     public $telcontacto2="";
     public $email="";
 
+    public $moveFirmwareId="";
+
     public function validar(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
             
@@ -177,6 +179,99 @@ class Viewedit extends Component
 
 
 
+        }
+
+    }
+
+    public function moveMachine(){
+        //Valido el id
+        if($this->moveFirmwareId<100000 || $this->moveFirmwareId > 999999 || !is_numeric($this->moveFirmwareId)){
+
+            $this->alerta = true;
+            $this->alerta_warning = "Alerta: El firmware Id no es válido";
+            
+            return false;
+        }
+
+        //Analizo si ya está
+        foreach($this->maquinas as $maq){
+            if($maq["FirmwareID"]==$this->moveFirmwareId){
+                $this->alerta = true;
+                $this->alerta_warning = "Alerta: Esta máquina ya está en este estudio";
+                
+                return false;
+            }
+        }
+
+        $apiData=[
+            'Branch' => 'Server',
+            'Service' => 'Machines',
+            'Action' => 'Assign',
+            "Data"=>[
+                "UserId"=>"1",
+                "Machines"=>[
+                    ["FirmwareID"=>$this->moveFirmwareId]
+                ]
+                ],
+            'DataStudy' => [
+                "Id"=>$this->informacion["Id"],
+            ]
+            ];
+
+
+
+        //Genero la petición de informacion
+        $response = Http::withHeaders([
+            'Authorization' => 'AAAA'
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post(config('app.API_URL'), $apiData);
+
+        $data = $response->json();
+        if (isset($data['Status'])) {
+            if($data['Status']){
+                $this->alerta=true;
+                $this->alerta_sucess= "Se ha vinculado la máquina $".$this->moveFirmwareId." con este estudio correctamente";
+
+                registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"],true);
+
+                $this->moveFirmwareId="";
+
+                //Recargo la info de la máquina
+                $responseStudio = Http::withHeaders([
+                    'Authorization' => 'AAAA'
+                ])->withOptions([
+                    'verify' => false // Desactiva la verificación SSL
+                ])->post(config('app.API_URL'), [
+                    'Branch' => 'Server',
+                    'Service' => 'PlatformUser',
+                    'Action' => 'StudyInfo',
+                    'Data' => ["UserId" => "1"],
+                    "DataStudy"=>["Id"=>$this->informacion["Id"]]
+                ]);
+
+                $dataStudio = $responseStudio->json();
+
+                if (isset($dataStudio['Status'])){
+                    if($dataStudio['Status']){
+                        $this->maquinas=$dataStudio["Data"]["Machines"];
+                    }
+                }
+
+            }else{
+                $this->alerta=true;
+                $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+                registrarLog("Producción","Estudios","Vincular","Se ha intentado mover la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"].", los datos fueron: ".json_encode($apiData),false);
+            }
+        }
+
+    }
+
+    public function desvincular($index){
+        //Analizo si la id cumple
+        if($this->informacion["Id"]!=1){
+            //Obtengo la maquina por el index
+            $maquina=$this->maquinas[$index];
         }
 
     }
