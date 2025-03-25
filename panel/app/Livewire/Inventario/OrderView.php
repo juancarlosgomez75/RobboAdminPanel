@@ -165,6 +165,40 @@ class OrderView extends Component
                     if(!$pto->inventory->save()){
                         $this->dispatch('mostrarToast', 'Reportar stock', 'Se ha generado un error, contacte a soporte');
                     }
+
+                    //Ahora actualizo si es el caso
+                    if(isset($element["firmware"]) && $this->orden->study_id!=null){
+                        $apiData=[
+                            'Branch' => 'Server',
+                            'Service' => 'Machines',
+                            'Action' => 'Assign',
+                            "Data"=>[
+                                "UserId"=>"1",
+                                "Machines"=>[
+                                    ["FirmwareID"=>$element["firmware"]]
+                                ]
+                                ],
+                            'DataStudy' => [
+                                "Id"=>$this->orden->study_id,
+                            ]
+                        ];
+
+                        $data=sendBack($apiData);
+
+                        if (!isset($data['Status'])) {
+                            $this->dispatch('mostrarToast', 'Mover máquina', 'Se ha generado un error al mover automáticamente una máquina, contacte a soporte');
+
+                        }
+                        elseif(!$data['Status']){
+                            $this->dispatch('mostrarToast', 'Mover máquina', 'No se ha completado con éxito, contacte a soporte');
+                        }else{
+                            registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina Firmware#".$element["firmware"]." al estudio #".$this->orden->study_id.", resultado de operación de la orden #".$mov->id,true);
+                        }
+
+                        
+
+
+                    }
                 }
 
             }
