@@ -201,7 +201,7 @@ class MachineController extends Controller
             'Data' => [
                 "UserId" => "1",
                 "Machines"=>[
-                    ["ID"=>"3"]
+                    ["ID"=>$idmaquina]
                 ]
             ]
         ];

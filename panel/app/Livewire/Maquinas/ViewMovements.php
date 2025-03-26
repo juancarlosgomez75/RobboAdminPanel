@@ -51,6 +51,7 @@ class ViewMovements extends Component
                 $subQuery->whereRaw("LOWER(name) LIKE ?", [strtolower($this->filtroAutor) . '%']);
             });
         })
+        ->where("machine_id", "=", $this->Maquina["ID"])
         ->paginate(30);
 
         return view('livewire.maquinas.view-movements',compact('history'));
