@@ -105,5 +105,5 @@
 
 
 </div>
-
+@livewire('alerts')
 @endsection
