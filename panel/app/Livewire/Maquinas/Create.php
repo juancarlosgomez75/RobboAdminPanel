@@ -26,6 +26,12 @@ class Create extends Component
     }
 
     public function validar(){
+
+        //Se reinician las alertas
+        $this->alerta_sucess="";
+        $this->alerta_error="";
+        $this->alerta_warning="";
+
         if(!(is_numeric($this->hardwareid) && $this->hardwareid > 0)){
             
             $this->alerta=true;

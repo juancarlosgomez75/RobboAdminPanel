@@ -32,6 +32,12 @@ class Perfil extends Component
 
     }
     public function validar(){
+
+        //Se reinician las alertas
+        $this->alerta_sucess="";
+        $this->alerta_error="";
+        $this->alerta_warning="";
+
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
             
             $this->alerta=true;

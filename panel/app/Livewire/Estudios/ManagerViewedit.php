@@ -25,9 +25,11 @@ class ManagerViewedit extends Component
 
     
     public function verificarCampos(){
-        $this->alerta_warning="";
-        $this->alerta_error="";
+        //Se reinician las alertas
         $this->alerta_sucess="";
+        $this->alerta_error="";
+        $this->alerta_warning="";
+        
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
             
             $this->alerta=true;
