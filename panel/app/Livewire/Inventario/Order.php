@@ -36,6 +36,9 @@ class Order extends Component
     //Información de los detalles
     public $details="";
 
+    public $searchResults;
+    public $finded=false;
+
     //El elemento de updated
     public function updatedtoStudy($valor)
     {
@@ -184,8 +187,10 @@ class Order extends Component
         $this->addingProduct=true;
     }
 
-    public function cancelAdding(){
+    public function cancelSearch(){
         $this->addingProduct=false;
+        $this->finded=false;
+        $this->searchResults=[];
 
         //Reinicio los campos
         $this->product_name="";
@@ -200,41 +205,42 @@ class Order extends Component
 
     }
 
-    public function addProduct(){
+    public function searchProduct(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->product_name) && !empty(trim($this->product_name)))){
             
-            $this->dispatch('mostrarToast', 'Añadir producto', 'El campo no es válido');
+            $this->dispatch('mostrarToast', 'Buscar producto', 'El campo no es válido');
 
             return;
         }
 
-        //Busco el producto
-        $busqueda=Product::where("name", "LIKE", "%".$this->product_name."%")
-        ->where("available", "=", "1")
-        ->first();
+        $searchTerm = preg_replace('/\s+/', '%', trim($this->product_name)); // Reemplaza espacios múltiples con %
 
-        if($busqueda){
-            //Añado el producto
-            $this->listProducts[]=[
-                "id"=>$busqueda->id,
-                "name"=>$busqueda->name,
-                "amount"=>$this->product_amount
-            ];
+        $this->searchResults = Product::whereRaw("LOWER(name) LIKE LOWER(?)", ["%" . $searchTerm . "%"])
+            ->where("available", "=", "1")
+            ->get();
 
-            //Reinicio los campos
-            $this->product_name="";
-            $this->product_amount=1;
+        //Indico que debe mostrar resultados
+        $this->finded=true;
 
-            //Cierro el editando
-            $this->addingProduct=false;
+    }
+    public function addProduct($index){
 
-            //Notifico que se ha añadido
-            $this->dispatch('mostrarToast', 'Añadir producto', 'Se ha añadido el producto al carrito');
-
-        }else{
+        if(!isset($this->searchResults[$index])){
             $this->dispatch('mostrarToast', 'Añadir producto', 'No se ha localizado el producto');
+            return;
         }
- 
+
+        $busqueda=$this->searchResults[$index];
+
+        //Añado el producto
+        $this->listProducts[]=[
+            "id"=>$busqueda->id,
+            "name"=>$busqueda->name,
+            "amount"=>1
+        ];
+
+        $this->dispatch('mostrarToast', 'Añadir producto', 'Producto añadido');
+
     }
 
     public function validar(){
@@ -275,6 +281,13 @@ class Order extends Component
         if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
             $this->dispatch('mostrarToast', 'Crear pedido', 'Las observaciones no son válidas');
             return false;
+        }
+
+        //Valido las cantidades
+        foreach($this->listProducts as $product)
+            if($product['amount']<=0){
+                $this->dispatch('mostrarToast', 'Crear pedido', 'La cantidad del producto: '.$product["name"].' no es válida');
+                return false;
         }
 
         return true;

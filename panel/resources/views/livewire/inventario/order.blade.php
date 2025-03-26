@@ -87,7 +87,7 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nombre</th>
-                                <th scope="col">Cantidad</th>
+                                <th scope="col" style="width:10%">Cantidad</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -97,7 +97,9 @@
                                 <tr>
                                     <td>{{$index+1}}</td>
                                     <td>{{$pd["name"]}}</td>
-                                    <td>{{$pd["amount"]}}</td>
+                                    <td>
+                                        <input type="number" min="1" class="form-control" wire:model="listProducts.{{$index}}.amount" >
+                                    </td>
                                     <td>
                                         <a class="btn btn-outline-danger btn-sm" wire:click="removeProduct({{$index}})">Eliminar</a>
                                     </td>
@@ -118,22 +120,51 @@
                     </div>    
                     @else
                     <div class="row">
-                        <div class="col-md-7 mb-3">
-                            <label class="form-label">Nombre producto</label>
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label">Buscar producto por nombre</label>
                             <input type="text" class="form-control" placeholder="Ejemplo: Neutro" wire:model="product_name" >
                         </div>
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label">Cantidad</label>
-                            <input type="number" min="0" class="form-control" placeholder="Ejemplo: 2" wire:model="product_amount" >
-                        </div>
-                        <div class="col-md-1 mb-3 pt-2 d-grid text-center">
+                        <div class="col-md-2 mb-3 pt-2 d-grid text-center">
                             <br>
-                            <button type="button" class="btn btn-outline-primary btn-sm" wire:click="addProduct()">Añadir</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" wire:click="searchProduct()">Buscar</button>
                         </div>
-                        <div class="col-md-1 mb-3 pt-2 d-grid text-center">
+                        <div class="col-md-2 mb-3 pt-2 d-grid text-center">
                             <br>
-                            <button type="button" class="btn btn-outline-danger btn-sm" wire:click="cancelAdding()">Cancelar</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" wire:click="cancelSearch()">Finalizar</button>
                         </div>
+                        @if($finded)
+                        <div class="col-md-12 mb-3">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Stock disponible</th>
+                                        <th scope="col" style="width:20%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(!$searchResults->isEmpty())
+                                    @foreach ($searchResults as $index=>$result)
+                                    <tr>
+                                        <th scope="row">{{$index+1}}</th>
+                                        <td>{{$result->name}}</td>
+                                        <td>{{$result->inventory->stock_available}}</td>
+                                        <td class="d-grid">
+                                            <a class="btn btn-outline-primary btn-sm" wire:click="addProduct({{$index}})">Añadir</a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+
+                                    @else
+                                    <tr class="text-center">
+                                        <td colspan="4">No hubo coincidencia de productos con este nombre</td>
+                                    </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                        @endif
                     </div>
                     @endif
                 </div>
