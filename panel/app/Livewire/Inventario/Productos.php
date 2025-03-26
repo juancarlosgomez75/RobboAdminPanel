@@ -16,6 +16,12 @@ class Productos extends Component
     protected $category_use;
     public $ref;
 
+    protected $listeners = ['refrescarCategorias'];
+
+    public function refrescarCategorias(){
+        $this->render();
+    }
+
     public function validar(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
             $this->dispatch('mostrarToast', 'Crear producto', 'Error: El nombre del producto no es válido');
