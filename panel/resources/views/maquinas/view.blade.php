@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    @livewire("maquinas.view-movements")
+                    @livewire("maquinas.view-movements", compact("Maquina"))
                 </div>
             </div>
         </div>
