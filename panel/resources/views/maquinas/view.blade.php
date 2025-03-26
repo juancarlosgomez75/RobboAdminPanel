@@ -32,7 +32,7 @@
 <div>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="/estudio/" class="text-secondary">Estudio</a></li>
+            <li class="breadcrumb-item "><a href="{{route("estudio.ver",$Maquina["ID"])}}" class="text-secondary">Estudio</a></li>
             <li class="breadcrumb-item active" aria-current="page">Máquina</li>
         </ol>
     </nav>
@@ -47,19 +47,25 @@
                     <table class="table">
                         <tr>
                             <th>Id </th>
-                            <td>1</td>
+                            <td>{{$Maquina["ID"]}}</td>
                         </tr>
                         <tr>
                             <th>FirmwareID</th>
-                            <td>1</td>
+                            <td>{{$Maquina["FirmwareID"]}}</td>
                         </tr>
                         <tr>
                             <th>Tipo</th>
-                            <td>1</td>
+                            <td>{{$Maquina["Tipo"] ?? "N/R"}}</td>
+                        </tr>
+                        <tr>
+                            <th>Ciudad</th>
+                            <td>{{$Maquina["City"]}}</td>
                         </tr>
                         <tr>
                             <th>Estudio actual</th>
-                            <td>Ver estudio</td>
+                            <td>
+                                <a href="{{route("estudio.ver",$Maquina["ID"])}}">Ver estudio</a>
+                            </td>
                         </tr>
                     </table>
                     

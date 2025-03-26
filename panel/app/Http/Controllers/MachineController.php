@@ -201,50 +201,42 @@ class MachineController extends Controller
             'Data' => [
                 "UserId" => "1",
                 "Machines"=>[
-                    ["FirmwareID"=>"200046"]
+                    ["ID"=>"3"]
                 ]
             ]
         ];
         $data=sendBack($data_send);
 
-        return view("maquinas.view");
+        // return json_encode($data);
 
-        // //Analizo si es válido lo que necesito
-        // if (isset($data['Status']) && isset($generalinformation['Status'])) {
-        //     //Analizo si el status es true
-        //     if($data["Status"] && $generalinformation["Status"]){
+        // return view("maquinas.view");
 
-        //         return json_encode($data);
+        //Analizo si es válido lo que necesito
+        if (isset($data['Status']) && isset($generalinformation['Status'])) {
+            //Analizo si el status es true
+            if($data["Status"] && $generalinformation["Status"]){
 
-        //         // // Mapear ciudades con su país
-        //         // $cityMap = [];
-        //         // if (isset($generalinformation['CountryList'])) {
-        //         //     foreach ($generalinformation['CountryList'] as $country) {
-        //         //         foreach ($country['Cities'] as $city) {
-        //         //             $cityMap[$city['Id']] = $city['CityName'] . ', ' . $country['CountryName'];
-        //         //         }
-        //         //     }
-        //         // }
+                // // Mapear ciudades con su país
+                $cityMap = [];
+                if (isset($generalinformation['CountryList'])) {
+                    foreach ($generalinformation['CountryList'] as $country) {
+                        foreach ($country['Cities'] as $city) {
+                            $cityMap[$city['Id']] = $city['CityName'] . ', ' . $country['CountryName'];
+                        }
+                    }
+                }
 
-        //         // // Agregar el campo City en ListStudyData
-        //         // if (isset($data['ListStudyData'])) {
-        //         //     foreach ($data['ListStudyData'] as &$study) {
-        //         //         $study['FullName'] = $study['FullName'] = $study["StudyName"] . " (" . ($cityMap[$study['CityId']] ?? 'Desconocido') . ")";
-        //         //     }
-        //         // }
+                $data["Data"]["Machines"][0]["City"]=$cityMap[$data["Data"]["Machines"][0]["StudyData"]["CityId"]] ?? 'N/R';
 
-        //         // usort($data["ListStudyData"], function ($a, $b) {
-        //         //     return strcmp($a["FullName"], $b["FullName"]);
-        //         // });
 
-        //         // return view("maquinas.create",["information"=>$data["ListStudyData"]]);
-        //     }
-        //     return "Error de status";
+                return view("maquinas.view",["Maquina"=>$data["Data"]["Machines"][0]]);
+            }
+            return "Error de status";
             
-        // }
+        }
         
         
-        // return "Error general";
+        return "Error general";
 
 
 
