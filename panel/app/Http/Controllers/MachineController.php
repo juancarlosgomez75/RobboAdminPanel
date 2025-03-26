@@ -182,4 +182,76 @@ class MachineController extends Controller
 
 
     }
+
+    public function view($idmaquina){
+
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => "GeneralParams",
+            'Action' => "GeneralParams",
+            'Data' => ["UserId" => "1"]
+        ];
+        $generalinformation=sendBack($data_send);
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'Machines',
+            'Action' => 'OneView',
+            'Data' => [
+                "UserId" => "1",
+                "Machines"=>[
+                    ["FirmwareID"=>"200046"]
+                ]
+            ]
+        ];
+        $data=sendBack($data_send);
+
+        return view("maquinas.view");
+
+        // //Analizo si es válido lo que necesito
+        // if (isset($data['Status']) && isset($generalinformation['Status'])) {
+        //     //Analizo si el status es true
+        //     if($data["Status"] && $generalinformation["Status"]){
+
+        //         return json_encode($data);
+
+        //         // // Mapear ciudades con su país
+        //         // $cityMap = [];
+        //         // if (isset($generalinformation['CountryList'])) {
+        //         //     foreach ($generalinformation['CountryList'] as $country) {
+        //         //         foreach ($country['Cities'] as $city) {
+        //         //             $cityMap[$city['Id']] = $city['CityName'] . ', ' . $country['CountryName'];
+        //         //         }
+        //         //     }
+        //         // }
+
+        //         // // Agregar el campo City en ListStudyData
+        //         // if (isset($data['ListStudyData'])) {
+        //         //     foreach ($data['ListStudyData'] as &$study) {
+        //         //         $study['FullName'] = $study['FullName'] = $study["StudyName"] . " (" . ($cityMap[$study['CityId']] ?? 'Desconocido') . ")";
+        //         //     }
+        //         // }
+
+        //         // usort($data["ListStudyData"], function ($a, $b) {
+        //         //     return strcmp($a["FullName"], $b["FullName"]);
+        //         // });
+
+        //         // return view("maquinas.create",["information"=>$data["ListStudyData"]]);
+        //     }
+        //     return "Error de status";
+            
+        // }
+        
+        
+        // return "Error general";
+
+
+
+
+
+
+    }
+
+
 }

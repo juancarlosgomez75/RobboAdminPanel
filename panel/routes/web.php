@@ -39,6 +39,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(StudyController::class
 Route::middleware(['auth','checkuserstatus'])->controller(MachineController::class)->group(function(){
     Route::get('/panel/maquinas', 'index')->name('maquinas.index');
     Route::middleware('checkrank:5')->get('/panel/maquinas/crear', 'create')->name('maquinas.create');
+    Route::get('/panel/maquina/{idmaquina}', 'view')->name('maquinas.view');
 });
 
 Route::middleware(['auth','checkuserstatus'])->controller(ModelController::class)->group(function(){

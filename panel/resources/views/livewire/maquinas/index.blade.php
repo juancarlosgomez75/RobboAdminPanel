@@ -7,9 +7,9 @@
                     {{-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> --}}
                 </div>
                 <div class="col-md-3 justify-content-end" style="display: flex; gap:0.6rem">
-                    <a href="maquinas/crear" class="btn btn-sm action-btn btn-outline-secondary">
+                    {{-- <a href="maquinas/crear" class="btn btn-sm action-btn btn-outline-secondary">
                         <i class="fa-solid fa-plus"></i> Crear
-                    </a>
+                    </a> --}}
                     
                     <a type="button" class="btn btn-sm action-btn btn-outline-secondary" wire:click="switchFiltros()">
                         <i class="fa-solid fa-filter"></i> Filtros
