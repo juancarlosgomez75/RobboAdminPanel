@@ -154,7 +154,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Firmware</th>
                                 <th scope="col">Tipo</th>
-                                <th scope="col" style="width: 12%;"></th>
+                                <th scope="col" style="width: 28%;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -166,6 +166,7 @@
                                     <td>{{ $maquina["Tipo"] ?? 'No especificado' }}</td>
                                     
                                     <td>
+                                        <a type="button" class="btn btn-outline-primary btn-sm" href="{{route("maquinas.view",$maquina["ID"])}}">Visualizar</a>
                                         @if($informacion["Id"]!=1)
                                         <a type="button" class="btn btn-outline-danger btn-sm" wire:click="desvincular({{$index}})">Desvincular</a>
                                         @else

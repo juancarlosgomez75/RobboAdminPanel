@@ -64,7 +64,7 @@
                         <tr>
                             <th>Estudio actual</th>
                             <td>
-                                <a href="{{route("estudio.ver",$Maquina["ID"])}}">Ver estudio</a>
+                                <a href="{{route("estudio.ver",$Maquina["StudyData"]["Id"])}}">Ver estudio</a>
                             </td>
                         </tr>
                     </table>

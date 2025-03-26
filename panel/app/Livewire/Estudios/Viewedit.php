@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Estudios;
 
+use App\Models\MachineHistory;
 use Livewire\Component;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class Viewedit extends Component
 
@@ -245,22 +246,37 @@ class Viewedit extends Component
 
                 registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"],true);
 
+                //Genero la información
+                $data_send=[
+                    'Branch' => 'Server',
+                    'Service' => 'Machines',
+                    'Action' => 'OneView',
+                    'Data' => [
+                        "UserId" => "1",
+                        "Machines"=>[
+                            ["FirmwareID"=>$this->moveFirmwareId]
+                        ]
+                    ]
+                ];
+                $data=sendBack($data_send);
+
+                if($data["Status"]){
+                    $Maquina=$data["Data"]["Machines"][0];
+
+                    //Genero el movimiento
+                    $movimiento=new MachineHistory();
+
+                    //Cargo la info
+                    $movimiento->machine_id=$Maquina["ID"];
+                    $movimiento->description="Vincular";
+                    $movimiento->details="Se ha vinculado la máquina con firmware #".$Maquina["FirmwareID"]." al estudio #".$this->informacion["Id"];
+                    $movimiento->author=Auth::user()->id;
+
+                    $movimiento->save();
+                }
+                
+                
                 $this->moveFirmwareId="";
-
-                // //Recargo la info de la máquina
-                // $responseStudio = Http::withHeaders([
-                //     'Authorization' => 'AAAA'
-                // ])->withOptions([
-                //     'verify' => false // Desactiva la verificación SSL
-                // ])->post(config('app.API_URL'), [
-                //     'Branch' => 'Server',
-                //     'Service' => 'PlatformUser',
-                //     'Action' => 'StudyInfo',
-                //     'Data' => ["UserId" => "1"],
-                //     "DataStudy"=>["Id"=>$this->informacion["Id"]]
-                // ]);
-
-                // $dataStudio = $responseStudio->json();
 
                 $data_send=[
                     'Branch' => 'Server',
@@ -329,6 +345,20 @@ class Viewedit extends Component
 
                     unset($this->maquinas[$index]); // Elimina el elemento del array
                     $this->maquinas = array_values($this->maquinas); // Reorganiza los índices
+
+
+                    //Genero el movimiento
+                    $movimiento=new MachineHistory();
+
+                    //Cargo la info
+                    $movimiento->machine_id=$maquina["ID"];
+                    $movimiento->description="Desvincular";
+                    $movimiento->details="Se ha desvinculado la máquina con firmware #".$maquina["FirmwareID"]." del estudio #".$this->informacion["Id"];
+                    $movimiento->author=Auth::user()->id;
+
+                    $movimiento->save();
+
+
     
                 }else{
                     $this->alerta=true;
