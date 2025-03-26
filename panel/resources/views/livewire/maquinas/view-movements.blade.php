@@ -6,7 +6,7 @@
                 <input type="text" class="custom-input" placeholder="Filtrar por fecha" wire:model.change="filtroFecha">
             </div>
             <div class="col-md-3">
-                <input type="text" class="custom-input" placeholder="Filtrar por acción" wire:model.change="filtroAccion">
+                <input type="text" class="custom-input" placeholder="Filtrar por descrpción" wire:model.change="filtroDesc">
             </div>
             <div class="col-md-3">
                 <input type="text" class="custom-input" placeholder="Filtrar por autor" wire:model.change="filtroAutor">
