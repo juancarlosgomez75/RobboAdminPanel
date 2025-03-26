@@ -6,10 +6,15 @@ use App\Models\MachineHistory;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+
 
 class ViewMovements extends Component
 {
     use WithPagination;
+
 
     public $filtroFecha="";
     public $filtroAutor="";
@@ -23,6 +28,16 @@ class ViewMovements extends Component
     public $Description= "";
 
     protected $paginationTheme = 'bootstrap';
+
+    public function updatingFiltroFecha()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFiltroAutor()
+    {
+        $this->resetPage();
+    }
 
     public function validar(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->CreateDescription) && !empty(trim($this->CreateDescription)))){
@@ -52,8 +67,12 @@ class ViewMovements extends Component
                 $this->dispatch('mostrarToast', 'Crear movimiento', 'Se ha creado el movimiento correctamente');
                 $this->CreateDescription="";
                 $this->CreateDetails="";
+                $this->resetPage();
+
+                registrarLog("Producción","Maquinas","Crear movimiento","Se ha creado un movimiento con la siguiente información: ".json_encode($movimiento),true);
             }else{
                 $this->dispatch('mostrarToast', 'Crear movimiento', 'Error almacenando, contacte con soporte');
+                registrarLog("Producción","Maquinas","Crear movimiento","Se ha intentado crear un movimiento con la siguiente información: ".json_encode($movimiento),false);
             }
 
 
@@ -83,7 +102,7 @@ class ViewMovements extends Component
     {
         $history = MachineHistory::orderBy("created_at", "desc")
         ->when(!empty($this->filtroFecha), function ($query) {
-            return $query->whereRaw("LOWER(created_at) LIKE ?", [strtolower($this->filtroFecha) . '%']);
+            return $query->where("created_at", "=", Carbon::parse($this->filtroFecha));
         })
         ->when(!empty($this->filtroAutor), function ($query) {
             return $query->whereHas('author_info', function ($subQuery) {
