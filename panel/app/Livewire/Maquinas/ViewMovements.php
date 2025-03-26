@@ -102,7 +102,7 @@ class ViewMovements extends Component
     {
         $history = MachineHistory::orderBy("created_at", "desc")
         ->when(!empty($this->filtroFecha), function ($query) {
-            return $query->where("created_at", "=", Carbon::parse($this->filtroFecha));
+            return $query->whereRaw("TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') LIKE ?", [$this->filtroFecha . '%']);
         })
         ->when(!empty($this->filtroAutor), function ($query) {
             return $query->whereHas('author_info', function ($subQuery) {

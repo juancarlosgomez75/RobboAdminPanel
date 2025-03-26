@@ -6,6 +6,7 @@ use App\Models\Log;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Carbon\Carbon;
 
 class Logs extends Component
 {
@@ -67,9 +68,9 @@ class Logs extends Component
     {
         
         $logs = Log::orderBy("created_at", "desc")
-            ->when(!empty($this->filtroFecha), function ($query) {
-                return $query->whereRaw("LOWER(created_at) LIKE ?", [strtolower($this->filtroFecha) . '%']);
-            })
+        ->when(!empty($this->filtroFecha), function ($query) {
+            return $query->whereRaw("TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') LIKE ?", [$this->filtroFecha . '%']);
+        })
             ->when($this->filtroAccion, function ($query) {
                 return $query->whereRaw("LOWER(action) LIKE ?", [strtolower($this->filtroAccion) . '%']);
             })
