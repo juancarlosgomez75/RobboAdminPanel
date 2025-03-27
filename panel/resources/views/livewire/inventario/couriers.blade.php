@@ -25,7 +25,11 @@
                                 <td>{{$courier->name}}</td>
                                 <td>{{$courier->page}}</td>
                                 <td>{{$courier->created_at}}</td>
-                                <td>{{$courier->page}}</td>
+                                <td>
+                                    <a class="btn btn-outline-secondary btn-sm" wire:click="editar({{$courier->id}})">
+                                        Editar información
+                                    </a>
+                                </td>
                             </tr>
                             @endforeach
                             @else
@@ -72,6 +76,52 @@
                 </div>
             </div>
         </div>
+
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Edición de empresa de mensajería</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Al presionar en guardar, la información será almacenada automáticamente
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la empresa</label>
+                        <input type="email" class="form-control" placeholder="Ejemplo: Coordinadora" wire:model="name_edit">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Página de la empresa</label>
+                        <input type="email" class="form-control" placeholder="Ejemplo: https://coordinadora.com/" wire:model="page_edit">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="guardarCambios()">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Livewire.on('abrirModalEdit', () => {
+                let modal = new bootstrap.Modal(document.getElementById('editModal'));
+                modal.show();
+            });
+    
+            Livewire.on('cerrarModalEdit', () => {
+                let modalEl = document.getElementById('editModal');
+                let modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+            });
+        });
+    </script>
 
 
     </div>
