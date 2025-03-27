@@ -169,8 +169,6 @@
                                         <a type="button" class="btn btn-outline-primary btn-sm" href="{{route("maquinas.view",$maquina["ID"])}}">Visualizar</a>
                                         @if($informacion["Id"]!=1)
                                         <a type="button" class="btn btn-outline-danger btn-sm" wire:click="desvincular({{$index}})">Desvincular</a>
-                                        @else
-                                        Sin acciones
                                         @endif
                                     </td>
                                     
