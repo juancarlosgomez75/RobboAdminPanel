@@ -28,7 +28,7 @@ class OrderList extends Component
     {
         $pedidos = ProductOrder::orderBy("created_at", "desc")
         ->when(!empty($this->filtroFecha), function ($query) {
-            return $query->whereRaw("LOWER(created_at) LIKE ?", [strtolower($this->filtroFecha) . '%']);
+            return $query->whereRaw("TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') LIKE ?", [$this->filtroFecha . '%']);
         })
         ->when(!empty($this->filtroCiudad), function ($query) {
             return $query->whereRaw("city LIKE ?", [strtolower($this->filtroCiudad) . '%']);
