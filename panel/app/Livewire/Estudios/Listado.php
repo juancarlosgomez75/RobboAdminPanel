@@ -38,6 +38,11 @@ class Listado extends Component
             return $nombreCoincide && $ciudadCoincide;
         });
 
+        //Ordeno
+        usort($filtrados, function ($a, $b) {
+            return strcmp($a["StudyName"], $b["StudyName"]);
+        });
+
         return view('livewire.estudios.listado', [
             'texto' => $this->filtroNombre,
             'filtroOn' => $this->filtrosActivos,
