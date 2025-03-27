@@ -62,8 +62,8 @@ class Account extends Component
 
             return;
         }
-        //Valido si el usuario ya existe
-        elseif(User::where('username', $this->username)->exists()){
+        //Valido si el usuario ya existe si es diferente
+        elseif((User::where('username', $this->username)->exists()) && ($this->usuario->username!=$this->username)){
             $this->alerta=true;
             $this->alerta_warning="Este usuario ya está registrado";
             return;
