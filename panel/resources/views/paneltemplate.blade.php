@@ -184,6 +184,7 @@ body {
                                     <i class="fa-solid fa-chevron-down dropdown"></i>
                                 </a>
                                 <ul class="submenu">
+                                    <li><a href="{{ route('inventario.couriers') }}">Empresas mensajería</a></li>
                                     <li><a href="{{ route('inventario.index') }}">Productos</a></li>
                                     <li><a href="{{ route('ordenes') }}">Órdenes</a></li>
                                 </ul>

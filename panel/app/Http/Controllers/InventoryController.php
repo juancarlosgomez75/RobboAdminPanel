@@ -54,4 +54,8 @@ class InventoryController extends Controller
         }
         
     }
+
+    public function couriers(){
+        return view("inventario.couriers");
+    }
 }

@@ -65,6 +65,7 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->contro
     Route::get('/panel/productos', 'index')->name('inventario.index');
     Route::get('/panel/producto/movimiento/{idinventario}', 'movement')->name('inventario.movimiento');
     Route::get('/panel/producto/{idproducto}', 'viewedit')->name('inventario.viewedit');
+    Route::get('/panel/mensajeria', 'couriers')->name('inventario.couriers');
 
     //órdenes
     Route::get('/panel/ordenes', 'order_list')->name('ordenes');
