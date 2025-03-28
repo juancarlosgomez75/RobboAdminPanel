@@ -25,7 +25,6 @@
     
     </style>
 @section("contenido")
-@livewire('alerts')
 @livewire("inventario.order-list")
 
 @endsection

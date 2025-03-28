@@ -25,7 +25,6 @@
     
     </style>
 @section("contenido")
-@livewire('alerts')
 @livewire("inventario.couriers")
 
 @endsection

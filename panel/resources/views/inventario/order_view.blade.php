@@ -2,7 +2,6 @@
 @section('title','Ver orden')
 @section("contenido")
 
-@livewire('alerts')
 @livewire("inventario.order-view",compact("orden"))
 
 @endsection

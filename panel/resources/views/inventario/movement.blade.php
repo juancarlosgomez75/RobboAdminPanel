@@ -2,7 +2,6 @@
 @section('title','Crear movimiento')
 @section("contenido")
 
-@livewire('alerts')
 @livewire("inventario.movement",compact("inventory"))
 
 @endsection
