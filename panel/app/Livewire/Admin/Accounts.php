@@ -10,11 +10,6 @@ use Livewire\Component;
 
 class Accounts extends Component
 {
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
 
     public $username="";
     public $name="";
@@ -24,34 +19,29 @@ class Accounts extends Component
     public function validar(){
         //Valido los campos
         if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $this->username) && !empty(trim($this->username)))){
-            $this->alerta=true;
-            $this->alerta_warning="Alerta: El usuario no es válido";
+            $this->dispatch('mostrarToast', 'Crear usuario', "Alerta: El usuario no es válido");
             return;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El nombre no es válido";
+            $this->dispatch('mostrarToast', 'Crear usuario', "Alerta: El nombre no es válido");
 
             return;
         }
         elseif(!(preg_match('/^[\w\.-]+@[\w\.-]+\.\w{2,}$/', $this->email) && !empty(trim($this->email)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El email no es válido";
+            $this->dispatch('mostrarToast', 'Crear usuario', "Alerta: El email no es válido");
 
             return;
         }
         //Valido el rango
         elseif($this->rank>Rank::max('id') || $this->rank<1 || $this->rank>Auth::user()->rank){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El rango no es válido: ".$this->rank;
+            $this->dispatch('mostrarToast', 'Crear usuario', "Alerta: El rango no es válido");
 
             return;
         }
         //Valido si el usuario ya existe
         elseif(User::where('username', $this->username)->exists()){
-            $this->alerta=true;
-            $this->alerta_warning="Este usuario ya está registrado";
+            $this->dispatch('mostrarToast', 'Crear usuario', "Alerta: Este usuario ya existe");
             return;
         }
 
@@ -70,8 +60,7 @@ class Accounts extends Component
 
             //Intento salvar
             if($usuario->save()){
-                $this->alerta=true;
-                $this->alerta_sucess="El usuario ha sido registrado";
+                $this->dispatch('mostrarToast', 'Crear usuario', "Se ha registrado al usuario correctamente");
 
                 //Reinicio las variables
                 $this->username="";
@@ -83,8 +72,7 @@ class Accounts extends Component
 
                 return;
             }else{
-                $this->alerta=true;
-                $this->alerta_error="Error registrando al usuario";
+                $this->dispatch('mostrarToast', 'Crear usuario', "Error al registrar el usuario,contacte a soporte");
 
                 registrarLog("Administracion","Cuentas","Crear","Se ha intentado crear al usuario: ".$usuario->name." (".$usuario->id."), detalles: ".$usuario->toJson(),false);
             }
