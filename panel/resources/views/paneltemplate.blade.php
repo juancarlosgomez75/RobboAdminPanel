@@ -24,7 +24,7 @@ body {
     width: 100%;
 }
 .sidebar-container {
-    width: 300px;
+    width: 350px;
     background-color: #D2665A;
     height: 100vh;
     position: fixed;
@@ -35,10 +35,10 @@ body {
 }
 
 .content-container {
-    margin-left: 300px;
-    padding: 20px;
+    margin-left: 350px;
+    padding: 30px;
     flex-grow: 1;
-    width: calc(100% - 250px);
+    width: calc(100% - 300px);
 }
 
 .sidebar {
@@ -131,22 +131,17 @@ body {
 /* Hace que el último elemento se mantenga abajo */
 .sticky-bottom {
     margin-top: auto;
-}
-
-/* Contenedor del usuario */
-.user-info {
     display: flex;
     align-items: center;
-    padding: 0.8rem 1rem;
     background-color: #8a3127;
     /* border-top: 1px solid rgba(255, 255, 255, 0.2); */
-    gap: 0.8rem;
+    gap: 0.7rem;
 }
 
 /* Imagen circular */
 .user-avatar {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -173,9 +168,11 @@ body {
 
 /* Contenedor de los iconos */
 .user-actions {
+    align-items: center;
+    justify-content: center; /* Centra horizontalmente */
     display: flex;
-    gap: 0.8rem;
-    font-size: 1.2rem;
+    gap: 0.6rem;
+    font-size: 1.15rem;
     color: #fff;
     cursor: pointer;
 }
@@ -189,6 +186,9 @@ body {
     </style>
 </head>
 <body>
+
+    @livewire('alerts')
+
     <div class="content">
         <div class="sidebar-container">
             <img src="{{ asset('img/LogoBlanco.png') }}" class="img-fluid d-block mx-auto" alt="Imagen" width="200" style="padding: 20px 10px">
@@ -242,17 +242,24 @@ body {
 
                     <li class="sticky-bottom user-info">
                         <img src="{{ asset('img/bb.jpg') }}" alt="Usuario" class="user-avatar">
+
+                        
                         <div class="user-details">
                             <span class="user-name">{{ auth()->user()->name }}</span>
                             <span class="user-role">
                                 {{ auth()->user()->rank_info->name ?? 'Sin rango' }}
                             </span>
                         </div>
+
                         <div class="user-actions">
 
                             <a href="{{route("panel.perfil.view")}}"><i class="fa-solid fa-gear"></i></a>
                             <a href="{{ route('logout') }}" class="ps-1"><i class="fa-solid fa-right-from-bracket"></i></a>
+
                         </div>
+
+                        @livewire("api-select")
+
                     </li>
                     
                 </ul>
