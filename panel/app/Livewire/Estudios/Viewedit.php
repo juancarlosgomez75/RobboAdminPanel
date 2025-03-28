@@ -9,13 +9,6 @@ use Illuminate\Support\Facades\Auth;
 class Viewedit extends Component
 
 {
-
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
-
     public $editing=false;
 
     public $informacion;
@@ -39,68 +32,54 @@ class Viewedit extends Component
 
     public function validar(){
 
-        //Se reinician las alertas
-        $this->alerta_sucess="";
-        $this->alerta_error="";
-        $this->alerta_warning="";
-
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
-            
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El nombre del estudio no es válido";
+
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El nombre del estudio no es válido");
 
             return false;
         }
         elseif(!(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La razón social no es válida";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La razón social no es válida");
 
             return false;
         }
         elseif(!(is_numeric($this->nit) && $this->nit > 0)){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El NIT no es válido";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El NIT no es válido");
 
             return false;
         }
         elseif(!(is_numeric($this->idciudad) && $this->idciudad > 0)){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La ciudad no se reconoce";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La ciudad no es válida");
 
             return false;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La dirección no es válida: ".$this->direccion;
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La dirección no es válida");
 
             return false;
         }
         elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->responsable) && !empty(trim($this->responsable)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El nombre del responsable no es válido";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El nombre del responsable no es válido");
 
             return false;
         }
         elseif(!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) && !empty(trim($this->telcontacto)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El número de contacto no es válido";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El número de contacto no es válido");
 
             return false;
         }
         elseif (!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) && 
         (empty(trim($this->telcontacto2)) || $this->telcontacto2 === "0" || preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto2)))) { 
 
-            $this->alerta = true;
-            $this->alerta_warning = "Alerta: El número de contacto secundario no es válido";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El número de contacto secundario no es válido");
             
             return false;
         }
         elseif(!(preg_match('/^[\w\.-]+@[\w\.-]+\.\w{2,}$/', $this->email) && !empty(trim($this->email)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El email no es válido";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El email no es válido");
 
             return false;
         }
@@ -119,8 +98,7 @@ class Viewedit extends Component
             return true;
         }
         else{
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La ciudad no se reconoce";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La ciudad no se reconoce");
 
             return false;
         }
@@ -167,23 +145,21 @@ class Viewedit extends Component
                 if($data['Status']){
                     //$this->resetExcept('ciudades');
                     $this->editing=false;
-                    $this->alerta=true;
-                    $this->alerta_sucess= "Se ha modificado el estudio de forma satisfactoria";
+                    $this->dispatch('mostrarToast', 'Editar estudio', "Se ha modificado al estudio correctamente");
 
                     registrarLog("Producción","Estudios","Editar","Se ha modificado al estudio #".$this->informacion["Id"].", detalles: ".json_encode($apidata));
 
                     return;
                 }else{
-                    $this->alerta=true;
-                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+
+                    $this->dispatch('mostrarToast', 'Editar estudio', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
 
                     registrarLog("Producción","Estudios","Editar","Se ha intentado modificar al estudio #".$this->informacion["Id"].", detalles: ".json_encode($apidata),false);
                     return;
                 }
             }
 
-            $this->alerta=true;
-            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+            $this->dispatch('mostrarToast', 'Editar estudio', "Ha ocurrido un error durante la operación, contacte a soporte");
 
 
 
@@ -195,8 +171,7 @@ class Viewedit extends Component
         //Valido el id
         if($this->moveFirmwareId<100000 || $this->moveFirmwareId > 999999 || !is_numeric($this->moveFirmwareId)){
 
-            $this->alerta = true;
-            $this->alerta_warning = "Alerta: El firmware Id no es válido";
+            $this->dispatch('mostrarToast', 'Mover máquina', "Alerta: El firmware Id no es válido");
             
             return false;
         }
@@ -204,8 +179,7 @@ class Viewedit extends Component
         //Analizo si ya está
         foreach($this->maquinas as $maq){
             if($maq["FirmwareID"]==$this->moveFirmwareId){
-                $this->alerta = true;
-                $this->alerta_warning = "Alerta: Esta máquina ya está en este estudio";
+                $this->dispatch('mostrarToast', 'Mover máquina', "Alerta: Esta máquina ya está en este estudio");
                 
                 return false;
             }
@@ -241,8 +215,8 @@ class Viewedit extends Component
 
         if (isset($data['Status'])) {
             if($data['Status']){
-                $this->alerta=true;
-                $this->alerta_sucess= "Se ha vinculado la máquina #".$this->moveFirmwareId." con este estudio correctamente";
+
+                $this->dispatch('mostrarToast', 'Mover máquina', "Se ha vinculado la máquina #".$this->moveFirmwareId." con este estudio correctamente");
 
                 registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"],true);
 
@@ -294,8 +268,8 @@ class Viewedit extends Component
                 }
 
             }else{
-                $this->alerta=true;
-                $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+
+                $this->dispatch('mostrarToast', 'Mover máquina', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
                 registrarLog("Producción","Estudios","Vincular","Se ha intentado mover la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"].", los datos fueron: ".json_encode($apiData),false);
             }
         }
@@ -338,9 +312,8 @@ class Viewedit extends Component
 
             if (isset($data['Status'])) {
                 if($data['Status']){
-                    $this->alerta=true;
-                    $this->alerta_sucess= "Se ha desvinculado la máquina #".$maquina["ID"]." de este estudio correctamente";
     
+                    $this->dispatch('mostrarToast', 'Desvincular máquina', "Se ha desvinculado la máquina #".$maquina["ID"]." de este estudio correctamente");
                     registrarLog("Producción","Estudios","Desvincular","Se ha desvinculado la máquina #".$maquina["ID"]." del estudio #".$this->informacion["Id"],true);
 
                     unset($this->maquinas[$index]); // Elimina el elemento del array
@@ -361,8 +334,10 @@ class Viewedit extends Component
 
     
                 }else{
-                    $this->alerta=true;
-                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+
+
+                    $this->dispatch('mostrarToast', 'Desvincular máquina', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
+
                     registrarLog("Producción","Estudios","Desvincular","Se ha intentado desvincular la máquina #".$maquina["ID"]." del estudio #".$this->informacion["Id"].", los datos fueron: ".json_encode($apiData),false);
                 }
             }

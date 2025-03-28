@@ -8,11 +8,6 @@ use Livewire\Component;
 class Create extends Component
 {
     //Variables de alerta
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
 
     public $ciudades;
 
@@ -29,68 +24,54 @@ class Create extends Component
 
     public function validar(){
 
-        //Se reinician las alertas
-        $this->alerta_sucess="";
-        $this->alerta_error="";
-        $this->alerta_warning="";
-
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El nombre del estudio no es válido";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El nombre no es válido");
 
             return false;
         }
         elseif(!(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La razón social no es válida";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: La razón social no es válida");
 
             return false;
         }
         elseif(!(is_numeric($this->nit) && $this->nit > 0)){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El NIT no es válido";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El NIT no es válido");
 
             return false;
         }
         elseif(!(is_numeric($this->idciudad) && $this->idciudad > 0)){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La ciudad no se reconoce";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: La ciudad no es válida");
 
             return false;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La dirección no es válida: ".$this->direccion;
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El dirección no es válida");
 
             return false;
         }
         elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->responsable) && !empty(trim($this->responsable)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El nombre del responsable no es válido";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El nombre de responsable no es válido");
 
             return false;
         }
         elseif(!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) && !empty(trim($this->telcontacto)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El número de contacto principal no es válido";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El número de contacto principal no es válido");
 
             return false;
         }
         elseif (!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) && 
         (empty(trim($this->telcontacto2)) || $this->telcontacto2 === "0" || preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto2)))) { 
 
-            $this->alerta = true;
-            $this->alerta_warning = "Alerta: El número de contacto secundario no es válido";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El número de contacto secundario no es válido");
             
             return false;
         }
         elseif(!(preg_match('/^[\w\.-]+@[\w\.-]+\.\w{2,}$/', $this->email) && !empty(trim($this->email)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El email no es válido";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El email no es válido");
 
             return false;
         }
@@ -110,8 +91,7 @@ class Create extends Component
             return true;
         }
         else{
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La ciudad no se reconoce";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: La ciudad ingresada no se reconoce");
 
             return false;
         }
@@ -177,20 +157,18 @@ class Create extends Component
                 if($data['Status']){
                     registrarLog("Producción","Estudios","Crear estudio","Se ha creado el estudio: ".$this->nombre,true);
                     $this->resetExcept('ciudades');
-                    $this->alerta=true;
-                    $this->alerta_sucess= "Se ha registrado el estudio de forma satisfactoria";
+                    $this->dispatch('mostrarToast', 'Crear estudio', "Se ha registrado el estudio correctamente");
                     
                     return;
                 }else{
                     registrarLog("Producción","Estudios","Crear estudio","Se ha intentado crear el estudio: ".$this->nombre,false);
-                    $this->alerta=true;
-                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+
+                    $this->dispatch('mostrarToast', 'Crear estudio', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
                     return;
                 }
             }
 
-            $this->alerta=true;
-            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+            $this->dispatch('mostrarToast', 'Crear estudio', "Ha ocurrido un error durante la operación, contacte a soporte");
 
 
 

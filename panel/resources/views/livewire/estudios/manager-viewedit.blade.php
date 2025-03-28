@@ -1,19 +1,4 @@
 <div>
-    @if($alerta)
-        @if($alerta_sucess!="")
-        <div class="alert alert-success" role="alert">
-            {{$alerta_sucess}}
-        </div>
-        @elseif($alerta_error!="")
-        <div class="alert alert-danger" role="alert">
-            {{$alerta_error}}
-        </div>
-        @elseif($alerta_warning!="")
-        <div class="alert alert-warning" role="alert">
-            {{$alerta_warning}}
-        </div>
-        @endif
-    @endif
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">

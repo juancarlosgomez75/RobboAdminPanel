@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Http;
 
 class ManagerCreate extends Component
 {
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
 
     public $idEstudio=0;
 
@@ -21,27 +16,19 @@ class ManagerCreate extends Component
     public $email="";
 
     public function verificarCampos(){
-        //Se reinician las alertas
-        $this->alerta_sucess="";
-        $this->alerta_error="";
-        $this->alerta_warning="";
-        
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El nombre del manager no es válido";
+            $this->dispatch('mostrarToast', 'Crear manager', "Alerta: El nombre no es válido");
 
             return false;
         }
         elseif(!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telefono) && !empty(trim($this->telefono)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El número de contacto no es válido";
+            $this->dispatch('mostrarToast', 'Crear manager', "Alerta: El número de contacto no es válido");
 
             return false;
         }
         elseif(!(preg_match('/^[\w\.-]+@[\w\.-]+\.\w{2,}$/', $this->email) && !empty(trim($this->email)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El email no es válido";
+            $this->dispatch('mostrarToast', 'Crear manager', "Alerta: El email no es válido");
 
             return false;
         }
@@ -100,21 +87,21 @@ class ManagerCreate extends Component
                     registrarLog("Producción","Managers","Crear Manager","Se ha creado el manager: ".$this->nombre.", del estudio #".$this->idEstudio,true);
 
                     $this->resetExcept(['idEstudio']);
-                    $this->alerta=true;
-                    $this->alerta_sucess= "Se ha registrado a este manager correctamente";
+                    $this->dispatch('mostrarToast', 'Crear manager', "Se ha registrado a este manager correctamente");
                     
                     return;
 
                 }else{
-                    $this->alerta=true;
-                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+
+                    $this->dispatch('mostrarToast', 'Crear manager', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
+
+
                     registrarLog("Producción","Managers","Crear Manager","Se ha intentado crear al manager: ".$this->nombre.", del estudio #".$this->idEstudio,false);
                     return;
                 }
             }
 
-            $this->alerta=true;
-            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+            $this->dispatch('mostrarToast', 'Crear manager', "Ha ocurrido un error durante la operación, por favor contacte a soporte");
 
 
         }
