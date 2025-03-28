@@ -10,11 +10,6 @@ use Illuminate\Http\Request;
 
 class Perfil extends Component
 {
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
 
     public $editing=false;
 
@@ -33,21 +28,14 @@ class Perfil extends Component
     }
     public function validar(){
 
-        //Se reinician las alertas
-        $this->alerta_sucess="";
-        $this->alerta_error="";
-        $this->alerta_warning="";
-
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
-            
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El nombre no es válido";
+
+            $this->dispatch('mostrarToast', 'Editar perfil', "El nombre no es válido");
 
             return;
         }
         elseif(!(preg_match('/^[\w\.-]+@[\w\.-]+\.\w{2,}$/', $this->email) && !empty(trim($this->email)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El email no es válido";
+            $this->dispatch('mostrarToast', 'Editar perfil', "El email no es válido");
 
             return;
         }
@@ -64,15 +52,13 @@ class Perfil extends Component
             $usuario->email=$this->email;
 
             if($usuario->save()){
-                $this->alerta=true;
-                $this->alerta_sucess="Tu cuenta ha sido actualizada";
+                $this->dispatch('mostrarToast', 'Editar perfil', "Se ha actualizado tu información");
                 $this->editing=false;
     
                 registrarLog("Administracion","Perfil","Actualizar","Ha actualizado su propia información",true);
                 return;
             }else{
-                $this->alerta=true;
-                $this->alerta_error="No se ha logrado actualizar tu cuenta";
+                $this->dispatch('mostrarToast', 'Editar perfil', "Error actualizando tu información");
             }
 
 
@@ -84,20 +70,17 @@ class Perfil extends Component
 
         // Verificar si la contraseña actual es correcta
         if (!Hash::check($this->password, $user->password)) {
-            $this->alerta=true;
-            $this->alerta_error="Tu contraseña actual no coincide";
+            $this->dispatch('mostrarToast', 'Cambiar contraseña', "Tu contraseña actual no coincide");
             return;
         }
         elseif($this->passwordnew!=$this->passwordnewagain){
-            $this->alerta=true;
-            $this->alerta_error="Las contraseñas nuevas no coinciden";
+            $this->dispatch('mostrarToast', 'Cambiar contraseña', "Las contraseñas no coinciden");
             return;
         }
     
         // Verificar que la nueva contraseña sea diferente a la actual
         elseif (Hash::check($this->passwordnew, $user->password)) {
-            $this->alerta=true;
-            $this->alerta_error="No puedes asignar la misma contraseña";
+            $this->dispatch('mostrarToast', 'Cambiar contraseña', "No puedes asignar la misma contraseña");
             return;
         }
     
@@ -106,8 +89,7 @@ class Perfil extends Component
         $usuario->password = Hash::make($this->passwordnew);
         $usuario->save();
     
-        $this->alerta=true;
-        $this->alerta_sucess="Se ha cambiado tu contraseña, por favor inicia sesión nuevamente";
+        $this->dispatch('mostrarToast', 'Cambiar contraseña', "Se ha actualizado tu contraseña, vuelve a ingresar");
 
         Auth::logout();
 
