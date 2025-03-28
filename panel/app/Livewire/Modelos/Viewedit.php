@@ -12,11 +12,6 @@ class Viewedit extends Component
     public $ManagerInformation;
     public $StudyInformation;
     public $editing=false;
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
 
     //Inicializo la información de la modelo
     public $drivername;
@@ -34,27 +29,21 @@ class Viewedit extends Component
     public $listadomanagers;
 
     public function validar(){
-        //Se reinician las alertas
-        $this->alerta_sucess="";
-        $this->alerta_error="";
-        $this->alerta_warning="";
 
         //Valido el nombre de usuario
         if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $this->drivername) && !empty(trim($this->drivername)))){
-            $this->alerta=true;
-            $this->alerta_warning="Alerta: El nombre de usuario no es válido";
+
+            $this->dispatch('mostrarToast', 'Editar modelo', "Alerta: El nombre de usuario no es válido");
             return;
         }
         //Valido el nombre personalizado
         elseif (!empty(trim($this->customname)) && !preg_match('/^[a-zA-Z0-9._-]+$/', $this->customname)){
-            $this->alerta=true;
-            $this->alerta_warning="Alerta: El nombre personalizado no es válido";
+            $this->dispatch('mostrarToast', 'Editar modelo', "Alerta: El nombre personalizado no es válido");
             return;
         }
         //Valido si usa o no
         elseif(!($this->usecustomname=="0") && !($this->usecustomname=="1")){
-            $this->alerta=true;
-            $this->alerta_warning="No se ha indicado si usar o no el nombre personalizado";
+            $this->dispatch('mostrarToast', 'Editar modelo', "Alerta: No se ha indicado si usar o no el nombre personalizado");
             return;
         }
 
@@ -67,8 +56,7 @@ class Viewedit extends Component
         }
 
         if(!$estudioencontrado){
-            $this->alerta=true;
-            $this->alerta_warning="No se ha seleccionado un estudio válido";
+            $this->dispatch('mostrarToast', 'Editar modelo', "Alerta: El estudio no es válido");
             return;
         }
 
@@ -81,8 +69,7 @@ class Viewedit extends Component
         }
 
         if(!$managerencontrado){
-            $this->alerta=true;
-            $this->alerta_warning="No se ha seleccionado un manager válido";
+            $this->dispatch('mostrarToast', 'Editar modelo', "Alerta: El manager no es válido");
             return;
         }
 
@@ -91,8 +78,8 @@ class Viewedit extends Component
             
             //Analizo el nickname
             if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $pagina["NickName"]) && !empty(trim($pagina["NickName"])))){
-                $this->alerta=true;
-                $this->alerta_warning="Alerta: El nombre de usuario: ".$pagina["NickName"]." no es válido";
+
+                $this->dispatch('mostrarToast', 'Editar modelo', "Alerta: El nombre de usuario: ".$pagina["NickName"]." no es válido");
                 return;
             }
 
@@ -105,8 +92,8 @@ class Viewedit extends Component
             }
 
             if(!$paginaencontrada){
-                $this->alerta=true;
-                $this->alerta_warning="Alerta: La página: ".$pagina["NickPage"]." no es válida";
+
+                $this->dispatch('mostrarToast', 'Editar modelo', "Alerta: La página: ".$pagina["NickPage"]." no es válida");
                 return;
             }
 
@@ -152,8 +139,7 @@ class Viewedit extends Component
 
             if (isset($data['Status'])) {
                 if($data['Status']){
-                    $this->alerta=true;
-                    $this->alerta_sucess= "Se ha modificado esta cuenta de forma correcta";
+                    $this->dispatch('mostrarToast', 'Editar modelo', "Se ha modificado esta cuenta de forma correcta");
                     $this->editing=false;
                     
                     registrarLog("Producción","Modelos","Editar","Se ha editado al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),true);
@@ -161,15 +147,14 @@ class Viewedit extends Component
                     return;
 
                 }else{
-                    $this->alerta=true;
-                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+
+                    $this->dispatch('mostrarToast', 'Editar modelo', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
                     registrarLog("Producción","Modelos","Editar","Se ha intentado editar al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),false);
                     return;
                 }
             }
 
-            $this->alerta=true;
-            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+            $this->dispatch('mostrarToast', 'Editar modelo', "Ha ocurrido un error durante la operación, contacte a soporte");
         }
     }
 
@@ -280,8 +265,7 @@ class Viewedit extends Component
             }
         }
 
-        $this->alerta=true;
-        $this->alerta_error="Error obteniendo los estudios";
+        $this->dispatch('mostrarToast', 'Obtener estudios', "Error obteniendo los estudios");
         return false;
     }
 
@@ -328,8 +312,7 @@ class Viewedit extends Component
             }
         }
 
-        $this->alerta=true;
-        $this->alerta_error="Error obteniendo los managers";
+        $this->dispatch('mostrarToast', 'Obtener managers', "Error obteniendo los managers");
         return false;
     }
 

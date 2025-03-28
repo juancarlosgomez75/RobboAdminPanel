@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\Http;
 
 class Create extends Component
 {
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
 
     //Inicializo la información de la modelo
     public $drivername;
@@ -29,27 +24,21 @@ class Create extends Component
     public $paginasDisponibles=[];
 
     public function validar(){
-        //Se reinician las alertas
-        $this->alerta_sucess="";
-        $this->alerta_error="";
-        $this->alerta_warning="";
 
         //Valido el nombre de usuario
         if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $this->drivername) && !empty(trim($this->drivername)))){
-            $this->alerta=true;
-            $this->alerta_warning="Alerta: El nombre de usuario no es válido";
+
+            $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: El nombre de usuario no es válido");
             return;
         }
         //Valido el nombre personalizado
         elseif (!empty(trim($this->customname)) && !preg_match('/^[a-zA-Z0-9._-]+$/', $this->customname)){
-            $this->alerta=true;
-            $this->alerta_warning="Alerta: El nombre personalizado no es válido";
+            $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: El nombre personalizado no es válido");
             return;
         }
         //Valido si usa o no
         elseif(!($this->usecustomname=="0") && !($this->usecustomname=="1")){
-            $this->alerta=true;
-            $this->alerta_warning="No se ha indicado si usar o no el nombre personalizado";
+            $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: No se ha indicado si usar o no el nombre personalizado");
             return;
         }
 
@@ -62,8 +51,7 @@ class Create extends Component
         }
 
         if(!$estudioencontrado){
-            $this->alerta=true;
-            $this->alerta_warning="No se ha seleccionado un estudio válido";
+            $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: Estudio no válido");
             return;
         }
 
@@ -76,8 +64,7 @@ class Create extends Component
         }
 
         if(!$managerencontrado){
-            $this->alerta=true;
-            $this->alerta_warning="No se ha seleccionado un manager válido, actual es:".$this->manageractual. " y busca a: ".json_encode($this->listadomanagers);
+            $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: No se ha seleccionado un manager válido");
             return;
         }
 
@@ -86,8 +73,8 @@ class Create extends Component
             
             //Analizo el nickname
             if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $pagina["NickName"]) && !empty(trim($pagina["NickName"])))){
-                $this->alerta=true;
-                $this->alerta_warning="Alerta: El nombre de usuario: ".$pagina["NickName"]." no es válido";
+
+                $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: El nombre de usuario: ".$pagina["NickName"]." no es válido");
                 return;
             }
 
@@ -100,8 +87,8 @@ class Create extends Component
             }
 
             if(!$paginaencontrada){
-                $this->alerta=true;
-                $this->alerta_warning="Alerta: La página: ".$pagina["NickPage"]." no es válida";
+
+                $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: La página: ".$pagina["NickPage"]." no es válida");
                 return;
             }
 
@@ -147,23 +134,22 @@ class Create extends Component
             if (isset($data['Status'])) {
                 if($data['Status']){
                     $this->resetExcept("listadoestudios","paginasdisponibles");
-                    $this->alerta=true;
-                    $this->alerta_sucess= "Se ha creado este modelo de forma correcta";
+
+                    $this->dispatch('mostrarToast', 'Crear modelo', "Se ha registrado al modelo de forma correcta");
                     
                     registrarLog("Producción","Modelos","Crear","Se ha registrado al modelo con información: ".json_encode($enviar),true);
 
                     return;
 
                 }else{
-                    $this->alerta=true;
-                    $this->alerta_error= "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado");
+
+                    $this->dispatch('mostrarToast', 'Crear modelo', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
                     registrarLog("Producción","Modelos","Crear","Se ha intentado registrar al con información: ".json_encode($enviar),false);
                     return;
                 }
             }
 
-            $this->alerta=true;
-            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+            $this->dispatch('mostrarToast', 'Crear modelo', "Ha ocurrido un error durante la operación, contacte a soporte");
         }
     }
 
@@ -264,8 +250,7 @@ class Create extends Component
             }
         }
 
-        $this->alerta=true;
-        $this->alerta_error="Error obteniendo los estudios";
+        $this->dispatch('mostrarToast', 'Obtener estudios', "Ha ocurrido un error al obtener los estudios");
         return false;
     }
 
@@ -313,8 +298,7 @@ class Create extends Component
                 }
             }
 
-            $this->alerta=true;
-            $this->alerta_error="Error obteniendo los managers";
+            $this->dispatch('mostrarToast', 'Obtener managers', "Ha ocurrido un error al obtener los managers");
             return false;
         }
 
