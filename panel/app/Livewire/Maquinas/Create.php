@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Http;
 
 class Create extends Component
 {
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
 
     public $information;
 
@@ -27,21 +22,14 @@ class Create extends Component
 
     public function validar(){
 
-        //Se reinician las alertas
-        $this->alerta_sucess="";
-        $this->alerta_error="";
-        $this->alerta_warning="";
-
         if(!(is_numeric($this->hardwareid) && $this->hardwareid > 0)){
-            
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: La id del hardware no es válida";
+
+            $this->dispatch('mostrarToast', 'Crear máquina', "Alerta: La id del hardware no es válida");
 
             return false;
         }
         elseif(!(in_array($this->tipoid,["1","2","3"]))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El tipo de dispositivo no es válido";
+            $this->dispatch('mostrarToast', 'Crear máquina', "Alerta: El tipo de dispositivo no es válido");
 
             return false;
         }
@@ -61,8 +49,7 @@ class Create extends Component
             return true;
         }
         else{
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El estudio no se reconoce";
+            $this->dispatch('mostrarToast', 'Crear máquina', "Alerta: El estudio no se reconoce");
 
             return false;
         }
@@ -111,15 +98,13 @@ class Create extends Component
             if(true){
 
                 $this->resetExcept('information'); 
-                $this->alerta=true;
-                $this->alerta_sucess= "Se ha registrado la máquina";
+                $this->dispatch('mostrarToast', 'Crear máquina', "Se ha registrado la máquina correctamente");
 
                 
                 return;
             }
 
-            $this->alerta=true;
-            $this->alerta_error= "Ha ocurrido un error, contacte a soporte";
+            $this->dispatch('mostrarToast', 'Crear máquina', "Ha ocurrido un error, contacte a soporte");
 
 
 
