@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class Account extends Component
 {
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
 
     public $usuario;
     public $editing=false;
@@ -33,39 +28,31 @@ class Account extends Component
     }
 
     public function validar(){
-        $this->alerta_warning="";
-        $this->alerta_error="";
-        $this->alerta_sucess="";
         //Valido los campos
         if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $this->username) && !empty(trim($this->username)))){
-            $this->alerta=true;
-            $this->alerta_warning="Alerta: El usuario no es válido";
+            $this->dispatch('mostrarToast', 'Modificar usuario', "Alerta: El usuario no es válido");
             return;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
             
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El nombre no es válido";
+            $this->dispatch('mostrarToast', 'Modificar usuario', "Alerta: El nombre no es válido");
 
             return;
         }
         elseif(!(preg_match('/^[\w\.-]+@[\w\.-]+\.\w{2,}$/', $this->email) && !empty(trim($this->email)))){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El email no es válido";
+            $this->dispatch('mostrarToast', 'Modificar usuario', "Alerta: El email no es válido");
 
             return;
         }
         //Valido el rango
         elseif($this->rank>Rank::max('id') || $this->rank<1 || $this->rank>Auth::user()->rank){
-            $this->alerta=true;
-            $this->alerta_warning= "Alerta: El rango no es válido: ".$this->rank;
+            $this->dispatch('mostrarToast', 'Modificar usuario', "Alerta: El rango no es válido");
 
             return;
         }
         //Valido si el usuario ya existe si es diferente
         elseif((User::where('username', $this->username)->exists()) && ($this->usuario->username!=$this->username)){
-            $this->alerta=true;
-            $this->alerta_warning="Este usuario ya está registrado";
+            $this->dispatch('mostrarToast', 'Modificar usuario', "Alerta: Este nombre de usuario ya existe");
             return;
         }
 
@@ -83,8 +70,7 @@ class Account extends Component
 
             //Intento salvar
             if($this->usuario->save()){
-                $this->alerta=true;
-                $this->alerta_sucess="El usuario ha sido modificado correctamente";
+                $this->dispatch('mostrarToast', 'Modificar usuario', "Usuario modificado correctamente");
                 $this->editing=false;
 
                 //Genero el log
@@ -92,8 +78,7 @@ class Account extends Component
 
                 return;
             }else{
-                $this->alerta=true;
-                $this->alerta_error="Error modificando al usuario";
+                $this->dispatch('mostrarToast', 'Modificar usuario', "Error al modificar al usuario, contacte a soporte");
 
                 registrarLog("Administracion","Cuenta","Modificar","Ha intentado modificar al usuario: ".$this->usuario->name." (".$this->usuario->id.")");
             }
@@ -106,16 +91,14 @@ class Account extends Component
 
         //Intento salvar
         if($this->usuario->save()){
-            $this->alerta=true;
-            $this->alerta_sucess="El usuario ha sido desactivado correctamente";
+            $this->dispatch('mostrarToast', 'Desactivar usuario', "Se ha desactivado al usuario correctamente");
 
             //Genero el log
             registrarLog("Administracion","Cuenta","Desactivar","Se ha desactivado al usuario: ".$this->usuario->name." (".$this->usuario->id.")",true);
 
             return;
         }else{
-            $this->alerta=true;
-            $this->alerta_error="Error desactivando al usuario";
+            $this->dispatch('mostrarToast', 'Desactivar usuario', "Error al desactivar al usuario, contacte a soporte");
             registrarLog("Administracion","Cuenta","Desactivar","Ha intentado desactivar al usuario: ".$this->usuario->name." (".$this->usuario->id.")",false);
         }
     }
@@ -126,8 +109,7 @@ class Account extends Component
 
         //Intento salvar
         if($this->usuario->save()){
-            $this->alerta=true;
-            $this->alerta_sucess="El usuario ha sido activado correctamente";
+            $this->dispatch('mostrarToast', 'Activar usuario', "Se ha activado al usuario correctamente");
 
 
             //Genero el log
@@ -135,8 +117,7 @@ class Account extends Component
 
             return;
         }else{
-            $this->alerta=true;
-            $this->alerta_error="Error activando al usuario";
+            $this->dispatch('mostrarToast', 'activar usuario', "Error al activar al usuario, contacte a soporte");
             registrarLog("Administracion","Cuenta","Desactivar","Ha intentado activar al usuario: ".$this->usuario->name." (".$this->usuario->id.")",false);
         }
     }
@@ -147,16 +128,14 @@ class Account extends Component
 
         //Intento salvar
         if($this->usuario->save()){
-            $this->alerta=true;
-            $this->alerta_sucess="Se ha reiniciado la contraseña correctamente";
+            $this->dispatch('mostrarToast', 'Reiniciar contraseña', "Se ha reiniciado la contraseña correctamente");
             // Cierra sesión en todos los dispositivos
             DB::table('sessions')->where('user_id', $this->usuario->id)->delete();
 
             registrarLog("Administracion","Cuenta","Reiniciar contraseña","Se ha reiniciado la contraseña al usuario: ".$this->usuario->name." (".$this->usuario->id.")",true);
             return;
         }else{
-            $this->alerta=true;
-            $this->alerta_error="Error intentando reiniciar la contraseña";
+            $this->dispatch('mostrarToast', 'Reiniciar contraseña', "Error al reiniciar la contraseña, contacte a soporte");
 
             registrarLog("Administracion","Cuenta","Reiniciar contraseña","Se ha intentado reiniciar la contraseña al usuario: ".$this->usuario->name." (".$this->usuario->id.")",false);
 
