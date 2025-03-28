@@ -17,7 +17,28 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh; /* Para que la página tome toda la altura */
+}
+
+.content{
     display: flex;
+    width: 100%;
+}
+.sidebar-container {
+    width: 300px;
+    background-color: #D2665A;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-container {
+    margin-left: 300px;
+    padding: 20px;
+    flex-grow: 1;
+    width: calc(100% - 250px);
 }
 
 .sidebar {
@@ -168,107 +189,78 @@ body {
     </style>
 </head>
 <body>
-    <div class="container" style="padding-top: 1em">
-        <div class="row" style="margin-bottom: 1em">
-            <div class="col-md-2" style="position: fixed; height: 100%; background-color: #D2665A; margin: 0; padding: 0; top: 0; left: 0;">
-                <img src="{{ asset('img/LogoBlanco.png') }}" class="img-fluid d-block mx-auto" alt="Imagen" width="200" style="padding: 8px; margin-bottom: 2rem; margin-top: 1rem;">
+    <div class="content">
+        <div class="sidebar-container">
+            <img src="{{ asset('img/LogoBlanco.png') }}" class="img-fluid d-block mx-auto" alt="Imagen" width="200" style="padding: 20px 10px">
 
-
-                    <nav class="sidebar">
-                        <ul>
-                            @if(auth()->check() && auth()->user()->rank >= 2)
-                            <li>
-                                <a href="#" class="toggle-submenu">
-                                    <i class="fa-solid fa-box"></i>
-                                    <span>Inventario</span>
-                                    <i class="fa-solid fa-chevron-down dropdown"></i>
-                                </a>
-                                <ul class="submenu">
-                                    <li><a href="{{ route('inventario.couriers') }}">Empresas mensajería</a></li>
-                                    <li><a href="{{ route('inventario.index') }}">Productos</a></li>
-                                    <li><a href="{{ route('ordenes') }}">Órdenes</a></li>
-                                </ul>
-                            </li>
-                            @endif
-
-                            @if(auth()->check() && auth()->user()->rank >= 1)
-                            <li>
-                                <a href="#" class="toggle-submenu">
-                                    <i class="fa-solid fa-truck"></i>
-                                    <span>Producción</span>
-                                    <i class="fa-solid fa-chevron-down dropdown"></i>
-                                </a>
-                                <ul class="submenu">
-                                    <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
-                                    <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
-                                </ul>
-                            </li>
-                            @endif
-                        
-
-                            @if(auth()->check() && auth()->user()->rank >= 4)
-                            <li>
-                                <a href="#" class="toggle-submenu">
-                                    <i class="fa-solid fa-book"></i>
-                                    <span>Administración</span>
-                                    <i class="fa-solid fa-chevron-down dropdown"></i>
-                                </a>
-                                <ul class="submenu">
-                                    <li><a href="{{ route('admin.accounts') }}">Cuentas de usuario</a></li>
-                                    <li><a href="{{ route('admin.logs') }}">Logs</a></li>
-                                </ul>
-                            </li>
-                            @endif
-
-
-                            {{-- <li>
-                                <a href="/logout">
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                    <span>Salir del panel</span>
-                                </a>
-                            </li> --}}
-
-
-                            <li class="sticky-bottom user-info">
-                                <img src="{{ asset('img/bb.jpg') }}" alt="Usuario" class="user-avatar">
-                                <div class="user-details">
-                                    <span class="user-name">{{ auth()->user()->name }}</span>
-                                    <span class="user-role">
-                                        {{ auth()->user()->rank_info->name ?? 'Sin rango' }}
-                                    </span>
-                                </div>
-                                <div class="user-actions">
-
-                                    <a href="{{route("panel.perfil.view")}}"><i class="fa-solid fa-gear"></i></a>
-                                    <a href="{{ route('logout') }}" class="ps-1"><i class="fa-solid fa-right-from-bracket"></i></a>
-                                </div>
-                            </li>
-                            
+            <nav class="sidebar">
+                <ul>
+                    @if(auth()->check() && auth()->user()->rank >= 2)
+                    <li>
+                        <a href="#" class="toggle-submenu">
+                            <i class="fa-solid fa-box"></i>
+                            <span>Inventario</span>
+                            <i class="fa-solid fa-chevron-down dropdown"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="{{ route('inventario.couriers') }}">Empresas mensajería</a></li>
+                            <li><a href="{{ route('inventario.index') }}">Productos</a></li>
+                            <li><a href="{{ route('ordenes') }}">Órdenes</a></li>
                         </ul>
-                    </nav>
- 
+                    </li>
+                    @endif
 
-            </div>
-
-            <div class="col offset-md-1 md-10">
-                <br>
-
-                <div class="row">
-                   {{-- <div class="col md-9">
-                        <h2><b>@yield('title')</b></h2>
-                    </div> 
-                    <div class="col md-3">
-                        Holis
-                    </div> --}}
-                    <div class="col md-12">
-                        @yield("contenido")
-                    </div>
-                </div>
+                    @if(auth()->check() && auth()->user()->rank >= 1)
+                    <li>
+                        <a href="#" class="toggle-submenu">
+                            <i class="fa-solid fa-truck"></i>
+                            <span>Producción</span>
+                            <i class="fa-solid fa-chevron-down dropdown"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
+                            <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
+                        </ul>
+                    </li>
+                    @endif
                 
-            </div>
 
+                    @if(auth()->check() && auth()->user()->rank >= 4)
+                    <li>
+                        <a href="#" class="toggle-submenu">
+                            <i class="fa-solid fa-book"></i>
+                            <span>Administración</span>
+                            <i class="fa-solid fa-chevron-down dropdown"></i>
+                        </a>
+                        <ul class="submenu">
+                            <li><a href="{{ route('admin.accounts') }}">Cuentas de usuario</a></li>
+                            <li><a href="{{ route('admin.logs') }}">Logs</a></li>
+                        </ul>
+                    </li>
+                    @endif
+
+
+                    <li class="sticky-bottom user-info">
+                        <img src="{{ asset('img/bb.jpg') }}" alt="Usuario" class="user-avatar">
+                        <div class="user-details">
+                            <span class="user-name">{{ auth()->user()->name }}</span>
+                            <span class="user-role">
+                                {{ auth()->user()->rank_info->name ?? 'Sin rango' }}
+                            </span>
+                        </div>
+                        <div class="user-actions">
+
+                            <a href="{{route("panel.perfil.view")}}"><i class="fa-solid fa-gear"></i></a>
+                            <a href="{{ route('logout') }}" class="ps-1"><i class="fa-solid fa-right-from-bracket"></i></a>
+                        </div>
+                    </li>
+                    
+                </ul>
+            </nav>
         </div>
-
+        <div class="content-container">
+            @yield("contenido")
+        </div>
     </div>
 
     <script>

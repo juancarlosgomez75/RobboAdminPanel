@@ -26,6 +26,8 @@ class Login extends Component
         ];
 
         if(Auth::attempt($credenciales)){
+            session(['API_used' => 'development']);
+
             return redirect(route("panel.index"));
         }else{
             $this->error=true;
