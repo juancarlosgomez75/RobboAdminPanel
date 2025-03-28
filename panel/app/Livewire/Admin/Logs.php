@@ -20,12 +20,6 @@ class Logs extends Component
     public $filtroAccion="";
     public $filtroAutor="";
 
-    public $alerta=false;
-
-    public $alerta_sucess="";
-    public $alerta_error="";
-    public $alerta_warning="";
-
     public function updatingFiltroFecha()
     {
         $this->resetPage();
@@ -58,8 +52,7 @@ class Logs extends Component
 
         registrarLog("Administracion","Logs","Borrar","Ha borrado todos los logs",true);
 
-        $this->alerta=true;
-        $this->alerta_sucess="Se han borrado todos los logs";
+        $this->dispatch('mostrarToast', 'Borrar logs', "Se han borrado los logs registrados");
 
 
     }
