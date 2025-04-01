@@ -16,6 +16,8 @@ class Viewedit extends Component
     public $maquinas;
     public $ciudades;
 
+    public $modelos=[];
+
 
     //Variables
     public $nombre="";
@@ -361,6 +363,22 @@ class Viewedit extends Component
         $this->telcontacto=$this->informacion["Phone"] ?? "0";
         $this->telcontacto2=$this->informacion["Phone2"] ?? "0";
         $this->email=$this->informacion["Email"] ?? "noconfigurado@noconfigurado.com";
+
+        //Cargo las modelos
+        foreach($Managers as $Manager){
+            //Asigno mis modelos
+            $misModelos=[];
+
+            //Recorro
+            foreach($Manager["ModelsList"] as $modelo){
+                $modelo["manager_id"]=$Manager["Id"];
+                $modelo["manager_name"]=$Manager["Name"];
+            }
+
+            $misModelos[]=$modelo;
+
+            $this->modelos=array_merge($this->modelos,$misModelos);
+        }
         
     }
 
@@ -370,6 +388,6 @@ class Viewedit extends Component
     
     public function render()
     {
-        return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades]);
+        return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"modelos"=>$this->modelos, "maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades]);
     }
 }

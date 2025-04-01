@@ -57,60 +57,6 @@
                     
                 </div>
 
-                <div class="col-md-12">
-                    <h5 class="card-title">Modelos asignados</h5>
-                    <p class="card-text">Estos son los modelos gestionados por este manager</p><br>
-                </div>
-                <div class="col-md-12">
-                    
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="w-10" scope="col" style="width: 7%;">#</th>
-                                <th class="w-40" scope="col">Username</th>
-                                <th class="w-30" scope="col">Páginas</th>
-                                <th scope="col" style="width: 15%;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(!empty($Models))
-                            @foreach ($Models as $Model)
-                            <tr>
-                                <td>{{$Model["ModelId"]}}</td>
-                                <td>{{$Model["ModelUserName"]}}</td>
-                                <td>
-                                    @if(!empty($Model["ModelPages"]))
-                                    @foreach ($Model["ModelPages"] as $index => $Page)
-                                    <span>{{ ucfirst(strtolower($Page["NickPage"])) }}</span>
-                                    @if (!$loop->last) | @endif
-                                    @endforeach
-                                    @else
-                                    <span>Sin páginas</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a type="button" class="btn btn-outline-primary btn-sm" href="{{route("modelo.viewedit",$Model["ModelId"])}}">Visualizar</a>
-                                </td>
-                            </tr>
-                            @endforeach
-                            @else
-                            <tr>
-                                <td colspan="4" class="text-center">
-                                    Sin modelos registrados
-                                </td>
-                            </tr>
-                            @endif
-
-                        </tbody>
-                    </table>
-                    
-                </div>
-                <div class="col-md-12 text-center">
-                    <a type="button" class="btn btn-outline-secondary" href="{{route("modelos.create",$Study["Id"])}}">
-                        Crear modelo
-                    </a>
-                </div>
-
             </div>
         </div>
     </div>

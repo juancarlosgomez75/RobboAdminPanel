@@ -1,4 +1,5 @@
 <div>
+    {{json_encode($managers)}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -126,6 +127,58 @@
                     {{-- <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$estudioactual}}"> --}}
                     <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$informacion["Id"]}}">
                         Crear nuevo manager
+                    </a>
+                </div>
+                <div class="col-md-12">
+                    <br>
+                    <h5 class="card-title">Modelos registrados</h5>
+                    <p class="card-text">Estos son los modelos registrados en este estudio</p><br>
+
+                    <table class="table">
+                        <thead>
+                            <tr class="align-middle">
+                                <th scope="col">#</th>
+                                <th scope="col">Manager</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Páginas</th>
+                                <th scope="col" style="width: 15%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(!empty($modelos))
+                            @foreach ($modelos as $Model)
+                            <tr>
+                                <td>{{$Model["ModelId"]}}</td>
+                                <td>{{$Model["manager_name"]}}</td>
+                                <td>{{$Model["ModelUserName"]}}</td>
+                                <td>
+                                    @if(!empty($Model["ModelPages"]))
+                                    @foreach ($Model["ModelPages"] as $index => $Page)
+                                    <span>{{ ucfirst(strtolower($Page["NickPage"])) }}</span>
+                                    @if (!$loop->last) | @endif
+                                    @endforeach
+                                    @else
+                                    <span>Sin páginas</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a type="button" class="btn btn-outline-primary btn-sm" href="{{route("modelo.viewedit",$Model["ModelId"])}}">Visualizar</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    Sin modelos registrados
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 text-center">
+                    <a type="button" class="btn btn-outline-secondary" href="{{route("modelos.create",$informacion["Id"])}}">
+                        Crear modelo
                     </a>
                 </div>
                 <div class="col-md-12">
