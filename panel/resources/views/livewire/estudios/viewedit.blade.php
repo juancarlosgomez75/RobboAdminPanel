@@ -277,14 +277,43 @@
         </div>
     </div>
 
-  <script>
-    const myModal = document.getElementById('myModal')
-    const myInput = document.getElementById('myInput')
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="moveModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Confirmación de vinculación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Actualmente la máquina con Firmware #<b>{{$moveFirmwareId}}</b> está vinculada con el estudio <b>{{$estudioMoveInfo["StudyName"] ?? "No encontrado"}}</b> , ¿Desea confirmar la vinculación?
+                    </p>
 
-    myModal.addEventListener('shown.bs.modal', () => {
-    myInput.focus()
-    })
-</script>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="confirmarVinculacion()">Confirmar vinculación</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Livewire.on('abrirModalMove', () => {
+                let modal = new bootstrap.Modal(document.getElementById('moveModal'));
+                modal.show();
+            });
+    
+            Livewire.on('cerrarModalMove', () => {
+                let modalEl = document.getElementById('moveModal');
+                let modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+            });
+        });
+    </script>
 
 
     <br>

@@ -32,6 +32,8 @@ class Viewedit extends Component
 
     public $moveFirmwareId="";
 
+    public $estudioMoveInfo;
+
     public function validar(){
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
@@ -187,6 +189,115 @@ class Viewedit extends Component
             }
         }
 
+        //Consulto la máquina
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'Machines',
+            'Action' => 'OneView',
+            'Data' => [
+                "UserId" => "1",
+                "Machines"=>[
+                    ["FirmwareID"=>$this->moveFirmwareId]
+                ]
+            ]
+        ];
+        $data=sendBack($data_send);
+
+        if(isset($data['Status'])){
+            if($data["Status"]){
+                $this->estudioMoveInfo=$data["Data"]["Machines"][0]["StudyData"];
+                //Genero la confirmación
+                $this->dispatch('abrirModalMove');
+                return;
+            }
+
+        }
+
+        $this->dispatch('mostrarToast', 'Mover máquina', "Alerta: No se ha localizado máquinas con este FirmwareID");
+                
+        return false;
+
+        // $apiData=[
+        //     'Branch' => 'Server',
+        //     'Service' => 'Machines',
+        //     'Action' => 'Assign',
+        //     "Data"=>[
+        //         "UserId"=>"1",
+        //         "Machines"=>[
+        //             ["FirmwareID"=>$this->moveFirmwareId]
+        //         ]
+        //         ],
+        //     'DataStudy' => [
+        //         "Id"=>$this->informacion["Id"],
+        //     ]
+        //     ];
+
+        // $data=sendBack($apiData);
+
+        // if (isset($data['Status'])) {
+        //     if($data['Status']){
+
+        //         $this->dispatch('mostrarToast', 'Mover máquina', "Se ha vinculado la máquina #".$this->moveFirmwareId." con este estudio correctamente");
+
+        //         registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"],true);
+
+        //         //Genero la información
+        //         $data_send=[
+        //             'Branch' => 'Server',
+        //             'Service' => 'Machines',
+        //             'Action' => 'OneView',
+        //             'Data' => [
+        //                 "UserId" => "1",
+        //                 "Machines"=>[
+        //                     ["FirmwareID"=>$this->moveFirmwareId]
+        //                 ]
+        //             ]
+        //         ];
+        //         $data=sendBack($data_send);
+
+        //         if($data["Status"]){
+        //             $Maquina=$data["Data"]["Machines"][0];
+
+        //             //Genero el movimiento
+        //             $movimiento=new MachineHistory();
+
+        //             //Cargo la info
+        //             $movimiento->machine_id=$Maquina["ID"];
+        //             $movimiento->description="Vincular";
+        //             $movimiento->details="Se ha vinculado la máquina con firmware #".$Maquina["FirmwareID"]." al estudio #".$this->informacion["Id"];
+        //             $movimiento->author=Auth::user()->id;
+
+        //             $movimiento->save();
+        //         }
+                
+                
+        //         $this->moveFirmwareId="";
+
+        //         $data_send=[
+        //             'Branch' => 'Server',
+        //             'Service' => 'PlatformUser',
+        //             'Action' => 'StudyInfo',
+        //             'Data' => ["UserId" => "1"],
+        //             "DataStudy"=>["Id"=>$this->informacion["Id"]]
+        //         ];
+        //         $dataStudio=sendBack($data_send);
+
+        //         if (isset($dataStudio['Status'])){
+        //             if($dataStudio['Status']){
+        //                 $this->maquinas=$dataStudio["Data"]["Machines"];
+        //             }
+        //         }
+
+        //     }else{
+
+        //         $this->dispatch('mostrarToast', 'Mover máquina', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
+        //         registrarLog("Producción","Estudios","Vincular","Se ha intentado mover la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"].", los datos fueron: ".json_encode($apiData),false);
+        //     }
+        // }
+
+    }
+
+    public function confirmarVinculacion(){
         $apiData=[
             'Branch' => 'Server',
             'Service' => 'Machines',
@@ -201,17 +312,6 @@ class Viewedit extends Component
                 "Id"=>$this->informacion["Id"],
             ]
             ];
-
-
-
-        // //Genero la petición de informacion
-        // $response = Http::withHeaders([
-        //     'Authorization' => 'AAAA'
-        // ])->withOptions([
-        //     'verify' => false // Desactiva la verificación SSL
-        // ])->post(config('app.API_URL'), $apiData);
-
-        // $data = $response->json();
 
         $data=sendBack($apiData);
 
@@ -275,7 +375,6 @@ class Viewedit extends Component
                 registrarLog("Producción","Estudios","Vincular","Se ha intentado mover la máquina #".$this->moveFirmwareId." al estudio #".$this->informacion["Id"].", los datos fueron: ".json_encode($apiData),false);
             }
         }
-
     }
 
     public function desvincular($index){
