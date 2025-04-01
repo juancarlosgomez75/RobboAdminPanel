@@ -28,7 +28,6 @@
     }
     
     </style>
-
 <div>
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -64,7 +63,7 @@
                         <tr>
                             <th>Estudio actual</th>
                             <td>
-                                <a href="{{route("estudio.ver",$Maquina["StudyData"]["Id"])}}">Ver estudio</a>
+                                <a href="{{route("estudio.ver",$Maquina["StudyData"]["Id"])}}">{{$Maquina["StudyData"]["StudyName"]}}</a>
                             </td>
                         </tr>
                     </table>
