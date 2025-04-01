@@ -18,7 +18,7 @@
                 <th scope="row">{{$producto->id}}</th>
                 <td>{{$producto->name}}</td>
                 <td>
-                    {{$producto->category_info->name??"Sin categoría"}}
+                    {{$producto->category_info->name??"SIN CATEGORÍA"}}
                 </td>
                 <td>
                     @if($producto->available)
