@@ -23,5 +23,22 @@ class Log extends Model
         );
     }
 
+    protected function section(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => mb_strtoupper($value, 'UTF-8'),
+            get: fn ($value) => mb_strtoupper($value, 'UTF-8')
+
+        );
+    }
+
+    protected function action(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => mb_strtoupper($value, 'UTF-8'),
+            get: fn ($value) => mb_strtoupper($value, 'UTF-8')
+
+        );
+    }
 
 }
