@@ -37,6 +37,7 @@
                                 <th scope="col">Menu</th>
                                 <th scope="col">Sección</th>
                                 <th scope="col">Acción</th>
+                                <th scope="col">Entorno</th>
                                 <th scope="col">Autor</th>
                                 <th scope="col"></th>
                                 <th scope="col" style="width: 15%;"></th>
@@ -50,6 +51,15 @@
                                     <td>{{$log->menu}}</td>
                                     <td>{{$log->section}}</td>
                                     <td>{{$log->action}}</td>
+                                    <td>
+                                        @if($log->enviroment=="production")
+                                        Producción
+                                        @elseif($log->enviroment=="development")
+                                        Desarrollo
+                                        @else
+                                        No especifica
+                                        @endif
+                                    </td>
                                     <td>{{$log->author_info->username}}</td>
                                     <td>
                                         @if($log->result)

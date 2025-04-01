@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('menu');
             $table->string('section');
             $table->string('action');
+            $table->enum('enviroment', ['development', 'production'])->default('development');
             $table->text('details');
 
             $table->unsignedBigInteger('author')->nullable(); // ✅ Debe coincidir con 'id' de ranks

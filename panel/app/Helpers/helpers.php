@@ -16,6 +16,7 @@ if (!function_exists('registrarLog')) {
             $log->menu = $menu;
             $log->section = $section;
             $log->action = $action;
+            $log->enviroment=session('API_used',"development");
             $log->details = $details;
             $log->author=Auth::user()->id;
             $log->ip_address=Request::ip();
