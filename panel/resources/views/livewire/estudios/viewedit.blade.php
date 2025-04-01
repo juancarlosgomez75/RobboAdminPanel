@@ -1,5 +1,4 @@
 <div>
-    {{json_encode($managers)}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
