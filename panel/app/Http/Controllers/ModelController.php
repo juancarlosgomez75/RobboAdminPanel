@@ -20,9 +20,27 @@ class ModelController extends Controller
         return view("modelos.listado");
     }
     
-    public function create(){
+    public function create($idestudio){
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'StudyInfo',
+            'Data' => ["UserId" => "1"],
+            "DataStudy"=>["Id"=>$idestudio]
+        ];
+        $dataStudio=sendBack($data_send);
+
+        if (isset($dataStudio['Status'])){
+            //Analizo si el status es correcto
+            if($dataStudio['Status']){
+                return view("modelos.create",compact("idestudio"));
+            }
+        }
+
+        return "Estudio no encontrado";
         
-        return view("modelos.create");
+        
     }
 
     public function viewedit($idmodelo){

@@ -311,7 +311,11 @@ class Create extends Component
         $this->obtenerManagers($this->estudioactual);
     }
 
-    public function mount(){
+    public function mount($idestudio){
+
+        //Pongo el estudio actual
+        $this->estudioactual=$idestudio;
+        
         //Trato de obtener los estudios
         if($this->obtenerEstudios()){
             //Trato de obtener los managers

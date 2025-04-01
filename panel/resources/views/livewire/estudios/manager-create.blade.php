@@ -1,4 +1,10 @@
 <div>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{{route("estudio.ver",$idEstudio)}}" class="text-secondary">Estudio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Crear Manager</li>
+        </ol>
+    </nav>
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">

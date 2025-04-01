@@ -2,7 +2,7 @@
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="/estudio/{{$Study["Id"]}}" class="text-secondary">Estudio</a></li>
+            <li class="breadcrumb-item "><a href="{{route("estudio.ver",$Study["Id"])}}" class="text-secondary">Estudio</a></li>
             <li class="breadcrumb-item active" aria-current="page">Manager</li>
         </ol>
     </nav>
@@ -106,7 +106,7 @@
                     
                 </div>
                 <div class="col-md-12 text-center">
-                    <a type="button" class="btn btn-outline-secondary" href="{{route("modelos.create")}}">
+                    <a type="button" class="btn btn-outline-secondary" href="{{route("modelos.create",$Study["Id"])}}">
                         Crear modelo
                     </a>
                 </div>
