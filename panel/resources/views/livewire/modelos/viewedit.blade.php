@@ -3,7 +3,6 @@
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{route("estudio.ver",$estudioactual)}}" class="text-secondary">Estudio</a></li>
-            <li class="breadcrumb-item "><a href="{{route("manager.ver",$manageractual)}}" class="text-secondary">Manager</a></li>
             <li class="breadcrumb-item active" aria-current="page">Modelo</li>
         </ol>
     </nav>

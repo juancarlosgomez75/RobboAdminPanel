@@ -13,6 +13,8 @@ class Create extends Component
     public $usecustomname=0;
     public $customname="";
     public $estudioactual=0;
+
+    public $infoestudio;
     public $manageractual=0;
     public $active=false;
     public $paginas=[];
@@ -42,18 +44,18 @@ class Create extends Component
             return;
         }
 
-        //Valido si está en un estudio correcto
-        $estudioencontrado=false;
-        foreach($this->listadoestudios as $estudio){
-            if($estudio["Id"]==$this->estudioactual){
-                $estudioencontrado=true;
-            }
-        }
+        // //Valido si está en un estudio correcto
+        // $estudioencontrado=false;
+        // foreach($this->listadoestudios as $estudio){
+        //     if($estudio["Id"]==$this->estudioactual){
+        //         $estudioencontrado=true;
+        //     }
+        // }
 
-        if(!$estudioencontrado){
-            $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: Estudio no válido");
-            return;
-        }
+        // if(!$estudioencontrado){
+        //     $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: Estudio no válido");
+        //     return;
+        // }
 
         //Valido si tengo un manager correcto
         $managerencontrado=false;
@@ -133,12 +135,31 @@ class Create extends Component
 
             if (isset($data['Status'])) {
                 if($data['Status']){
-                    $this->resetExcept("listadoestudios","paginasdisponibles");
 
                     $this->dispatch('mostrarToast', 'Crear modelo', "Se ha registrado al modelo de forma correcta");
                     
                     registrarLog("Producción","Modelos","Crear","Se ha registrado al modelo con información: ".json_encode($enviar),true);
 
+                    //Aquí consulto el estudio
+                    $data_send=[
+                        'Branch' => 'Server',
+                        'Service' => 'PlatformUser',
+                        'Action' => 'StudyInfo',
+                        'Data' => ["UserId" => "1"],
+                        "DataStudy"=>["Id"=>$this->estudioactual]
+                    ];
+                    $dataStudio=sendBack($data_send);
+
+                    //Recorro los managers
+                    foreach($dataStudio["ListUserData"] as $Manager){
+                        foreach($Manager["ModelsList"] as $modelo){
+                            if($modelo["ModelUserName"]==$this->drivername){
+                                return redirect(route("modelo.viewedit",$modelo["ModelId"]));
+                            }
+                        }
+                    }
+
+                    $this->resetExcept("listadoestudios","paginasdisponibles");
                     return;
 
                 }else{
@@ -235,12 +256,19 @@ class Create extends Component
                     }
 
 
-                    //Significa que está bien, entonces proceso la lista
-                    $this->listadoestudios=$data["ListStudyData"];
+                    // //Significa que está bien, entonces proceso la lista
+                    // $this->listadoestudios=$data["ListStudyData"];
 
-                    usort($this->listadoestudios, function ($a, $b) {
-                        return strcmp($a["FullName"], $b["FullName"]);
-                    });
+                    // usort($this->listadoestudios, function ($a, $b) {
+                    //     return strcmp($a["FullName"], $b["FullName"]);
+                    // });
+
+                    //Almaceno solo el estudio de mi interés
+                    foreach($data["ListStudyData"] as $estudio){
+                        if($estudio["Id"]==$this->estudioactual){
+                            $this->infoestudio=$estudio;
+                        }
+                    }
 
                     //Obtengo las páginas disponibles
                     $this->paginasDisponibles=$generalinformation['WebPagesList'];

@@ -2,7 +2,7 @@
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item "><a href="{{route("estudio.ver",$estudioactual)}}" class="text-secondary">Modelos</a></li>
+            <li class="breadcrumb-item "><a href="{{route("estudio.ver",$estudioactual)}}" class="text-secondary">Estudio</a></li>
             <li class="breadcrumb-item active" aria-current="page">Crear modelo</li>
         </ol>
     </nav>
@@ -37,17 +37,8 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Estudio actual</label>
-                            <select class="form-select"  wire:model.live="estudioactual">
-                                
-                                @if(!empty($listadoestudios))
-                                <option disabled value="0">Seleccionar un estudio</option>
-                                @foreach($listadoestudios as $estudio)
-                                <option value="{{$estudio["Id"]}}">{{$estudio["FullName"]}}</option>
-                                @endforeach
-                                @else
-                                <option disabled value="0">Sin estudios</option>
-                                @endif
-                            </select>
+                            <input class="form-control" type="text" value="{{$infoestudio["FullName"]}}" disabled>
+
                             <br>
                         </div>
                         <div class="col-md-6">
