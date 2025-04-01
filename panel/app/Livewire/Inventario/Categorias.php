@@ -49,11 +49,11 @@ class Categorias extends Component
     public function validar_edit(){
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name_edit) && !empty(trim($this->name_edit)))){
-            $this->dispatch('mostrarToast', 'Editar categoría', 'Error: El nombre de la categoría no es válido');
+            $this->dispatch('mostrarToast', 'Editar categoría', 'Error: El nombre de la categoría no es válido o está vacía');
             return false;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description_edit) && !empty(trim($this->description_edit)))){
-            $this->dispatch('mostrarToast', 'Editar categoría', 'Error: La descripción de la categoría no es válida');
+            $this->dispatch('mostrarToast', 'Editar categoría', 'Error: La descripción de la categoría no es válida o está vacía');
             return false;
         }
 
@@ -96,11 +96,11 @@ class Categorias extends Component
     public function validar(){
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
-            $this->dispatch('mostrarToast', 'Crear categoría', 'Error: El nombre de la categoría no es válido');
+            $this->dispatch('mostrarToast', 'Crear categoría', 'Error: El nombre de la categoría no es válido o está vacío');
             return false;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description) && !empty(trim($this->description)))){
-            $this->dispatch('mostrarToast', 'Crear categoría', 'Error: La descripción de la categoría no es válida');
+            $this->dispatch('mostrarToast', 'Crear categoría', 'Error: La descripción de la categoría no es válida o está vacía');
             return false;
         }
 

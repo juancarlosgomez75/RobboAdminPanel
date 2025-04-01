@@ -24,16 +24,16 @@ class Productos extends Component
 
     public function validar(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
-            $this->dispatch('mostrarToast', 'Crear producto', 'Error: El nombre del producto no es válido');
+            $this->dispatch('mostrarToast', 'Crear producto', 'Error: El nombre del producto no es válido o está vacío');
             return false;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description) && !empty(trim($this->description)))){
-            $this->dispatch('mostrarToast', 'Crear producto', 'Error: La descripción del producto no es válida');
+            $this->dispatch('mostrarToast', 'Crear producto', 'Error: La descripción del producto no es válida o está vacía');
             return false;
         }
         elseif(!empty(trim($this->ref)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->ref)) {
 
-            $this->dispatch('mostrarToast', 'Crear producto', 'Error: La referencia no es válida');
+            $this->dispatch('mostrarToast', 'Crear producto', 'Error: La referencia no es válida o está vacía');
             return false;
         }
 
