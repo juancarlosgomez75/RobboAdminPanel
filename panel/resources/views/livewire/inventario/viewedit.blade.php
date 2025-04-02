@@ -3,7 +3,7 @@
     <div class="alert alert-danger" role="alert">
         Este producto no tiene stock disponible
     </div>
-    @elseif($stock>0 && $activo)
+    @elseif($stock>0 && $activo && $stock<$stockmin)
     <div class="alert alert-warning" role="alert">
         El stock disponible de este producto está por debajo del stock recomendable
     </div>
