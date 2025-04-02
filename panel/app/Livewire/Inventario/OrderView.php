@@ -278,7 +278,39 @@ class OrderView extends Component
 
         //Si almaceno
         if($this->orden->save()){
+            //Devuelvo el stock completo
+            foreach(json_decode($this->orden->creation_list) as $element){
+                //Busco el producto
+                $pto=Product::find($element->id);
+
+                //Genero un nuevo movimiento
+                $mov=new ProductInventoryMovement();
+
+                //Almaceno la información
+                $mov->inventory_id=$pto->inventory->id;
+                $mov->type="income";
+                $mov->reason="Cancelación de orden";
+                $mov->amount=$element->amount;
+                $mov->stock_before=$pto->inventory->stock_available;
+                $mov->stock_after=$pto->inventory->stock_available+$element->amount;
+                $mov->author=Auth::id();
+                $mov->order_id=$this->orden->id;
+
+                //Guardo
+                if(!$mov->save()){
+                    $this->dispatch('mostrarToast', 'Cancelar orden', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                }
+
+                //Ahora modifico el stock
+                $pto->inventory->stock_available=$mov->stock_after;
+
+                if(!$pto->inventory->save()){
+                    $this->dispatch('mostrarToast', 'Cancelar orden', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                }
+            }
+
             $this->dispatch('mostrarToast', 'Cancelar orden', 'Se ha cancelado la orden');
+
         }else{
             $this->dispatch('mostrarToast', 'Cancelar orden', 'Error cancelando la orden, contacta con soporte');
         }
