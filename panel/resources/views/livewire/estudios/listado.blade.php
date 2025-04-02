@@ -34,6 +34,7 @@
                                 <th class="w-10" scope="col" style="width: 7%;">#</th>
                                 <th class="w-40" scope="col">Nombre</th>
                                 <th class="w-30" scope="col">Ciudad</th>
+                                <th></th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
@@ -43,6 +44,13 @@
                                     <th scope="row">{{ $dato['Id'] }}</th>
                                     <td>{{ $dato["StudyName"] ?? 'Sin Nombre' }}</td>
                                     <td>{{ $dato['City'] ?? 'No especificada' }}</td>
+                                    <td>
+                                        @if($dato["Active"] )
+                                        <i class="fa-solid fa-circle-check" style="color: green;"></i>
+                                        @else
+                                        <i class="fa-solid fa-circle-xmark" style="color: red;"></i>
+                                        @endif
+                                    </td>
                                     <td>
                                         <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/{{ $dato['Id'] }}">Visualizar</a>
                                     </td>
