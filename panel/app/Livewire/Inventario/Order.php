@@ -4,6 +4,7 @@ namespace App\Livewire\Inventario;
 
 use App\Models\ProductOrder;
 use App\Models\Product;
+use App\Models\ProductInventoryMovement;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
@@ -232,11 +233,21 @@ class Order extends Component
 
         $busqueda=$this->searchResults[$index];
 
+        //Busco si ya existe
+        foreach($this->listProducts as $product){
+            if($product["id"]==$busqueda->id){
+
+                $this->dispatch('mostrarToast', 'Añadir producto', 'Advertencia: Este producto ya está en el carrito');
+                return;
+            }
+        }
+
         //Añado el producto
         $this->listProducts[]=[
             "id"=>$busqueda->id,
             "name"=>$busqueda->name,
-            "amount"=>1
+            "amount"=>1,
+            "use_firmware"=> $busqueda->use_firmwareid,
         ];
 
         $this->dispatch('mostrarToast', 'Añadir producto', 'Producto añadido');
@@ -284,10 +295,24 @@ class Order extends Component
         }
 
         //Valido las cantidades
-        foreach($this->listProducts as $product)
-            if($product['amount']<=0){
-                $this->dispatch('mostrarToast', 'Crear pedido', 'La cantidad del producto: '.$product["name"].' no es válida');
+        foreach($this->listProducts as $product){
+
+            //Busco el producto
+            $buscado=Product::find($product['id']);
+
+            if($buscado){
+                if($buscado->inventory->stock_available<$product['amount']){
+                    $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no tiene stock suficiente para completar la orden');
+                    return false;
+                }
+                elseif($product['amount']<=0){
+                    $this->dispatch('mostrarToast', 'Crear pedido', 'La cantidad del producto: '.$product["name"].' no es válida');
+                    return false;
+                }
+            }else{
+                $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no fue encontrado');
                 return false;
+            }
         }
 
         return true;
@@ -316,7 +341,44 @@ class Order extends Component
 
             //Intento guardar
             if($orden->save()){
-                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado el pedido satisfactoriamente');
+
+                //Ahora descargo los productos
+                foreach($this->listProducts as $element){
+
+                    //Busco el producto
+                    $pto=Product::find($element['id']);
+
+                    //Genero un nuevo movimiento
+                    $mov=new ProductInventoryMovement();
+
+                    //Almaceno la información
+                    $mov->inventory_id=$pto->inventory->id;
+                    $mov->type="expense";
+                    $mov->reason="Alistamiento de orden";
+                    $mov->amount=$element["amount"];
+                    $mov->stock_before=$pto->inventory->stock_available;
+                    $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
+                    $mov->author=Auth::id();
+                    $mov->order_id=$orden->id;
+
+                    //Guardo
+                    if(!$mov->save()){
+                        $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                    }
+
+                    //Ahora modifico el stock
+                    $pto->inventory->stock_available=$mov->stock_after;
+
+                    if(!$pto->inventory->save()){
+                        $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                    }
+
+                    $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado el pedido satisfactoriamente');
+
+                    return redirect(route("orden.ver",$orden->id));
+
+                }
+
                 $this->resetExcept("estudios");
             }else{
                 $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar el pedido, contacte a soporte');
