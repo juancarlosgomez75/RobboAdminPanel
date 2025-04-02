@@ -73,6 +73,17 @@
                                 Guardar cambios
                             </button>
                             @endif
+
+                            @if($activo)
+                            <button type="button" class="btn btn-outline-danger ms-2" wire:click="desactivarEstudio()">
+                                Desactivar estudio
+                            </button>
+                            @else
+                            <button type="button" class="btn btn-outline-success ms-2" wire:click="activarEstudio()">
+                                Activar estudio
+                            </button>
+                            @endif
+
                         </div>
                         
                     </div>

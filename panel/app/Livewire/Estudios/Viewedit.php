@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class Viewedit extends Component
 
 {
+    public $activo;
     public $editing=false;
 
     public $informacion;
@@ -367,12 +368,66 @@ class Viewedit extends Component
 
     }
 
+    public function desactivarEstudio(){
+        $information=$this->informacion;
+        $information["Active"]=false;
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'CreateUpdateStudy',
+            'Data' => ["UserId" => "1"],
+            "DataStudy"=>$information,
+        ];
+        $data=sendBack($data_send);
+
+        if (isset($data['Status'])){
+            if($data['Status']){
+                $this->activo=False;
+                $this->dispatch('mostrarToast', 'Desactivar estudio', "Se ha desactivado el estudio correctamente");
+                $this->informacion["Active"]=$information["Active"];
+                registrarLog("Producción","Estudios","Desactivar estudio","Se ha desactivado el estudio #".$this->informacion["Id"],true);
+            }else{
+                $this->dispatch('mostrarToast', 'Desactivar estudio', "Error al desactivar estudio, contacte a soporte");
+                registrarLog("Producción","Estudios","Desactivar estudio","Se ha intentado desactivar el estudio #".$this->informacion["Id"],false);
+            }
+        }
+    }
+
+    public function activarEstudio(){
+        $information=$this->informacion;
+        $information["Active"]=true;
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'CreateUpdateStudy',
+            'Data' => ["UserId" => "1"],
+            "DataStudy"=>$information,
+        ];
+        $data=sendBack($data_send);
+
+        if (isset($data['Status'])){
+            if($data['Status']){
+                $this->activo=True;
+                $this->dispatch('mostrarToast', 'Activar estudio', "Se ha activado el estudio correctamente");
+                $this->informacion["Active"]=$information["Active"];
+                registrarLog("Producción","Estudios","Activar estudio","Se ha activado el estudio #".$this->informacion["Id"],true);
+            }else{
+                $this->dispatch('mostrarToast', 'Activar estudio', "Error al activar estudio, contacte a soporte");
+                registrarLog("Producción","Estudios","Activar estudio","Se ha intentado activar el estudio #".$this->informacion["Id"],false);
+            }
+        }
+    }
+
     public function mount($Informacion,$Managers,$Maquinas,$Ciudades){
         $this->informacion=$Informacion;
         $this->managers = $Managers;
         $this->maquinas = $Maquinas;
         $this->ciudades = $Ciudades;
 
+
+        $this->activo=$Informacion["Active"];
         //Cargo la información
         $this->nombre=$this->informacion["StudyName"] ?? "No definido";
         $this->razonsocial=$this->informacion["RazonSocial"] ?? "No definida";
