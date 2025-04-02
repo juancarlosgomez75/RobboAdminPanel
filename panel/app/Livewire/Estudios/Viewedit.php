@@ -408,6 +408,9 @@ class Viewedit extends Component
     
     public function render()
     {
+        usort($this->maquinas, function ($a, $b) {
+            return strcmp($a["FirmwareID"], $b["FirmwareID"]);
+        });
         return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"modelos"=>$this->modelos, "maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Livewire\Inventario;
 
 use App\Models\Courier;
+use App\Models\MachineHistory;
 use App\Models\Product;
 use App\Models\ProductInventoryMovement;
 use Livewire\Component;
@@ -14,11 +15,6 @@ class OrderView extends Component
 
     public $preparando=false;
     public $preparacion_list=[];
-
-    public $preparacion_product="0";
-    public $preparacion_amount="1";
-    public $preparacion_firmware="";
-    public $preparacion_count=[];
     public $details="";
 
     public $enviando=false;
@@ -29,100 +25,66 @@ class OrderView extends Component
 
     public $reasonCancel="";
 
-    public function removeProduct($index)
-    {
-        //Disminuyo
-        $this->preparacion_count[$this->preparacion_list[$index]["id"]]-= $this->preparacion_list[$index]["amount"];
+    public function iniciarAlistamiento(){
+        //Actualizo el estado
+        $this->preparando=true;
+        $this->preparacion_list=[];
 
-        unset($this->preparacion_list[$index]); // Elimina el elemento del array
-        $this->preparacion_list = array_values($this->preparacion_list); // Reorganiza los índices
-        $this->dispatch('mostrarToast', 'Quitar producto', 'Se ha quitado el producto del alistamiento');
-
-    }
-
-    public function preparacionAdd(){
-        //Analizo si son valores correctos
-        if(!is_numeric($this->preparacion_amount) || $this->preparacion_amount <= 0){
-            $this->dispatch('mostrarToast', 'Añadir producto', 'La cantidad ingresada no es válida');
-            return;
-        }
-        elseif($this->preparacion_product== '0'){
-            $this->dispatch('mostrarToast', 'Añadir producto', 'Por favor selecciona un producto');
-            return;
-        }
-        elseif($this->preparacion_firmware!="" && (!is_numeric($this->preparacion_firmware) || $this->preparacion_firmware<100000)){
-            $this->dispatch('mostrarToast', 'Añadir producto', 'El firmware ingresado no es válido');
-            return;
-        }
-
-        $encontrado=false;
-        foreach (json_decode($this->orden->creation_list,true) as $index=>$pd){
-            if($pd["id"]==$this->preparacion_product){
-                $encontrado=true;
-                break;
+        //Genero el listado
+        foreach(json_decode($this->orden->creation_list) as $producto){
+            //Si usa firmware debo crear un elemento por acada id
+            if ($producto->use_firmware){
+                for($i = 0; $i < $producto->amount; $i++){
+                    $this->preparacion_list[]=[
+                        "check"=>False,
+                        "id"=>$producto->id,
+                        "name"=>$producto->name,
+                        "amount"=>1,
+                        "use_firmware"=> $producto->use_firmware,
+                        "firmwareid"=>""
+                    ];
+                }
+            }else{
+                $this->preparacion_list[]=[
+                    "check"=>False,
+                    "id"=>$producto->id,
+                    "name"=>$producto->name,
+                    "amount"=>$producto->amount,
+                    "use_firmware"=> $producto->use_firmware
+                ];
             }
         }
-
-        if(!$encontrado){
-            $this->dispatch('mostrarToast', 'Añadir producto', 'Error: este producto no pertenece a esta orden');
-            return;
-        }
-
-        //Busco el producto
-        $pto=Product::where("id","=",$this->preparacion_product)->where("available","=","1")->first();
-
-        if(!$pto){
-            $this->dispatch('mostrarToast', 'Añadir producto', 'Error: este producto no fue encontrado o no está disponible');
-            return;
-        }
-
-        //Ahora analizo si puedo añadir esto
-        $busc=($this->preparacion_count[$this->preparacion_product]??0)+$this->preparacion_amount;
-        if($pto->inventory->stock_available<$busc){
-            $this->dispatch('mostrarToast', 'Añadir producto', 'No hay stock suficiente de este producto');
-            return;
-        }
-
-        //Añade el producto si no existe, si existe le sumo
-        if (!array_key_exists($this->preparacion_product, $this->preparacion_count)) {
-            $this->preparacion_count[$this->preparacion_product]=$this->preparacion_amount;
-        }else{
-            $this->preparacion_count[$this->preparacion_product]+=$this->preparacion_amount;
-        }
-        
-
-        //Creo el array que almaceno
-        $informacion=[];
-
-        //Le cargo la informacion
-        $informacion["id"]=$this->preparacion_product;
-        $informacion["name"]=$pto->name;
-        $informacion["amount"]=$this->preparacion_amount;
-
-        if($this->preparacion_firmware!=""){
-            $informacion["firmware"]=$this->preparacion_firmware;  
-        }
-
-        //Añado
-        $this->preparacion_list[]=$informacion;
-
-        $this->dispatch('mostrarToast', 'Añadir producto', 'Producto añadido');
-
-        $this->preparacion_product="0";
-        $this->preparacion_amount="1";
-        $this->preparacion_firmware="";
-
-    }
-
-    public function iniciarAlistamiento(){
-        $this->preparando=true;
     }
 
     public function completarAlistamiento(){
         //Ahora valido las observaciones
         if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
-            $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Las observaciones no son válidas');
+            $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Error: Las observaciones no son válidas o el campo está vacío');
             return false;
+        }
+
+        //Ahora valido el check y el firmware
+        $firmwares=[];
+        foreach($this->preparacion_list as $index=>$item){
+            //Analizo si está check
+            if(!$item["check"]){
+                $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Error: El producto #'.($index+1).' no ha sido marcado como completado');
+                return false;
+            }
+
+            //Analizo si usa firmware
+            if($item["use_firmware"]){
+                #Consultto si el firmware no está
+                if(in_array($item["firmwareid"],$firmwares)){
+                    $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Error: La id de firmware del producto #'.($index+1).' ya ha sido ingresada anteriormente');
+                    return false;
+                }
+                $firmwares[]=$item["firmwareid"];
+                if($item["firmwareid"]<"100000" || $item["firmwareid"]>"999999"){
+                    $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Error: La id de firmware del producto #'.($index+1).' no está en el rango correcto');
+                    return false;
+                }
+            }
         }
 
         //Edito la información
@@ -141,33 +103,10 @@ class OrderView extends Component
 
                 //Siempre verifico todo
                 if($pto){
-                    //Genero un nuevo movimiento
-                    $mov=new ProductInventoryMovement();
 
-                    //Almaceno la información
-                    $mov->inventory_id=$pto->inventory->id;
-                    $mov->type="expense";
-                    $mov->reason="Alistamiento de orden";
-                    $mov->amount=$element["amount"];
-                    $mov->stock_before=$pto->inventory->stock_available;
-                    $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
-                    $mov->author=Auth::id();
-                    $mov->order_id=$this->orden->id;
-
-                    //Guardo
-                    if(!$mov->save()){
-                        $this->dispatch('mostrarToast', 'Reportar movimiento', 'Se ha generado un error, contacte a soporte');
-                    }
-
-                    //Ahora modifico el stock
-                    $pto->inventory->stock_available=$mov->stock_after;
-
-                    if(!$pto->inventory->save()){
-                        $this->dispatch('mostrarToast', 'Reportar stock', 'Se ha generado un error, contacte a soporte');
-                    }
-
-                    //Ahora actualizo si es el caso
-                    if(isset($element["firmware"]) && $this->orden->study_id!=null){
+                    //Ahora actualizo si usa firmware o no
+                    if($element["use_firmware"] && $this->orden->study_id!=null){
+                        
                         $apiData=[
                             'Branch' => 'Server',
                             'Service' => 'Machines',
@@ -175,7 +114,7 @@ class OrderView extends Component
                             "Data"=>[
                                 "UserId"=>"1",
                                 "Machines"=>[
-                                    ["FirmwareID"=>$element["firmware"]]
+                                    ["FirmwareID"=>$element["firmwareid"]]
                                 ]
                                 ],
                             'DataStudy' => [
@@ -186,17 +125,43 @@ class OrderView extends Component
                         $data=sendBack($apiData);
 
                         if (!isset($data['Status'])) {
-                            $this->dispatch('mostrarToast', 'Mover máquina', 'Se ha generado un error al mover automáticamente una máquina, contacte a soporte');
+                            // $this->dispatch('mostrarToast', 'Mover máquina', 'Se ha generado un error al mover automáticamente una máquina, contacte a soporte');
 
                         }
                         elseif(!$data['Status']){
-                            $this->dispatch('mostrarToast', 'Mover máquina', 'No se ha completado con éxito, contacte a soporte');
+                            // $this->dispatch('mostrarToast', 'Mover máquina', 'No se ha completado con éxito, contacte a soporte');
                         }else{
-                            registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina Firmware#".$element["firmware"]." al estudio #".$this->orden->study_id.", resultado de operación de la orden #".$mov->id,true);
+                            registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina Firmware#".$element["firmwareid"]." al estudio #".$this->orden->study_id.", resultado de operación de la orden #".$this->orden->id,true);
                         }
 
-                        
+                        //Genero la información
+                        $data_send=[
+                            'Branch' => 'Server',
+                            'Service' => 'Machines',
+                            'Action' => 'OneView',
+                            'Data' => [
+                                "UserId" => "1",
+                                "Machines"=>[
+                                    ["FirmwareID"=>$element["firmwareid"]]
+                                ]
+                            ]
+                        ];
+                        $data=sendBack($data_send);
 
+                        if($data["Status"]){
+                            $Maquina=$data["Data"]["Machines"][0];
+
+                            //Genero el movimiento
+                            $movimiento=new MachineHistory();
+
+                            //Cargo la info
+                            $movimiento->machine_id=$Maquina["ID"];
+                            $movimiento->description="Orden";
+                            $movimiento->details="Se ha vinculado la máquina con firmware #".$Maquina["FirmwareID"]." al estudio #".$this->orden->study_id. " por la orden #".$this->orden->id;
+                            $movimiento->author=Auth::user()->id;
+
+                            $movimiento->save();
+                        }
 
                     }
                 }
