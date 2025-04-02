@@ -12,7 +12,7 @@ class CheckUserStatus
     {
         if (Auth::check() && Auth::user()->activo == false) {
             Auth::logout(); // Cerrar sesión
-            return redirect('/login');
+            return redirect(route("login"));
         }
 
         return $next($request);
