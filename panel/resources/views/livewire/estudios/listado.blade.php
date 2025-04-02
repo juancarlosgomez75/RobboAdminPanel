@@ -19,11 +19,18 @@
                 <div class="col-md-12 @if(!$filtroOn) hide @endif" id="Filtros">
 
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <input type="text" class="custom-input" placeholder="Filtrar por nombre" wire:model.change="filtroNombre">
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-3">
                             <input type="text" class="custom-input" placeholder="Filtrar por ciudad" wire:model.change="filtroCiudad">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select form-select-sm" wire:model.change="filtroEstado">
+                                <option value="-1">Todos</option>
+                                <option value="0">Inactivos</option>
+                                <option value="1">Activos</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -39,6 +46,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(!empty($datosUsar))
                             @foreach($datosUsar as $index => $dato)
                                 <tr>
                                     <th scope="row">{{ $dato['Id'] }}</th>
@@ -56,6 +64,13 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                            <tr class="text-center">
+                                <td colspan="5">
+                                    No se encontraron estudios
+                                </td>
+                            </tr>
+                            @endif
                         </tbody>
                     </table>
                     

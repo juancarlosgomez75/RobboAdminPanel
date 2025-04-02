@@ -9,6 +9,8 @@ class Listado extends Component
 {
     public $filtroNombre = "";
     public $filtroCiudad = "";
+
+    public $filtroEstado="1";
     public $filtrosActivos = false;
     public $datos;
 
@@ -35,7 +37,11 @@ class Listado extends Component
         $filtrados = array_filter($this->datos, function ($dato) {
             $nombreCoincide = empty($this->filtroNombre) || stripos($dato["StudyName"], $this->filtroNombre) !== false;
             $ciudadCoincide = empty($this->filtroCiudad) || stripos($dato["City"], $this->filtroCiudad) !== false;
-            return $nombreCoincide && $ciudadCoincide;
+            
+            // Convertimos filtroEstado en booleano si es 0 o 1
+            $estadoFiltrado = $this->filtroEstado == "-1" ? null : (bool) $this->filtroEstado;
+            $estadoCoincide = is_null($estadoFiltrado) || (isset($dato["Active"]) && (bool) $dato["Active"] === $estadoFiltrado);
+            return $nombreCoincide && $ciudadCoincide  && $estadoCoincide;
         });
 
         //Ordeno

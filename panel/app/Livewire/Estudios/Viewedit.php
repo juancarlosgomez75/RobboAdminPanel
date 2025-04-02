@@ -448,9 +448,10 @@ class Viewedit extends Component
             foreach($Manager["ModelsList"] as $modelo){
                 $modelo["manager_id"]=$Manager["Id"];
                 $modelo["manager_name"]=$Manager["Name"];
+                $misModelos[]=$modelo;
             }
 
-            $misModelos[]=$modelo;
+            
 
             $this->modelos=array_merge($this->modelos,$misModelos);
         }
