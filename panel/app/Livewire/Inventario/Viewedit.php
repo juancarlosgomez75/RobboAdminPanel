@@ -23,6 +23,8 @@ class Viewedit extends Component
     public $category_use;
     public $ref;
 
+    public $firmware;
+
     public $stock=0;
     public $stockmin=0;
 
@@ -49,6 +51,11 @@ class Viewedit extends Component
         elseif(!empty(trim($this->ref)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->ref)) {
 
             $this->dispatch('mostrarToast', 'Editar producto', 'Error: La referencia no es válida');
+            return false;
+        }
+
+        elseif($this->firmware!="0" && $this->firmware!="1"){
+            $this->dispatch('mostrarToast', 'Editar producto', 'Error: Selecciona si el producto usa Firmware ID o no');
             return false;
         }
 
@@ -111,6 +118,7 @@ class Viewedit extends Component
             $this->producto->description= $this->description;
             $this->producto->category= $this->category_use;
             $this->producto->ref= $this->ref;
+            $this->producto->use_firmwareid=filter_var($this->firmware, FILTER_VALIDATE_BOOLEAN);
 
             //Almaceno
             if($this->producto->save()){
@@ -154,6 +162,7 @@ class Viewedit extends Component
         $this->category=$producto->category;
         $this->ref=$producto->ref;
         $this->activo=$producto->available;
+        $this->firmware=$producto->use_firmwareid?"1":"0";
 
         //Cargo el stock
         $this->stock=$this->producto->inventory->stock_available;

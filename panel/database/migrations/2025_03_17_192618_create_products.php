@@ -37,6 +37,9 @@ return new class extends Migration
             //Información de referencia
             $table->string('ref')->nullable();
 
+            //Información de Firmware
+            $table->boolean("use_firmwareid")->default(false);
+
             //Timestamp
             $table->timestamps();
         });

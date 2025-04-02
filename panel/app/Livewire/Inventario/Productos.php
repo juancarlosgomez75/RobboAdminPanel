@@ -13,6 +13,8 @@ class Productos extends Component
     public $description;
     public $category=-1;
 
+    public $firmware=-1;
+
     protected $category_use;
     public $ref;
 
@@ -36,6 +38,10 @@ class Productos extends Component
             $this->dispatch('mostrarToast', 'Crear producto', 'Error: La referencia no es válida o está vacía');
             return false;
         }
+        elseif($this->firmware!="0" && $this->firmware!="1"){
+            $this->dispatch('mostrarToast', 'Crear producto', 'Error: Selecciona si el producto usa Firmware ID o no');
+            return false;
+        }
 
         //Analizo la categoria
         if($this->category!="0"){
@@ -48,6 +54,8 @@ class Productos extends Component
         }else{
             $this->category_use=null;
         }
+
+
 
         return true;
     }
@@ -62,6 +70,7 @@ class Productos extends Component
             $producto->description=$this->description;
             $producto->ref=$this->ref;
             $producto->category=$this->category_use;
+            $producto->use_firmwareid=filter_var($this->firmware, FILTER_VALIDATE_BOOLEAN);
 
             if($producto->save()){
                 //Creo el inventario

@@ -1,15 +1,15 @@
 <div>
-    @if($stock>=$stockmin && $activo)
-    <div class="alert alert-success" role="alert">
-        El stock disponible de este producto se encuentra por encima del stock recomendable
+    @if($stock==0 && $activo)
+    <div class="alert alert-danger" role="alert">
+        Este producto no tiene stock disponible
     </div>
     @elseif($stock>0 && $activo)
     <div class="alert alert-warning" role="alert">
         El stock disponible de este producto está por debajo del stock recomendable
     </div>
-    @elseif($stock==0 && $activo)
-    <div class="alert alert-danger" role="alert">
-        Este producto no tiene stock disponible
+    @elseif($stock>=$stockmin && $activo)
+    <div class="alert alert-success" role="alert">
+        El stock disponible de este producto se encuentra por encima del stock recomendable
     </div>
     @endif
     <div class="card shadow-custom">
@@ -21,9 +21,17 @@
                 </div>
                 <div class="col-md-12 pt-3">
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-8 mb-3">
                             <label class="form-label">Nombre</label>
                             <input type="text" class="form-control" placeholder="Ejemplo: Juguetes" wire:model="name" required @if(!$editing) disabled @endif>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">¿Tendrán id de Firmware?</label>
+                            <select class="form-select" wire:model="firmware" @if(!$editing) disabled @endif>
+                                <option disabled value="-1">Seleccionar una opción</option>
+                                <option value="0">No</option>
+                                <option value="1">Si</option>
+                            </select>
                         </div>
                         <div class="col-md-12 mb-3">
                             <labelclass="form-label">Descripción</label>

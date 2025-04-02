@@ -29,7 +29,7 @@
                 </td>
                 <td>{{$producto->inventory->stock_available}}</td>
                 <td>
-                    @if($producto->inventory->stock_available>=$producto->inventory->stock_min)
+                    @if($producto->inventory->stock_available>=$producto->inventory->stock_min && $producto->inventory->stock_available!=0)
                     <i class="fa-solid fa-circle-check" style="color:green"></i>
                     @elseif($producto->inventory->stock_available>0)
                     <i class="fa-solid fa-circle-exclamation" style="color:orange"></i>
@@ -67,9 +67,17 @@
                 </p>
 
                 <div class="row">
-                    <div class="col-md-12 mb-3">
+                    <div class="col-md-8 mb-3">
                         <label class="form-label">Nombre</label>
                         <input type="text" class="form-control" placeholder="Ejemplo: Juguetes" wire:model="name">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">¿Tendrán id de Firmware?</label>
+                        <select class="form-select" wire:model="firmware">
+                            <option disabled value="-1">Seleccionar una opción</option>
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
                     </div>
                     <div class="col-md-12 mb-3">
                         <labelclass="form-label">Descripción</label>
