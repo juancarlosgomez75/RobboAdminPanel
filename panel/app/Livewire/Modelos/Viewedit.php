@@ -37,7 +37,7 @@ class Viewedit extends Component
             return;
         }
         //Valido el nombre personalizado
-        elseif (!empty(trim($this->customname)) && !preg_match('/^[a-zA-Z0-9._-]+$/', $this->customname)){
+        elseif (!empty(trim($this->customname)) && !preg_match("/^[a-zA-Z0-9._\- ]+$/", $this->customname)){
             $this->dispatch('mostrarToast', 'Editar modelo', "Alerta: El nombre personalizado no es válido");
             return;
         }

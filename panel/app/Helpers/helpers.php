@@ -52,11 +52,18 @@ if (!function_exists('sendBack')) {
     function sendBack($data,$code="AAA")
     {
 
+        if(session('API_used',"development")=="production"){
+            $api = config('app.API_URL_PROD');
+        }
+        else{
+            $api = config('app.API_URL_DEV');
+        }
+
         $response = Http::withHeaders([
             'Authorization' => $code
         ])->withOptions([
             'verify' => false // Desactiva la verificación SSL
-        ])->post(config('app.API_URL'), $data);
+        ])->post($api, $data);
 
         // Obtener la respuesta como string comprimido
         $compressedResponse = $response->body(); 
