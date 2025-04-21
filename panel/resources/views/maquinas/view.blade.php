@@ -29,7 +29,6 @@
     
     </style>
 <div>
-    {{json_encode($Maquina)}}
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{route("estudio.ver",$Maquina["ID"])}}" class="text-secondary">Estudio</a></li>
