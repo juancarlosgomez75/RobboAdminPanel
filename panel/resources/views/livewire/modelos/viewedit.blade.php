@@ -97,26 +97,41 @@
                         </thead>
                         <tbody class="align-middle">
                             @if(!empty($paginas))
-                            @foreach ($paginas as $indice=> $Page)
-                            <tr>
-                                <td>{{ $indice + 1 }}</td>
-                                <td>
-                                    <select class="form-select" wire:model="paginas.{{ $indice }}.NickPage" @if(!$editing) disabled @endif>
-                                        <option disabled value="-1">Selecciona una página</option>
-                                        @foreach($paginasDisponibles as $index=>$pag)
-                                        <option value="{{$pag}}">{{$pag}}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" wire:model="paginas.{{ $indice}}.NickName" placeholder="Ejemplo: usuario.chatb" @if(!$editing) disabled @endif>
-                                </td>
-                                <td>
-                                    <a class="btn btn-outline-danger btn-sm" wire:click="eliminarPagina({{ $indice }})">
-                                        Eliminar
-                                    </a>
-                                </td>
-                            </tr>
+                            @php
+                                $paginasUsadas = [];
+
+                                foreach($paginas as $indice => $Page){
+                                    $paginasUsadas[] = $Page['NickPage'];
+                                }
+                            @endphp
+
+                            @foreach ($paginas as $indice => $Page)
+                                @php
+                                     $seleccionActual = $Page['NickPage'] ?? '-1';
+                                    
+                                @endphp
+
+                                <tr>
+                                    <td>{{ $indice + 1 }}</td>
+                                    <td>
+                                        <select class="form-select" wire:model.live="paginas.{{ $indice }}.NickPage" @if(!$editing) disabled @endif>
+                                            <option disabled value="-1">Selecciona una página</option>
+                                            @foreach ($paginasDisponibles as $pag)
+                                                @if (!in_array($pag, $paginasUsadas) || $pag === $seleccionActual)
+                                                    <option value="{{ $pag }}">{{ $pag }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" wire:model="paginas.{{ $indice }}.NickName" placeholder="Ejemplo: usuario.chatb" @if(!$editing) disabled @endif>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-outline-danger btn-sm" wire:click="eliminarPagina({{ $indice }})">
+                                            Eliminar
+                                        </a>
+                                    </td>
+                                </tr>
                             @endforeach
                             @else
                             <tr>

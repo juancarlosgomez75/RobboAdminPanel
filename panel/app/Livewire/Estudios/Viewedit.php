@@ -261,16 +261,20 @@ class Viewedit extends Component
                 if($data["Status"]){
                     $Maquina=$data["Data"]["Machines"][0];
 
-                    //Genero el movimiento
-                    $movimiento=new MachineHistory();
+                    if(session('API_used',"development")=="production"){
+                        //Genero el movimiento
+                        $movimiento=new MachineHistory();
 
-                    //Cargo la info
-                    $movimiento->machine_id=$Maquina["ID"];
-                    $movimiento->description="Vincular";
-                    $movimiento->details="Se ha vinculado la máquina con firmware #".$Maquina["FirmwareID"]." al estudio #".$this->informacion["Id"];
-                    $movimiento->author=Auth::user()->id;
+                        //Cargo la info
+                        $movimiento->machine_id=$Maquina["ID"];
+                        $movimiento->description="Vincular";
+                        $movimiento->details="Se ha vinculado la máquina con firmware #".$Maquina["FirmwareID"]." al estudio #".$this->informacion["Id"];
+                        $movimiento->author=Auth::user()->id;
 
-                    $movimiento->save();
+                        $movimiento->save();
+                    }
+
+
                 }
                 
                 
@@ -342,17 +346,19 @@ class Viewedit extends Component
                     unset($this->maquinas[$index]); // Elimina el elemento del array
                     $this->maquinas = array_values($this->maquinas); // Reorganiza los índices
 
+                    if(session('API_used',"development")=="production"){
+                        //Genero el movimiento
+                        $movimiento=new MachineHistory();
 
-                    //Genero el movimiento
-                    $movimiento=new MachineHistory();
+                        //Cargo la info
+                        $movimiento->machine_id=$maquina["ID"];
+                        $movimiento->description="Desvincular";
+                        $movimiento->details="Se ha desvinculado la máquina con firmware #".$maquina["FirmwareID"]." del estudio #".$this->informacion["Id"];
+                        $movimiento->author=Auth::user()->id;
 
-                    //Cargo la info
-                    $movimiento->machine_id=$maquina["ID"];
-                    $movimiento->description="Desvincular";
-                    $movimiento->details="Se ha desvinculado la máquina con firmware #".$maquina["FirmwareID"]." del estudio #".$this->informacion["Id"];
-                    $movimiento->author=Auth::user()->id;
+                        $movimiento->save();
+                    }
 
-                    $movimiento->save();
 
 
     
