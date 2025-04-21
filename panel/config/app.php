@@ -131,7 +131,7 @@ return [
     |
     */
     'API_URL_DEV' => 'https://robbocock.online:8443/ApiIntegration/resources/restapi/transaction',
-    'API_URL_PROD' => 'https://robbocock.online:8443/ApiIntegration/resources/restapi/transaction'
+    'API_URL_PROD' => 'https://clientcontrol.robbocock.com:8443/ApiIntegration/resources/restapi/transaction'
     
 
 ];

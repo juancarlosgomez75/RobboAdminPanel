@@ -29,6 +29,7 @@
     
     </style>
 <div>
+    {{json_encode($Maquina)}}
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{route("estudio.ver",$Maquina["ID"])}}" class="text-secondary">Estudio</a></li>
@@ -70,6 +71,77 @@
                     
                 </div>
                 <div class="col-md-12 mb-3">
+                    <h5 class="card-title">Historial de autoclean</h5>
+                    <p class="card-text">Aquí encontrarás los últimos 3 registros de Autoclean, almacenados en la base de datos.</p>
+                </div>
+                <div class="col-md-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Fecha y hora</th>
+                                <th scope="col">Paso 1</th>
+                                <th scope="col">Paso 2</th>
+                                <th scope="col">Paso 3</th>
+                                <th scope="col">Paso 4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(!empty($Maquina["AutoClean"]))
+                            @foreach ($Maquina["AutoClean"] as $autoclean)
+                            <tr>
+                                <td>{{$autoclean["fecha"]}}</td>
+                                <td>
+                                    @if($autoclean["paso1Fin"] != "NO EJECUTADO")
+                                        <span class="badge bg-success"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="{{$autoclean["paso1Fin"]}}">Completado</span>
+                                    @else
+                                        <span class="badge bg-danger">No completado</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($autoclean["paso2Fin"] != "NO EJECUTADO")
+                                        <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="{{$autoclean["paso2Fin"]}}">Completado</span>
+                                    @else
+                                        <span class="badge bg-danger">No completado</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($autoclean["paso3Fin"] != "NO EJECUTADO")
+                                        <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="{{$autoclean["paso3Fin"]}}">Completado</span>
+                                    @else
+                                        <span class="badge bg-danger">No completado</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($autoclean["paso4Fin"] != "NO EJECUTADO")
+                                        <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="{{$autoclean["paso4Fin"]}}">Completado</span>
+                                    @else
+                                        <span class="badge bg-danger">No completado</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="5">No se han registrado autoclean</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <div class="col-md-12 mb-3">
+
+                </div>
+                <div class="col-md-12 mb-3">
                     <h5 class="card-title">Movimientos de la máquina</h5>
                     <p class="card-text">Estos son los movimientos registrados para esta máquina</p>
                 </div>
@@ -105,4 +177,8 @@
 
 </div>
 @livewire('alerts')
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
 @endsection

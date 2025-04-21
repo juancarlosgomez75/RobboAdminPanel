@@ -14,11 +14,14 @@ class ApiSelect extends Component
         // Por ejemplo, emitir un evento o cambiar una configuración
         if($value=="development"){
             session(['API_used' => 'development']);
-            $this->dispatch('mostrarToast', 'Cambiar entorno', 'Ahora estás trabajando en desarrollo');
+            $this->dispatch('mostrarToast', 'Cambiar entorno', 'Ahora trabajarás en desarrollo, espera un momento por favor mientras se actualiza todo');
+            $this->dispatch('refreshPage'); // lanza la señal
         }
         elseif($value== 'production'){
             session(['API_used' => 'production']);
-            $this->dispatch('mostrarToast', 'Cambiar entorno', 'Ahora estás trabajando en producción');
+            $this->dispatch('mostrarToast', 'Cambiar entorno', 'Ahora trabajarás en producción, espera un momento por favor mientras se actualiza todo');
+                // lógica de guardado
+            $this->dispatch('refreshPage'); // lanza la señal
         }
     }
 

@@ -303,6 +303,15 @@ body {
             });
         });
     </script>
+    @livewireScripts
+
+    <script>
+        Livewire.on('refreshPage', () => {
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000); // Espera 4 segundos antes de recargar
+        });
+    </script>
 @stack('scripts')
 </body>
 </html>
