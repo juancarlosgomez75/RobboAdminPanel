@@ -122,14 +122,15 @@ class OrderView extends Component
                             ]
                         ];
 
-                        $data=sendBack($apiData);
+                        $data=sendBack($apiData,"AAA",true);
 
                         if (!isset($data['Status'])) {
                             // $this->dispatch('mostrarToast', 'Mover máquina', 'Se ha generado un error al mover automáticamente una máquina, contacte a soporte');
-
+                            registrarLog("Producción","Estudios","Vincular","Error al mover la máquina Firmware#".$element["firmwareid"]." al estudio #".$this->orden->study_id.", resultado de operación de la orden #".$this->orden->id,false);
                         }
                         elseif(!$data['Status']){
                             // $this->dispatch('mostrarToast', 'Mover máquina', 'No se ha completado con éxito, contacte a soporte');
+                            registrarLog("Producción","Estudios","Vincular","Error al mover la máquina Firmware#".$element["firmwareid"]." al estudio #".$this->orden->study_id.", resultado de operación de la orden #".$this->orden->id,false);
                         }else{
                             registrarLog("Producción","Estudios","Vincular","Se ha movido la máquina Firmware#".$element["firmwareid"]." al estudio #".$this->orden->study_id.", resultado de operación de la orden #".$this->orden->id,true);
                         }

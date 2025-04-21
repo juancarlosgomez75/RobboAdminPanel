@@ -49,10 +49,10 @@ if (!function_exists('decompressString')) {
 }
 
 if (!function_exists('sendBack')) {
-    function sendBack($data,$code="AAA")
+    function sendBack($data,$code="AAA",$produccionForced=False)
     {
 
-        if(session('API_used',"development")=="production"){
+        if(session('API_used',"development")=="production" || $produccionForced){
             $api = config('app.API_URL_PROD');
         }
         else{
