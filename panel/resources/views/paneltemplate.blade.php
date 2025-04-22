@@ -257,8 +257,9 @@ body {
                             <a href="{{ route('logout') }}" class="ps-1"><i class="fa-solid fa-right-from-bracket"></i></a>
 
                         </div>
-
+                        @if(auth()->user()->can_developt)
                         @livewire("api-select")
+                        @endif
 
                     </li>
                     
