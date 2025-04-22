@@ -15,7 +15,7 @@ class Viewedit extends Component
 
     //Inicializo la información de la modelo
     public $drivername;
-    public $usecustomname=0;
+    public $usecustomname;
     public $customname="";
     public $estudioactual=0;
     public $manageractual=0;
@@ -115,9 +115,10 @@ class Viewedit extends Component
                     "ModelData"=>[
                         "ModelId"=>$this->ModelInformation["ModelId"],
                         "ModelUserName"=>$this->drivername,
+                        "ModelActive"=>$this->active,
                         "ModelPersonalCm"=>($this->usecustomname == "1"),
                         "ModelPersonalCmName"=>$this->customname,
-                        "ModelPages"=>$this->paginas
+                        "ModelPages"=>$this->paginas,
                     ],
                     "UserData"=>[
                         "Id"=>$this->manageractual
@@ -155,6 +156,100 @@ class Viewedit extends Component
             }
 
             $this->dispatch('mostrarToast', 'Editar modelo', "Ha ocurrido un error durante la operación, contacte a soporte");
+        }
+    }
+
+    public function activarUsuario(){
+        if($this->validar()){
+
+            //Cargo la data
+            $enviar=[
+                'Branch' => 'Server',
+                'Service' => 'SelfModels',
+                'Action' => 'Edit',
+                "Data"=>[
+                    "UserId"=>"1",
+                    "ModelData"=>[
+                        "ModelId"=>$this->ModelInformation["ModelId"],
+                        "ModelUserName"=>$this->drivername,
+                        "ModelActive"=>true,
+                        "ModelPersonalCm"=>($this->usecustomname == "1"),
+                        "ModelPersonalCmName"=>$this->customname,
+                        "ModelPages"=>$this->paginas,
+                    ],
+                    "UserData"=>[
+                        "Id"=>$this->manageractual
+                    ]
+                ],
+            ];
+
+            $data=sendBack($enviar);
+
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    $this->dispatch('mostrarToast', 'Activar modelo', "Se ha activado este modelo de forma correcta");
+                    $this->editing=false;
+                    
+                    registrarLog("Producción","Modelos","Activar","Se ha activado al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),true);
+                    $this->active=true;
+                    return;
+
+                }else{
+
+                    $this->dispatch('mostrarToast', 'Activar modelo', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
+                    registrarLog("Producción","Modelos","Activar","Se ha intentado activar al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),false);
+                    return;
+                }
+            }
+
+            $this->dispatch('mostrarToast', 'Activar modelo', "Ha ocurrido un error durante la operación, contacte a soporte");
+        }
+    }
+
+    public function desactivarUsuario(){
+        if($this->validar()){
+
+            //Cargo la data
+            $enviar=[
+                'Branch' => 'Server',
+                'Service' => 'SelfModels',
+                'Action' => 'Edit',
+                "Data"=>[
+                    "UserId"=>"1",
+                    "ModelData"=>[
+                        "ModelId"=>$this->ModelInformation["ModelId"],
+                        "ModelUserName"=>$this->drivername,
+                        "ModelActive"=>false,
+                        "ModelPersonalCm"=>($this->usecustomname == "1"),
+                        "ModelPersonalCmName"=>$this->customname,
+                        "ModelPages"=>$this->paginas,
+                    ],
+                    "UserData"=>[
+                        "Id"=>$this->manageractual
+                    ]
+                ],
+            ];
+
+            $data=sendBack($enviar);
+
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    $this->dispatch('mostrarToast', 'Desactivar modelo', "Se ha desactivado este modelo de forma correcta");
+                    $this->editing=false;
+                    
+                    registrarLog("Producción","Modelos","Desactivar","Se ha desactivado al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),true);
+                    $this->active=false;
+                    return;
+
+                }else{
+
+                    $this->dispatch('mostrarToast', 'Desactivar modelo', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
+                    registrarLog("Producción","Modelos","Desactivar","Se ha intentado desactivar al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),false);
+                    return;
+                }
+            }
+
+            $this->dispatch('mostrarToast', 'Desactivar modelo', "Ha ocurrido un error durante la operación, contacte a soporte");
         }
     }
 
@@ -332,7 +427,7 @@ class Viewedit extends Component
         //Cargo la información de la modelo
         $this->drivername = $ModelInformation["ModelUserName"];
 
-        $this->usecustomname = ($ModelInformation["ModelPersonalCm"] ?? false) ? 1 : 0;
+        $this->usecustomname = ($ModelInformation["ModelPersonalCm"] ?? false) ? "1" : "0";
         $this->customname = $ModelInformation["ModelPersonalCmName"]??"";
         $this->active= $ModelInformation["ModelActive"];
         $this->estudioactual = $StudyInformation["Id"];

@@ -1,5 +1,5 @@
 <div>
-
+    {{-- {{json_encode($ModelInformation)}} --}}
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{route("estudio.ver",$estudioactual)}}" class="text-secondary">Estudio</a></li>
@@ -158,15 +158,15 @@
                     </button>
                     @endif
 
-                    {{-- @if($activo)
+                    @if($active)
                     <button type="button" class="btn btn-outline-danger ms-2" wire:click="desactivarUsuario()">
-                        Desactivar usuario
+                        Desactivar modelo
                     </button>
                     @else
                     <button type="button" class="btn btn-outline-success ms-2" wire:click="activarUsuario()">
-                        Activar usuario
+                        Activar modelo
                     </button>
-                    @endif --}}
+                    @endif
                 </div>
 
             </div>
