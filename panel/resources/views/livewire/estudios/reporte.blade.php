@@ -101,7 +101,76 @@
                                 </h2>
                                 <div id="collapse{{ $index }}" class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}" aria-labelledby="heading{{ $index }}" data-bs-parent="#accordionPanelsStayOpenExample">
                                     <div class="accordion-body">
-                                        {!! $item['contenido']??"No" !!}
+                                        <div class="row">
+                                            <p><b>Información de acciones:</b></p>
+
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Acción</th>
+                                                        <th scope="col">Cantidad</th>
+                                                        <th scope="col">Tiempo (Minutos) </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item["ResultsReport"]["Acciones"] as $accion=>$info)
+                                                    <tr>
+                                                        <td>{{$accion}}</td>
+                                                        <td>{{$info["Cantidad"]}}</td>
+                                                        <td>{{$info["Tiempo"]/60}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            <br>
+                                            <p><b>Información de páginas:</b></p>
+
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Página</th>
+                                                        <th scope="col">Tokens</th>
+                                                        <th scope="col">Tipers</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item["ResultsReport"]["Paginas"] as $pagina=>$info)
+                                                    <tr>
+                                                        <td>{{$pagina}}</td>
+                                                        <td>{{$info["Tokens"]}}</td>
+                                                        <td>{{count($info["Tipers"])}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            <br>
+                                            <p><b>Información de modelos:</b></p>
+
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Modelo</th>
+                                                        <th scope="col">Tokens</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item["ResultsReport"]["Modelos"] as $modelo=>$info)
+                                                    <tr>
+                                                        <td>{{$modelo}}</td>
+                                                        <td>{{$info["Tokens"]}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                    <tr>
+                                                        <th scope="row">Total</th>
+                                                        <td>{{$item["ResultsReport"]["Tokens"]}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+
+
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
