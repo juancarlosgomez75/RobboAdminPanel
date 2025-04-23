@@ -299,4 +299,49 @@ class StudyController extends Controller
         return "Error";
     }
 
+    public function report($idestudio){
+
+        // $dataStudio = $responseStudio->json();
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'StudyInfo',
+            'Data' => ["UserId" => "1"],
+            "DataStudy"=>["Id"=>$idestudio]
+        ];
+        $dataStudio=sendBack($data_send);
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => "GeneralParams",
+            'Action' => "GeneralParams",
+            'Data' => ["UserId" => "1"]
+        ];
+        $generalinformation=sendBack($data_send);
+
+        //Si se recibe la informacion
+        if (isset($dataStudio['Status']) && isset($generalinformation["Status"])){
+            //Analizo si el status es correcto
+            if($dataStudio['Status'] && $generalinformation["Status"]){
+
+                // Mapear ciudades con su país
+                $cityMap = [];
+                if (isset($generalinformation['CountryList'])) {
+                    foreach ($generalinformation['CountryList'] as $country) {
+                        foreach ($country['Cities'] as $city) {
+                            $cityMap[] = ["Id"=>$city["Id"],"Name"=>$city['CityName'] . ', ' . $country['CountryName']];
+                        }
+                    }
+                }
+
+
+                return view("estudios.reporte",["Informacion"=> $dataStudio["DataStudy"],"Managers"=> $dataStudio["ListUserData"],"Maquinas"=> $dataStudio["Data"]["Machines"],"Ciudades"=>$cityMap]);
+            }
+        }
+
+
+        return "Error";
+    }
+
 }
+

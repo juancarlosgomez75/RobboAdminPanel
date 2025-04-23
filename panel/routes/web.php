@@ -34,6 +34,8 @@ Route::middleware(['auth','checkuserstatus'])->controller(StudyController::class
     Route::get('/panel/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
     
     Route::get('/panel/estudio/{idestudio}', 'viewedit')->name('estudio.ver');
+
+    Route::get('/panel/reporte/{idestudio}', 'report')->name('estudio.reporte');
 });
 
 Route::middleware(['auth','checkuserstatus'])->controller(MachineController::class)->group(function(){

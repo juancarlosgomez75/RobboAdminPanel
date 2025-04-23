@@ -220,6 +220,7 @@ body {
                         <ul class="submenu">
                             <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
                             <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
+                            <li><a href="{{ route('maquinas.index') }}">Reportes</a></li>
                         </ul>
                     </li>
                     @endif
