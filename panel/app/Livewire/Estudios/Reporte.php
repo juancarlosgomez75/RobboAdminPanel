@@ -18,6 +18,11 @@ class Reporte extends Component
     //Variables del registro
     public $fechaInicio;
     public $fechaFin;
+    public $fechaHoy;
+
+    public $estudiosSeleccionados=[];
+    public $indexSeleccionados=[];
+    public $estudioActual="0";
 
     public $ejecutandoReporte=false;
     public $reporteListo=false;
@@ -30,9 +35,30 @@ class Reporte extends Component
         usort($this->informacion, function ($a, $b) {
             return strcmp($a["StudyName"], $b["StudyName"]);
         });
+
+        $this->fechaHoy=Carbon::today()->toDateString();
     }
 
-    public function continuarReporte(){
+    public function adicionarEstudio(){
+        //Analizo que no sea cero o que ya esté
+        if($this->estudioActual<=0 | in_array($this->estudioActual-1,$this->indexSeleccionados) | $this->estudioActual>count($this->informacion)){
+            $this->dispatch('mostrarToast', 'Continuar reporte', "El estudio no es válido, está vacío o ya fue añadido");
+            return;
+        }
+
+        $this->indexSeleccionados[]=$this->estudioActual-1;
+        $this->estudioActual="0";
+    }
+
+    public function quitarEstudio($index){
+        // Eliminar el índice del array
+        unset($this->indexSeleccionados[$index]);
+
+        // Reindexar el array para reorganizar los índices
+        $this->indexSeleccionados = array_values($this->indexSeleccionados);
+    }
+
+    public function completarReporte(){
         //Valido las fechas
         if (!$this->fechaInicio || !strtotime($this->fechaInicio)) {
             $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de inicio no es válida o está vacía");
@@ -47,8 +73,13 @@ class Reporte extends Component
         $inicio = Carbon::parse($this->fechaInicio);
         $fin = Carbon::parse($this->fechaFin);
     
+        if ($fin->greaterThan(Carbon::now())) {
+            $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de fin debe ser posterior a la fecha de hoy");
+            return;
+        }
+
         if ($inicio->gt($fin)) {
-            $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de fin debe ser pstterior a la fecha de inicio");
+            $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de fin debe ser posterior a la fecha de inicio");
             return;
         }
     
@@ -61,6 +92,29 @@ class Reporte extends Component
             $this->dispatch('mostrarToast', 'Continuar reporte', "Aún no ha seleccionado el tipo de reporte o no es una opción válida");
             return;
         }
+
+        //Ahora, si son todos, continuo, sino, digo que adicione los estudios
+        if($this->tipoReporte =="1"){
+            //Cargo todos los estudios a los que seleccioné
+            $this->estudiosSeleccionados=$this->informacion;
+
+            //Indico que inicie el reporte
+            $this->generarReporte();
+        }else if($this->tipoReporte =="2"){
+            if(empty($this->indexSeleccionados)){
+                $this->dispatch('mostrarToast', 'Continuar reporte', "Aún no ha seleccionado estudios para generar el reporte");
+                return;
+            }
+
+            //Ahora cargo todo entonces
+            $this->estudiosSeleccionados=[];
+            foreach($this->indexSeleccionados as $indices){
+                $this->estudiosSeleccionados[]=$this->informacion[$indices];
+            }
+
+            //Indico que inicie el reporte
+            $this->generarReporte();
+        }
     }
 
     public function generarReporte(){
@@ -68,8 +122,19 @@ class Reporte extends Component
         $this->ejecutandoReporte=True;
         $this->reporteListo=False;
 
+        //Cargo las fechas
+        $fechaInicioFormateada = Carbon::parse($this->fechaInicio)
+        ->setTime(0, 0)
+        ->format('Y-m-d H:i');
+
+        $fechaFinFormateada = Carbon::parse($this->fechaFin)
+        ->addDay()         // suma un día
+        ->setTime(0, 0)    // asegura que la hora sea 00:00
+        ->format('Y-m-d H:i');
+
+
         //Mando la orden para que se corra el job
-        ProcesarConsultaReportes::dispatch(Auth::user()->id,$this->informacion);
+        ProcesarConsultaReportes::dispatch(Auth::user()->id,$this->estudiosSeleccionados,$fechaInicioFormateada,$fechaFinFormateada);
 
 
     }

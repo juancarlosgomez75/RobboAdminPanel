@@ -21,10 +21,12 @@ class ProcesarConsultaReportes implements ShouldQueue
     public $userId;
 
     public $tipo;
-    public function __construct($userId,$studies)
+    public function __construct($userId,$studies,$fechaInicio,$fechaFin)
     {
         $this->userId = $userId;
         $this->studies=$studies;
+        $this->fechaInicio=$fechaInicio;
+        $this->fechaFin=$fechaFin;
 
         Cache::forget("reportProgress_".$userId);
     }
@@ -54,8 +56,8 @@ class ProcesarConsultaReportes implements ShouldQueue
                 'Data' => [
                     "UserId" => "1",
                     "ModelData"=>[
-                        "InitialDate"=>"2024-04-01 00:00",
-                        "FinalDate"=>"2024-04-16 00:00"
+                        "InitialDate"=>$this->fechaInicio,
+                        "FinalDate"=>$this->fechaFin
                     ],
                     "UserData"=>[
                         "Id"=>$study["Id"]
