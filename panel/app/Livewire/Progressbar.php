@@ -18,6 +18,11 @@ class Progressbar extends Component
     {
         $this->progreso = Cache::get("reportProgress_" . $this->userId, 0);
         $this->resultados = Cache::get("reportResult_" . $this->userId, 0);
+
+        if($this->progreso==100){
+            $this->dispatch('progressDone');
+        }
+
         return view('livewire.progressbar');
     }
 }

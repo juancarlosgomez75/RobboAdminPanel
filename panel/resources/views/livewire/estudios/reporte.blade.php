@@ -7,6 +7,8 @@
                     <h4 class="card-title">Generación de reportes</h4>
                     <p class="card-text">Desde aquí podrás generar los reportes que desees. Para iniciar, por favor ingresa un rango de fechas y selecciona el estudio.</p>
                 </div>
+
+                @if(!$ejecutandoReporte)
                 <div class="col-md-12 mb-3">
                     <p class="card-text">Por favor completa la información y luego presiona en <b>Generar Reporte</b>. Por seguridad sólo se podrá hacer uso de un intervalo de 15 días.</p>
                 </div>
@@ -33,10 +35,23 @@
                 </div>
                 <div class="col-md-2">
                     <br>
-                    <button type="button" class="btn btn-primary" wire:click="generarReporte()">Generar reporte</button>
+                    <button type=("button" class="btn btn-primary" wire:click="generarReporte()">Generar reporte</button>
                 </div>
+                @endif
 
-                @livewire("progressbar", ["userId" => Auth::user()->id])
+                @if($ejecutandoReporte)
+                <div class="col-md-12">
+                    <label>Generando reporte...</label>
+                    @livewire("progressbar", ["userId" => Auth::user()->id])
+                </div>
+                @endif
+                
+                @if($reporteListo)
+                <div class="col-md-2">
+                    reporte listillo
+                </div>
+                @endif
+
             </div>
         </div>
     </div>

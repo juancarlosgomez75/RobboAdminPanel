@@ -18,6 +18,11 @@ class Reporte extends Component
     public $fechaInicio;
     public $fechaFin;
 
+    public $ejecutandoReporte=false;
+    public $reporteListo=false;
+
+    protected $listeners = ['progressDone'];
+
     public function mount($information){
         $this->informacion=$information;
 
@@ -27,11 +32,24 @@ class Reporte extends Component
     }
 
     public function generarReporte(){
+        //Indico que lo esoy ejecuttando
+        $this->ejecutandoReporte=True;
+        $this->reporteListo=False;
 
+        //Mando la orden para que se corra el job
         ProcesarConsultaReportes::dispatch(Auth::user()->id,$this->informacion);
-        $this->dispatch('mostrarToast', 'Activar job', "Iniciado el job");
 
 
+    }
+
+    public function progressDone(){
+        //Si estaba ejecutando el reporte
+        if($this->ejecutandoReporte){
+            $this->ejecutandoReporte=False;
+            $this->reporteListo=True;
+
+            $this->dispatch('mostrarToast', 'Generar reporte', "Reporte terminado");
+        }
     }
 
     public function render()
