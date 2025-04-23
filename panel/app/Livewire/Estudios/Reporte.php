@@ -149,6 +149,7 @@ class Reporte extends Component
             $this->dispatch('mostrarToast', 'Generar reporte', "Reporte terminado");
 
             $this->resultado= Cache::get("reportResult_" . Auth::user()->id);
+            Cache::forget("reportResult_" . Auth::user()->id);
         }
     }
 
