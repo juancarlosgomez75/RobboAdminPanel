@@ -78,3 +78,21 @@ if (!function_exists('sendBack')) {
         return $data;
     }
 }
+
+if (!function_exists('sendBackPython')) {
+    function sendBackPython($data)
+    {
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '.config('app.API_PYTHON_REPORTES_KEY')
+        ])->withOptions([
+            'verify' => false // Desactiva la verificación SSL
+        ])->post(config('app.API_PYTHON_REPORTES'), $data);
+
+        // Convertir el JSON descomprimido a array
+        $data  = json_decode($response->body(), true);
+
+
+        return $data;
+    }
+}

@@ -131,7 +131,9 @@ return [
     |
     */
     'API_URL_DEV' => 'https://robbocock.online:8443/ApiIntegration/resources/restapi/transaction',
-    'API_URL_PROD' => 'https://clientcontrol.robbocock.com:8443/ApiIntegration/resources/restapi/transaction'
+    'API_URL_PROD' => 'https://clientcontrol.robbocock.com:8443/ApiIntegration/resources/restapi/transaction',
+    'API_PYTHON_REPORTES'=>'http://127.0.0.1:5000/api/reportes',
+    'API_PYTHON_REPORTES_KEY'=>'TUJ5eK4gvLK33YibLjzt'
     
 
 ];

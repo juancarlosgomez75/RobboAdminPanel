@@ -299,17 +299,21 @@ class StudyController extends Controller
         return "Error";
     }
 
-    public function report($idestudio){
+    public function report(){
 
-        // $dataStudio = $responseStudio->json();
-        $data_send=[
-            'Branch' => 'Server',
-            'Service' => 'PlatformUser',
-            'Action' => 'StudyInfo',
-            'Data' => ["UserId" => "1"],
-            "DataStudy"=>["Id"=>$idestudio]
-        ];
-        $dataStudio=sendBack($data_send);
+        // //Genero la petición para obtener la información
+        // $information = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => "GeneralParams",
+        //     'Action' => "GeneralParams",
+        //     'Data' => ["UserId" => "1"]
+        // ]);
+
+        // $generalinformation=$information->json();
 
         $data_send=[
             'Branch' => 'Server',
@@ -318,29 +322,59 @@ class StudyController extends Controller
             'Data' => ["UserId" => "1"]
         ];
         $generalinformation=sendBack($data_send);
+        
+        // //Genero la petición de informacion
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'AAAA'
+        // ])->withOptions([
+        //     'verify' => false // Desactiva la verificación SSL
+        // ])->post(config('app.API_URL'), [
+        //     'Branch' => 'Server',
+        //     'Service' => 'PlatformUser',
+        //     'Action' => 'StudyList',
+        //     'Data' => ["UserId" => "1"]
+        // ]);
 
-        //Si se recibe la informacion
-        if (isset($dataStudio['Status']) && isset($generalinformation["Status"])){
-            //Analizo si el status es correcto
-            if($dataStudio['Status'] && $generalinformation["Status"]){
+        // $data = $response->json();
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'StudyList',
+            'Data' => ["UserId" => "1"]
+        ];
+        $data=sendBack($data_send);
+        
+
+        //Analizo si es válido lo que necesito
+        if (isset($data['Status']) && isset($generalinformation['Status'])) {
+            //Analizo si el status es true
+            if($data["Status"] && $generalinformation["Status"]){
 
                 // Mapear ciudades con su país
                 $cityMap = [];
                 if (isset($generalinformation['CountryList'])) {
                     foreach ($generalinformation['CountryList'] as $country) {
                         foreach ($country['Cities'] as $city) {
-                            $cityMap[] = ["Id"=>$city["Id"],"Name"=>$city['CityName'] . ', ' . $country['CountryName']];
+                            $cityMap[$city['Id']] = $city['CityName'] . ', ' . $country['CountryName'];
                         }
                     }
                 }
 
-
-                return view("estudios.reporte",["Informacion"=> $dataStudio["DataStudy"],"Managers"=> $dataStudio["ListUserData"],"Maquinas"=> $dataStudio["Data"]["Machines"],"Ciudades"=>$cityMap]);
+                // Agregar el campo City en ListStudyData
+                if (isset($data['ListStudyData'])) {
+                    foreach ($data['ListStudyData'] as &$study) {
+                        $study['City'] = $cityMap[$study['CityId']] ?? 'Desconocido';
+                    }
+                }
+                return view("estudios.reporte",["information"=>$data["ListStudyData"]]);
             }
+            return "Error de status";
+            
         }
-
-
-        return "Error";
+        
+        
+        return "Error general";
     }
 
 }

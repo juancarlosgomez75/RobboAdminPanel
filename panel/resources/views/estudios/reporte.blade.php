@@ -3,6 +3,6 @@
 
 </style>
 @section("contenido")
-@livewire("estudios.reporte",compact("Informacion","Managers","Maquinas","Ciudades"))
+@livewire("estudios.reporte",compact("information"))
 
 @endsection
