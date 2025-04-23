@@ -5,12 +5,13 @@ namespace App\Livewire\Estudios;
 use App\Jobs\ProcesarConsultaReportes;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class Reporte extends Component
 {
     public $informacion;
 
-    public $estudioSeleccionado;
+    public $tipoReporte="0";
     public $resultadoObtenido=false;
     public $resultado;
 
@@ -29,6 +30,37 @@ class Reporte extends Component
         usort($this->informacion, function ($a, $b) {
             return strcmp($a["StudyName"], $b["StudyName"]);
         });
+    }
+
+    public function continuarReporte(){
+        //Valido las fechas
+        if (!$this->fechaInicio || !strtotime($this->fechaInicio)) {
+            $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de inicio no es válida o está vacía");
+            return;
+        }
+    
+        if (!$this->fechaFin || !strtotime($this->fechaFin)) {
+            $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de fin no es válida o está vacía");
+            return;
+        }
+    
+        $inicio = Carbon::parse($this->fechaInicio);
+        $fin = Carbon::parse($this->fechaFin);
+    
+        if ($inicio->gt($fin)) {
+            $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de fin debe ser pstterior a la fecha de inicio");
+            return;
+        }
+    
+        if ($inicio->diffInDays($fin) > 15) {
+            $this->dispatch('mostrarToast', 'Continuar reporte', "No puede haber más de 15 días entre fechas");
+            return;
+        }
+
+        if($this->tipoReporte !="1" & $this->tipoReporte !="2"){
+            $this->dispatch('mostrarToast', 'Continuar reporte', "Aún no ha seleccionado el tipo de reporte o no es una opción válida");
+            return;
+        }
     }
 
     public function generarReporte(){
