@@ -8,16 +8,16 @@ use Illuminate\Support\Facades\Cache;
 class Progressbar extends Component
 {
     public $userId;
+    public $functionId;
     public $progreso = 0;
-    public $resultados="";
 
-    public function mount($userId){
+    public function mount($userId,$functionId){
         $this->userId=$userId;
+        $this->functionId=$functionId;
     }
     public function render()
     {
-        $this->progreso = Cache::get("reportProgress_" . $this->userId, 0);
-        $this->resultados = Cache::get("reportResult_" . $this->userId, 0);
+        $this->progreso = Cache::get($this->functionId."_" . $this->userId, 0);
 
         if($this->progreso==100){
             $this->dispatch('progressDone');

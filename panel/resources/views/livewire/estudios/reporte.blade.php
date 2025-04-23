@@ -42,7 +42,7 @@
                 @if($ejecutandoReporte)
                 <div class="col-md-12">
                     <label>Generando reporte...</label>
-                    @livewire("progressbar", ["userId" => Auth::user()->id])
+                    @livewire("progressbar", ["userId" => Auth::user()->id,"functionId"=>"reportProgress"])
                 </div>
                 @endif
                 

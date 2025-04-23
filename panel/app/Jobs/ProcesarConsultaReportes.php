@@ -166,10 +166,10 @@ class ProcesarConsultaReportes implements ShouldQueue
 
             // Actualiza la barra de progreso (ej: en caché)
             Cache::put("reportProgress_".$this->userId, round((($index + 1) / $total) * 100), 600);
-            Cache::put("reportResult_".$this->userId,  $this->studies, 600);
 
         }
 
+        Cache::put("reportResult_".$this->userId,  $this->studies, 600);
         // Cache::forget("reportProgress_".$this->userId);
 
     }
