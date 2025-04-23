@@ -6,6 +6,7 @@ use App\Jobs\ProcesarConsultaReportes;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class Reporte extends Component
 {
@@ -146,6 +147,8 @@ class Reporte extends Component
             $this->reporteListo=True;
 
             $this->dispatch('mostrarToast', 'Generar reporte', "Reporte terminado");
+
+            $this->resultado= Cache::get("reportResult_" . Auth::user()->id);
         }
     }
 
