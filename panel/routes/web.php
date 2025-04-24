@@ -78,6 +78,9 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->contro
 
 Route::get('/generar-pdf', [PdfController::class, 'generatePdf']);
 
+Route::post('/reporte-pdf', [PdfController::class, 'generateReport'])->name('reporte.pdf');
+
+
 // Route::view('dashboard', 'dashboard')
 //     ->middleware(['auth', 'verified'])
 //     ->name('dashboard');

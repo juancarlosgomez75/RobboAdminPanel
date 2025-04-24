@@ -19,4 +19,18 @@ class PdfController extends Controller
         // return $pdf->download('documento.pdf');
         return $pdf->stream('documento.pdf');
     }
+
+    public function generateReport(Request $request)
+    {
+        // Accede a los datos enviados por POST
+        $title = $request->input('title');
+        $otherData = $request->input('otherData'); // Si tienes más datos
+    
+        // Genera el PDF con los datos
+        $pdf = Pdf::loadView('report_template', compact('title', 'otherData'));
+    
+        return $pdf->stream('reporte.pdf'); // Muestra el PDF en el navegador
+    }
+
+
 }

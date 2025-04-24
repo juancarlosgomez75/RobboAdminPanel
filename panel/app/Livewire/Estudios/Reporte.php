@@ -166,6 +166,17 @@ class Reporte extends Component
         }
     }
 
+    public function verReporte($nombre)
+    {
+
+        $params = http_build_query([
+            'nombre' => "11111",
+        ]);
+
+        $this->dispatch('abrir-reporte', ['url' => route('reporte.pdf', ['title' => 'Título del reporte'])]);
+
+    }
+
     public function render()
     {
         return view('livewire.estudios.reporte');
