@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\PanelController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\StudyController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -74,6 +75,8 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->contro
     Route::get('/panel/ordenes/crear', 'order_create')->name('ordenes.create');
     Route::get('/panel/orden/{idorden}', 'order_view')->name('orden.ver');
 });
+
+Route::get('/generar-pdf', [PdfController::class, 'generatePdf']);
 
 // Route::view('dashboard', 'dashboard')
 //     ->middleware(['auth', 'verified'])
