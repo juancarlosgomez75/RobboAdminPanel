@@ -225,7 +225,7 @@ class Reporte extends Component
                 return;
             }
         
-            Mail::to("daenloye@gmail.com")->send(new EnviarReporte($datos, $pdfResponse ));
+            Mail::to("daenloye@gmail.com")->send(new EnviarReporte("Reporte prueba", $pdfResponse,'administracion@coolsofttechnology.com' ));
         
             $this->dispatch('mostrarToast', 'Continuar reporte', "Mail enviado");
 

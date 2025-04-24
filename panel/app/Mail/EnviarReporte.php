@@ -14,22 +14,18 @@ class EnviarReporte extends Mailable
     use Queueable, SerializesModels;
 
     public $reason;
+    public $replyMail;
     public $pdfContent;
 
-    public function __construct($reason, $pdfContent)
+    public function __construct($reason, $pdfContent,$replyMail)
     {
         $this->reason = $reason;
         $this->pdfContent = $pdfContent;
+        $this->replyMail = $replyMail;
     }
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Enviar Reporte',
-        );
-    }
 
     /**
      * Get the message content definition.
@@ -57,6 +53,6 @@ class EnviarReporte extends Mailable
             ->markdown('emails.reporte')
             ->attachData($this->pdfContent, 'Reporte.pdf', [
                 'mime' => 'application/pdf',
-            ]);
+            ])->replyTo($this->replyMail, 'Administración Coolsoft Technology SAS');
     }
 }
