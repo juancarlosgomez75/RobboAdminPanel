@@ -41,13 +41,13 @@
             </td>
             <td style="text-align: center">
                 <p>
-                    2024/04/24
+                    {{$fechaActual}}
                     <br>
                     <b style="color:#c84b46; font-size: 25px; padding-top: 50px;">
                         REPORTE GENERAL
                     </b>
                     <br>
-                    <b>Periodo: </b> Abril 01 - Abril 15
+                    <b>Periodo: </b> {{ucfirst($fechaInicio)}} - {{ucfirst($fechaFin)}}
                 </p>
             </td>
         </tr>

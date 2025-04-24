@@ -161,6 +161,8 @@ class Reporte extends Component
                     $valor = $elemento["ResultsReport"]['Paginas']['SIMULADOR'];
                     unset($this->resultado[$key]["ResultsReport"]['Paginas']['SIMULADOR']);     // Eliminar
                     $this->resultado[$key]["ResultsReport"]['Paginas']['SIMULADOR'] = $valor;   // Reinsertar al final
+                    $this->resultado[$key]["FechaInicio"]=$this->fechaInicio;
+                    $this->resultado[$key]["FechaFin"]=$this->fechaFin;
                 }
             }
         }
