@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CorreoDePrueba;
+
 class Reporte extends Component
 {
     public $informacion;
@@ -206,6 +209,12 @@ class Reporte extends Component
 
         
 
+    }
+
+    public function enviarCorreo(){
+        Mail::to('daenloye@gmail.com')->send(new CorreoDePrueba());
+
+        return 'Correo de prueba enviado';
     }
 
     public function render()
