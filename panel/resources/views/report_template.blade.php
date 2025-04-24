@@ -259,8 +259,50 @@
             </tr>
         </tbody>
     </table>
+    
+    @if($data["Renta"]=="Compartida")
+    <br><br>
+    <b>Información de cobros por acciones por modelos:</b><br>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th scope="col">Modelo</th>
+                <th scope="col">MOV</th>
+                <th scope="col">CONTROL</th>
+                <th scope="col">CUM</th>
+                <th scope="col">SCUM</th>
+                <th scope="col">XCUM</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($data["CobrosModelos"] as $modelo=>$info)
+            <tr>
+                <td>{{$modelo}}</td>
+                <td>{{'$' . number_format($info["MOV"], 2)}}</td>
+                <td>{{'$' . number_format($info["CONTROL"], 2)}}</td>
+                <td>{{'$' . number_format($info["CUM"], 2)}}</td>
+                <td>{{'$' . number_format($info["SCUM"], 2)}}</td>
+                <td>{{'$' . number_format($info["XCUM"], 2)}}</td>
+                <td>{{'$' . number_format($info["Total"], 2)}}</td>
+            </tr>
+            @endforeach
+            {{--MOV--}}
+            <tr>
+                <td><b>Total</b></td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["MOV"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["CONTROL"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["CUM"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["SCUM"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["XCUM"], 2)}}</td>
+                <td><b>{{'$' . number_format($data["CobrosTotales"]["Total"], 2)}}</b></td>
+            </tr>
+        </tbody>
+
+    </table>
 
 
+    @endif
     <div class="page-break"></div>
 
     <b style="color:#c84b46; font-size: 16px;">Términos y condiciones:</b><br>
