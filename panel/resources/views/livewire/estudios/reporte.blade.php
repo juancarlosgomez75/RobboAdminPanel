@@ -5,12 +5,12 @@
             <div class="row">
                 <div class="col-md-12 mb-3">
                     <h4 class="card-title">Generación de reportes</h4>
-                    <p class="card-text">Desde aquí podrás generar los reportes que desees. Para iniciar, por favor ingresa un rango de fechas y selecciona el estudio.</p>
+                    <p class="card-text">Desde aquí podrás generar los reportes que desees. Sólo se mostrarán los estudios que posean registros en el rango de tiempo ingresado.</p>
                 </div>
 
                 @if(!$ejecutandoReporte & !$reporteListo)
                 <div class="col-md-12 mb-3">
-                    <p class="card-text">Por favor completa la información y luego presiona en <b>Generar Reporte</b>. Por seguridad sólo se podrá hacer uso de un intervalo de 15 días.</p>
+                    <p class="card-text">Para iniciar, por favor ingresa un rango de fechas y selecciona el estudio. Por favor completa la información y luego presiona en <b>Generar Reporte</b>. Por seguridad sólo se podrá hacer uso de un intervalo de 15 días.</p>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label>Fecha de nicio:</label>
