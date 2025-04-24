@@ -139,6 +139,8 @@ class Reporte extends Component
         //Mando la orden para que se corra el job
         ProcesarConsultaReportes::dispatch(Auth::user()->id,$this->estudiosSeleccionados,$fechaInicioFormateada,$fechaFinFormateada);
 
+        registrarLog("Producción","Reportes","Generar reportes","Ha generado reporte ente las fechas ".$fechaInicioFormateada." y ".$fechaFinFormateada." para #".count($this->estudiosSeleccionados)." estudios",true);
+
 
     }
 
