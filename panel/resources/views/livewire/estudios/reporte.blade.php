@@ -87,7 +87,7 @@
                 
                 @if($reporteListo)
                 <div class="col-md-12">
-                    {{-- {{json_encode($resultado)}} --}}
+                    {{json_encode($resultado)}}
                     <div class="accordion" id="accordionPanelsStayOpenExample">
                         @foreach ($resultado as $index => $item)
                             @if(array_key_exists("ResultsReport", $item))

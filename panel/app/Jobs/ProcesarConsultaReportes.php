@@ -84,6 +84,8 @@ class ProcesarConsultaReportes implements ShouldQueue
                         ];
 
                     }
+                    //Añado el detailed
+                    $this->studies[$index]["DetailedReport"]=$raw;
                     foreach($raw as $log){
                         $maquina=$log["Machine"]["FirmwareID"];
                         //Analizo si ya tengo registrada la maquina o no

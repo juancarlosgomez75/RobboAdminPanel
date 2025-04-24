@@ -303,6 +303,44 @@
 
 
     @endif
+
+    <div class="page-break"></div>
+
+    <b>Informe detallado de acciones:</b><br>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th scope="col">Modelo</th>
+                <th scope="col">Accion</th>
+                <th scope="col">Valor contratado</th>
+                <th scope="col">Tokens</th>
+                <th scope="col">Tiper</th>
+                <th scope="col">Fecha Inicio</th>
+                <th scope="col">Fecha Fin</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($data["DetailedReport"] as $log)
+            <tr>
+                <td>{{$log["ModelData"]["ModelUserName"]}}</td>
+                <td>{{$log["Action"]}}</td>
+                <td>{{$log["ContratedValue"]}}</td>
+                <td>{{$log["Tokens"]}}</td>
+                <td>{{$log["Typer"]}}</td>
+                <td>{{ \Carbon\Carbon::createFromTimestamp($log["StartDate"] / 1000)->toDateTimeString() }}</td>
+                <td>{{ \Carbon\Carbon::createFromTimestamp($log["EndDate"] / 1000)->toDateTimeString() }}</td>
+                
+                
+                {{-- <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                <td>{{ $info["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                <td>{{ $info["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                <td>{{ $info["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td> --}}
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
     <div class="page-break"></div>
 
     <b style="color:#c84b46; font-size: 16px;">Términos y condiciones:</b><br>
