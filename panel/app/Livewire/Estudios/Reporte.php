@@ -224,8 +224,11 @@ class Reporte extends Component
                 $this->dispatch('mostrarToast', 'Continuar reporte', "No se pudo enviar el correo: ");
                 return;
             }
+
+            //Genero la informacion
+            $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
         
-            Mail::to("daenloye@gmail.com")->send(new EnviarReporte("Reporte prueba", $pdfResponse,'administracion@coolsofttechnology.com' ));
+            Mail::to("daenloye@gmail.com")->send(new EnviarReporte("Reporte prueba", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
         
             $this->dispatch('mostrarToast', 'Continuar reporte', "Mail enviado");
 

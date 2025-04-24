@@ -69,5 +69,17 @@ class PdfController extends Controller
         return $pdf->stream('reporte.pdf'); // Muestra el PDF en el navegador
     }
 
+    public function getReport()
+    {
+        // Cargar una vista y pasarle datos
+        $data = ['name' => 'Juan', 'age' => 25];
+        
+        $pdf = Pdf::loadView('pdf_template', $data);
+        
+        // Descargar el PDF generado
+        // return $pdf->download('documento.pdf');
+        return view('viewcorreo');
+    }
+
 
 }

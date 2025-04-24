@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Carbon\Carbon;
 
 class EnviarReporte extends Mailable
 {
@@ -16,12 +17,22 @@ class EnviarReporte extends Mailable
     public $reason;
     public $replyMail;
     public $pdfContent;
+    public $replyInfo;
 
-    public function __construct($reason, $pdfContent,$replyMail)
+    public function __construct($reason, $pdfContent,$replyMail,$replyInfo)
     {
         $this->reason = $reason;
         $this->pdfContent = $pdfContent;
         $this->replyMail = $replyMail;
+        $this->replyInfo = $replyInfo;
+
+        $fechaInicioRaw = Carbon::parse($replyInfo["FechaInicio"]);
+        $this->replyInfo["FechaInicio"] = $fechaInicioRaw->translatedFormat('F d');
+
+        $fechaFinRaw = Carbon::parse($replyInfo["FechaFin"])->subDay();
+        $this->replyInfo["FechaFin"] = $fechaFinRaw->translatedFormat('F d');
+
+
     }
     /**
      * Get the message envelope.
@@ -51,6 +62,10 @@ class EnviarReporte extends Mailable
     {
         return $this->subject($this->reason)
             ->markdown('emails.reporte')
+            ->with([
+                'informacion' => $this->replyInfo,
+                'reason' => $this->reason,
+            ])
             ->attachData($this->pdfContent, 'Reporte.pdf', [
                 'mime' => 'application/pdf',
             ])->replyTo($this->replyMail, 'Administración Coolsoft Technology SAS');

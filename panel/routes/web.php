@@ -80,7 +80,7 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->contro
     //Productos
     Route::get('/generar-pdf', 'generatePdf');
     Route::post('/reporte-pdf', 'generateReport')->name('reporte.pdf');
-    Route::post('/reporte-get', 'getReport')->name('reporte.get');
+    Route::get('/reporte-get', 'getReport')->name('reporte.get');
 });
 
 
