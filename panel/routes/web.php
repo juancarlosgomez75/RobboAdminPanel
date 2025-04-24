@@ -76,9 +76,12 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->contro
     Route::get('/panel/orden/{idorden}', 'order_view')->name('orden.ver');
 });
 
-Route::get('/generar-pdf', [PdfController::class, 'generatePdf']);
-
-Route::post('/reporte-pdf', [PdfController::class, 'generateReport'])->name('reporte.pdf');
+Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->controller(PdfController::class)->group(function(){
+    //Productos
+    Route::get('/generar-pdf', 'generatePdf');
+    Route::post('/reporte-pdf', 'generateReport')->name('reporte.pdf');
+    Route::post('/reporte-get', 'getReport')->name('reporte.get');
+});
 
 
 // Route::view('dashboard', 'dashboard')

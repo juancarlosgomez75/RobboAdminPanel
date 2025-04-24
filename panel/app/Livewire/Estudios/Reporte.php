@@ -9,7 +9,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 use Illuminate\Support\Facades\Mail;
-use App\Mail\CorreoDePrueba;
+use App\Mail\EnviarReporte  ;
+use Illuminate\Support\Facades\Http;
 
 class Reporte extends Component
 {
@@ -211,10 +212,26 @@ class Reporte extends Component
 
     }
 
-    public function enviarCorreo(){
-        Mail::to('daenloye@gmail.com')->send(new CorreoDePrueba());
+    public function enviarCorreo($id){
 
-        return 'Correo de prueba enviado';
+        if(count($this->resultado)>$id){
+            $this->dispatch('mostrarToast', 'Continuar reporte', "Enviando correo");
+            $datos=$this->resultado[$id];
+
+            $pdfResponse = generateReportPDF($datos);
+
+            if ($pdfResponse==False) {
+                $this->dispatch('mostrarToast', 'Continuar reporte', "No se pudo enviar el correo: ");
+                return;
+            }
+        
+            Mail::to("daenloye@gmail.com")->send(new EnviarReporte($datos, $pdfResponse ));
+        
+            $this->dispatch('mostrarToast', 'Continuar reporte', "Mail enviado");
+
+        }else{
+            $this->dispatch('mostrarToast', 'Continuar reporte', "El reporte no es válido o no existe");
+        }
     }
 
     public function render()

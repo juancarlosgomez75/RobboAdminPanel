@@ -4,6 +4,8 @@ use App\Models\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request; // Importar Request;
 use Illuminate\Support\Facades\Http;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 if (!function_exists('registrarLog')) {
     function registrarLog($menu,$section, $action, $details,$result=true)
@@ -95,4 +97,51 @@ if (!function_exists('sendBackPython')) {
 
         return $data;
     }
+
+}
+
+if (!function_exists('generateReportPDF')) {
+    function generateReportPDF($data)
+    {
+        $fechaActual = Carbon::now();
+
+        $fechaInicioRaw = Carbon::parse($data["FechaInicio"]);
+        $fechaInicio = $fechaInicioRaw->translatedFormat('F d');
+
+        $fechaFinRaw = Carbon::parse($data["FechaFin"])->subDay();
+        $fechaFin = $fechaFinRaw->translatedFormat('F d');
+
+        //Analizo el tipo de renta es compartida, para generar entonces el reporte
+        if($data["Renta"]=="Compartida"){
+
+            //Genero los cobros totales
+            $data["CobrosTotales"]=[
+                "MOV"=>number_format(($data["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0)*$data["Montos"]["MOV"] / 60, 2),
+                "CONTROL"=>number_format(($data["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0)*$data["Montos"]["CONTROL"] / 60, 2),
+                "CUM"=>number_format(($data["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0)*$data["Montos"]["CUM"], 2),
+                "SCUM"=>number_format(($data["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0)*$data["Montos"]["SCUM"], 2),
+                "XCUM"=>number_format(($data["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0)*$data["Montos"]["XCUM"], 2),
+            ];
+            $data["CobrosTotales"]["Total"]=array_sum($data["CobrosTotales"]);
+
+            //Genero los cobros por modelos
+            $data["CobrosModelos"]=[];
+            foreach($data["ResultsReport"]["Modelos"] as $modelo=>$valores){
+                $data["CobrosModelos"][$modelo]=[];
+                $data["CobrosModelos"][$modelo]["MOV"]=number_format(($valores["Acciones"]["MOV"]["Tiempo"] ?? 0)*$data["Montos"]["MOV"] / 60, 2);
+                $data["CobrosModelos"][$modelo]["CONTROL"]=number_format(($valores["Acciones"]["CONTROL"]["Tiempo"] ?? 0)*$data["Montos"]["CONTROL"] / 60, 2);
+                $data["CobrosModelos"][$modelo]["CUM"]=number_format(($valores["Acciones"]["CUM"]["Cantidad"] ?? 0)*$data["Montos"]["CUM"], 2);
+                $data["CobrosModelos"][$modelo]["SCUM"]=number_format(($valores["Acciones"]["SCUM"]["Cantidad"] ?? 0)*$data["Montos"]["SCUM"], 2);
+                $data["CobrosModelos"][$modelo]["XCUM"]=number_format(($valores["Acciones"]["XCUM"]["Cantidad"] ?? 0)*$data["Montos"]["XCUM"], 2);
+                
+                $data["CobrosModelos"][$modelo]["Total"]=array_sum($data["CobrosModelos"][$modelo]);
+            }
+        }
+        // Genera el PDF con los datos
+        $pdf = Pdf::loadView('report_template', compact('data','fechaActual','fechaInicio','fechaFin'));
+    
+        return $pdf->output();
+    
+    }
+    
 }
