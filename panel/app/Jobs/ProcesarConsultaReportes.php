@@ -76,6 +76,7 @@ class ProcesarConsultaReportes implements ShouldQueue
                     if(!empty($raw)){
                         //Defino lo que almacena
                         $resultado_estudio=[
+                            "Maquinas"=>[],
                             "Acciones"=>[],
                             "Paginas"=>[],
                             "Modelos"=>[],
@@ -84,12 +85,28 @@ class ProcesarConsultaReportes implements ShouldQueue
 
                     }
                     foreach($raw as $log){
+                        $maquina=$log["Machine"]["FirmwareID"];
+                        //Analizo si ya tengo registrada la maquina o no
+                        if(!array_key_exists($maquina, $resultado_estudio["Maquinas"])){
+                            $resultado_estudio["Maquinas"][$maquina]=[
+                                "Acciones"=>[],
+                                "Modelos"=>[],
+                                "Tokens"=>0
+                            ];
+                        }
+
                         $modelo=$log["ModelData"]["ModelUserName"];
-                        //Analiso si ya tengo registrado al modelo o no
+                        //Analizo si ya tengo registrado al modelo o no
                         if(!array_key_exists($modelo, $resultado_estudio["Modelos"])){
                             $resultado_estudio["Modelos"][$modelo]=[
                                 "Acciones"=>[],
                                 "Paginas"=>[],
+                                "Tokens"=>0
+                            ];
+                        }
+
+                        if(!array_key_exists($modelo, $resultado_estudio["Maquinas"][$maquina]["Modelos"])){
+                            $resultado_estudio["Maquinas"][$maquina]["Modelos"][$modelo]=[
                                 "Tokens"=>0
                             ];
                         }
@@ -108,6 +125,12 @@ class ProcesarConsultaReportes implements ShouldQueue
                                 "Tiempo"=>0
                             ];
                         }
+                        if(!array_key_exists($accion, $resultado_estudio["Maquinas"][$maquina]["Acciones"])){
+                            $resultado_estudio["Maquinas"][$maquina]["Acciones"][$accion]=[
+                                "Cantidad"=>0,
+                                "Tiempo"=>0
+                            ];
+                        }
 
                         //Ahora aumento en acciones
                         $resultado_estudio["Acciones"][$accion]["Cantidad"]+=1;
@@ -115,6 +138,9 @@ class ProcesarConsultaReportes implements ShouldQueue
 
                         $resultado_estudio["Modelos"][$modelo]["Acciones"][$accion]["Cantidad"]+=1;
                         $resultado_estudio["Modelos"][$modelo]["Acciones"][$accion]["Tiempo"]+=$log["ContratedValue"];
+
+                        $resultado_estudio["Maquinas"][$maquina]["Acciones"][$accion]["Cantidad"]+=1;
+                        $resultado_estudio["Maquinas"][$maquina]["Acciones"][$accion]["Tiempo"]+=$log["ContratedValue"];
 
                         //Ahora a las páginas, inicio preguntando si es simulador o cual
                         $pagina = empty($log["Page"]) ? "SIMULADOR" : $log["Page"];
@@ -135,9 +161,13 @@ class ProcesarConsultaReportes implements ShouldQueue
                         $resultado_estudio["Tokens"]+=$log["Tokens"];
                         $resultado_estudio["Modelos"][$modelo]["Tokens"]+=$log["Tokens"];
 
+                        $resultado_estudio["Maquinas"][$maquina]["Tokens"]+=$log["Tokens"];
+                        $resultado_estudio["Maquinas"][$maquina]["Modelos"][$modelo]["Tokens"]+=$log["Tokens"];
+
                         //Ahora por pagina
                         $resultado_estudio["Paginas"][$pagina]["Tokens"]+=$log["Tokens"];
                         $resultado_estudio["Modelos"][$modelo]["Paginas"][$pagina]["Tokens"]+=$log["Tokens"];
+
 
                         //Ahora los tipers
                         $tiper = $log["Typer"];

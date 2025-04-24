@@ -34,7 +34,7 @@
                     <br>
                     <button type=("button" class="btn btn-primary" wire:click="generarReporte()">Generar reporte</button>
                 </div> --}}
-                @if($tipoReporte !="2")
+                @if($tipoReporte =="1")
                 <div class="col-md-2">
                     <br>
                     <button type="button" class="btn btn-outline-primary" wire:click="completarReporte()">Generar reporte</button>
@@ -99,70 +99,155 @@
                                         Resultados para: {{ $item["StudyName"]." (".$item["City"].")" }}
                                     </button>
                                 </h2>
-                                <div id="collapse{{ $index }}" class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}" aria-labelledby="heading{{ $index }}" data-bs-parent="#accordionPanelsStayOpenExample">
+                                <div id="collapse{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}" data-bs-parent="#accordionPanelsStayOpenExample">
                                     <div class="accordion-body">
                                         <div class="row">
-                                            <p><b>Información de acciones:</b></p>
+                                            <p><b>Información de acciones por máquinas:</b></p>
 
-                                            <table class="table">
+                                            <table class="table align-middle text-center">
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">Acción</th>
-                                                        <th scope="col">Cantidad</th>
-                                                        <th scope="col">Tiempo (Minutos) </th>
+                                                        <th scope="col" colspan="2">Acción</th>
+                                                        @foreach ($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                        <th scope="col">#{{$Maquina}}</th>
+                                                        @endforeach
+                                                        <th scope="col">Total</th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($item["ResultsReport"]["Acciones"] as $accion=>$info)
+
+                                                    {{-- MOV --}}
                                                     <tr>
-                                                        <td>{{$accion}}</td>
-                                                        <td>{{$info["Cantidad"]}}</td>
-                                                        <td>{{$info["Tiempo"]/60}}</td>
+                                                        <td rowspan="2">MOV</td>
+                                                        <td>Cantidad</td>
+                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                        <td>{{ $info["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
+                                                        @endforeach
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
                                                     </tr>
-                                                    @endforeach
+                                                    <tr>
+                                                        <td>Tiempo (min)</td>
+                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                        <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        @endforeach
+                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                    </tr>
+
+                                                    {{-- CONTROL --}}
+                                                    <tr>
+                                                        <td rowspan="2">CONTROL</td>
+                                                        <td>Cantidad</td>
+                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                        <td>{{ $info["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
+                                                        @endforeach
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Tiempo (min)</td>
+                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                        <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        @endforeach
+                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                    </tr>
+
+                                                    {{-- CUM --}}
+                                                    <tr>
+                                                        <td>CUM</td>
+                                                        <td>Cantidad</td>
+                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                        <td>{{ $info["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                                                        @endforeach
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                                                    </tr>
+
+                                                    {{-- SCUM --}}
+                                                    <tr>
+                                                        <td>SCUM</td>
+                                                        <td>Cantidad</td>
+                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                        <td>{{ $info["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                                                        @endforeach
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                                                    </tr>
+
+                                                    {{-- XCUM --}}
+                                                    <tr>
+                                                        <td>XCUM</td>
+                                                        <td>Cantidad</td>
+                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                        <td>{{ $info["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                                                        @endforeach
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                             <br>
-                                            <p><b>Información de páginas:</b></p>
+                                            <p><b>Información de tokens por páginas y modelos:</b></p>
 
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Página</th>
-                                                        <th scope="col">Tokens</th>
-                                                        <th scope="col">Tipers</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($item["ResultsReport"]["Paginas"] as $pagina=>$info)
-                                                    <tr>
-                                                        <td>{{$pagina}}</td>
-                                                        <td>{{$info["Tokens"]}}</td>
-                                                        <td>{{count($info["Tipers"])}}</td>
-                                                    </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                            <br>
-                                            <p><b>Información de modelos:</b></p>
-
-                                            <table class="table">
+                                            <table class="table align-middle text-center">
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">Modelo</th>
-                                                        <th scope="col">Tokens</th>
+                                                        @foreach ($item["ResultsReport"]["Paginas"] as $pagina=>$info)
+                                                        <th scope="col">{{ $pagina == "SIMULADOR" ? "MANUAL" : $pagina }}</th>
+                                                        @endforeach
+                                                        <th scope="col">Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($item["ResultsReport"]["Modelos"] as $modelo=>$info)
                                                     <tr>
                                                         <td>{{$modelo}}</td>
-                                                        <td>{{$info["Tokens"]}}</td>
+                                                        @foreach ($item["ResultsReport"]["Paginas"] as $pagina=>$_)
+                                                        <td>{{$info["Paginas"][$pagina]["Tokens"]??0}}</td>
+                                                        @endforeach
+                                                        <td>{{$info["Tokens"]??0}}</td>
+
                                                     </tr>
                                                     @endforeach
                                                     <tr>
                                                         <th scope="row">Total</th>
-                                                        <td>{{$item["ResultsReport"]["Tokens"]}}</td>
+                                                        @foreach ($item["ResultsReport"]["Paginas"] as $pagina=>$info)
+                                                        <td>{{$info["Tokens"]??0}}</td>
+                                                        @endforeach
+                                                        <th scope="row">{{$item["ResultsReport"]["Tokens"]}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <br>
+                                            <p><b>Información de acciones por modelos:</b></p>
+
+                                            <table class="table align-middle text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Modelo</th>
+                                                        <th scope="col">MOV (min)</th>
+                                                        <th scope="col">CONTROL (min)</th>
+                                                        <th scope="col">CUM</th>
+                                                        <th scope="col">SCUM</th>
+                                                        <th scope="col">XCUM</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item["ResultsReport"]["Modelos"] as $modelo=>$info)
+                                                    <tr>
+                                                        <td>{{$modelo}}</td>
+                                                        <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>{{ $info["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                                                        <td>{{ $info["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                                                        <td>{{ $info["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                    <tr>
+                                                        <th scope="row">Total</th>
+                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

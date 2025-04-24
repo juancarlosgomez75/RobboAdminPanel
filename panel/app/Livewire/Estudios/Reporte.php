@@ -30,6 +30,8 @@ class Reporte extends Component
 
     protected $listeners = ['progressDone'];
 
+    public $accionesInteres=["CUMTEST","MOVTEST","CONTROL","MOV","CUM","SCUM","XCUM"];
+
     public function mount($information){
         $this->informacion=$information;
 
@@ -150,6 +152,15 @@ class Reporte extends Component
 
             $this->resultado= Cache::get("reportResult_" . Auth::user()->id);
             Cache::forget("reportResult_" . Auth::user()->id);
+
+            //Reorganizo simulador
+            foreach($this->resultado as $key=>$elemento){
+                if (isset($elemento["ResultsReport"]['Paginas']['SIMULADOR'])) {
+                    $valor = $elemento["ResultsReport"]['Paginas']['SIMULADOR'];
+                    unset($this->resultado[$key]["ResultsReport"]['Paginas']['SIMULADOR']);     // Eliminar
+                    $this->resultado[$key]["ResultsReport"]['Paginas']['SIMULADOR'] = $valor;   // Reinsertar al final
+                }
+            }
         }
     }
 
