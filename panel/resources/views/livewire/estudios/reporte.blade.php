@@ -3,57 +3,7 @@
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
-                <button wire:click="verReporte('Juan')">Ver reporte</button>
-
-                <script>
-                    document.addEventListener('livewire:init', () => {
-                        Livewire.on('abrir-reporte', (event) => {
-                            // Aquí accedemos a los datos necesarios
-                            const title = event[0]["title"];
-                            const otherData = event[0]["otherData"];  // Si tienes otros datos
-                
-                            // Creamos el formulario dinámicamente
-                            const form = document.createElement('form');
-                            form.method = 'POST'; // Enviar datos por POST
-                            form.action = '{{ route('reporte.pdf') }}';  // Ruta del reporte PDF
-                
-                            // Añadimos un campo CSRF para protección
-                            const csrfToken = document.createElement('input');
-                            csrfToken.type = 'hidden';
-                            csrfToken.name = '_token';
-                            csrfToken.value = '{{ csrf_token() }}';
-                            form.appendChild(csrfToken);
-                
-                            // Añadimos los parámetros necesarios al formulario
-                            const titleInput = document.createElement('input');
-                            titleInput.type = 'hidden';
-                            titleInput.name = 'title'; // Nombre del parámetro
-                            titleInput.value = title;
-                            form.appendChild(titleInput);
-                
-                            const otherInput = document.createElement('input');
-                            otherInput.type = 'hidden';
-                            otherInput.name = 'otherData'; // Otro parámetro
-                            otherInput.value = otherData;
-                            form.appendChild(otherInput);
-                
-                            // Abrimos una nueva ventana usando window.open
-                            const newWindow = window.open('', '_blank');  // Abre una nueva ventana en blanco
-                
-                            // Aseguramos que el formulario se envíe a esta nueva ventana
-                            form.target = newWindow.name;  // Usamos el nombre de la nueva ventana
-                
-                            // Enviamos el formulario
-                            newWindow.document.body.appendChild(form);  // Añadimos el formulario a la nueva ventana
-                            form.submit();  // Enviamos el formulario a la nueva ventana
-                
-                            // Removemos el formulario después de enviarlo
-                            document.body.removeChild(form);
-                        });
-                    });
-                </script>
-                
-
+            
                 <div class="col-md-12 mb-3">
                     <h4 class="card-title">Generación de reportes</h4>
                     <p class="card-text">Desde aquí podrás generar los reportes que desees. Sólo se mostrarán los estudios que posean registros en el rango de tiempo ingresado.</p>
@@ -304,6 +254,9 @@
                                             </table>
 
 
+                                            <div class="d-grid gap-2">
+                                                <button class="btn btn-outline-secondary" type="button" wire:click="verReporte({{$index}})">Ver reporte en PDF</button>
+                                            </div>
 
                                         </div>
                                         
@@ -322,6 +275,42 @@
 
 
     <br>
+
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('abrir-reporte', (event) => {
+                // Aquí accedemos a los datos necesarios
+                const url = event[0]["url"];  // La URL base sin parámetros
+                const data = event[0]["data"];
+                // const otherData = event[0]["otherData"];  // Si tienes otros datos
+    
+                // Creamos el formulario
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;  // Usamos la URL base
+                form.target = '_blank';  // Abre en nueva ventana
+
+                // Campo CSRF
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                csrfToken.value = '{{ csrf_token() }}';
+                form.appendChild(csrfToken);
+
+                // Campo title (ahora como POST)
+                const dataInput = document.createElement('input');
+                dataInput.type = 'hidden';
+                dataInput.name = 'data';
+                dataInput.value = data;
+                form.appendChild(dataInput);
+
+                // Enviamos el formulario
+                document.body.appendChild(form);
+                form.submit();
+                form.remove();
+            });
+        });
+    </script>
 
 
 </div>

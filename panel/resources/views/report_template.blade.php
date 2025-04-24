@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>PDF de ejemplo</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/bb_fondo.png') }}">
+    <title>Reporte en PDF</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,10 +60,10 @@
                     <b style="color:#c84b46; font-size: 16px;">Remitente:</b><br>
                     <b>COOLSOFT TECHNOLOGY SAS</b><br>
                     <span style="font-size: 12px;">
-                        NIT. 901.389.093<br>
+                        NIT. 901389093<br>
                         Calle 103 # 45A - 14<br>
                         BOGOTÁ, COLOMBIA<br>
-                        310 819 7185
+                        3108197185
                     </span>
                 </p>
             </td>
@@ -70,12 +71,12 @@
                 <td style="width: 50%">
                     <p>
                         <b style="color:#c84b46; font-size: 16px;">Destinatario:</b><br>
-                        <b>COOLSOFT TECHNOLOGY SAS</b><br>
+                        <b>{{$data["RazonSocial"]}}</b><br>
                         <span style="font-size: 12px;">
-                            NIT. 901.389.093<br>
-                            Calle 103 # 45A - 14<br>
-                            BOGOTÁ, COLOMBIA<br>
-                            310 819 7185
+                            NIT. {{$data["Nit"]}}<br>
+                            {{$data["Address"]}}<br>
+                            {{$data["City"]}}<br>
+                            {{$data["Phone"]}}
                         </span>
                     </p>
             </td>
@@ -83,6 +84,10 @@
     </table>
 
     <div class="page-break"></div>
+
+    <p>
+        {{json_encode($data)}}
+    </p>
 
 </body>
 </html>

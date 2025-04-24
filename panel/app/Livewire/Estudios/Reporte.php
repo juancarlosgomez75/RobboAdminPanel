@@ -14,7 +14,7 @@ class Reporte extends Component
 
     public $tipoReporte="0";
     public $resultadoObtenido=false;
-    public $resultado;
+    public $resultado=[];
 
     //Variables del registro
     public $fechaInicio;
@@ -166,14 +166,17 @@ class Reporte extends Component
         }
     }
 
-    public function verReporte($nombre)
+    public function verReporte($id)
     {
 
-        $params = http_build_query([
-            'nombre' => "11111",
-        ]);
+        if(count($this->resultado)>$id){
+            $datos=$this->resultado[$id];
+            $this->dispatch('abrir-reporte', ['url' => route('reporte.pdf'),'data' => json_encode($datos)]);
+        }else{
+            $this->dispatch('mostrarToast', 'Continuar reporte', "El reporte no es válido o no existe");
+        }
 
-        $this->dispatch('abrir-reporte', ['url' => route('reporte.pdf', ['title' => 'Título del reporte'])]);
+        
 
     }
 
