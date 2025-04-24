@@ -194,6 +194,8 @@ class Reporte extends Component
                 }else{
                     $this->resultado[$key]["Renta"]="Fija";
                 }
+
+                $this->resultado[$key]["CustomMail"]="";
             }
         }
     }
@@ -234,6 +236,34 @@ class Reporte extends Component
 
         }else{
             $this->dispatch('mostrarToast', 'Continuar reporte', "El reporte no es válido o no existe");
+        }
+    }
+
+    public function enviarCorreoCustom($id){
+        if(count($this->resultado)>$id){
+            $datos=$this->resultado[$id];
+
+            if( $datos["CustomMail"]=="" | !preg_match('/^[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]{2,7}$/', $datos["CustomMail"])){
+                $this->dispatch('mostrarToast', 'Enviar reporte', "El correo personalizado no es válido o está vacío");
+                return;
+            }
+
+            $pdfResponse = generateReportPDF($datos);
+
+            if ($pdfResponse==False) {
+                $this->dispatch('mostrarToast', 'Enviar reporte', "Ha ocurrido un error y no se ha podido enviar el correo");
+                return;
+            }
+
+            //Genero la informacion
+            $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
+        
+            Mail::to($datos["CustomMail"])->send(new EnviarReporte("Reporte periódico", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
+        
+            $this->dispatch('mostrarToast', 'Enviar reporte', "Correo enviado");
+
+        }else{
+            $this->dispatch('mostrarToast', 'Enviar reporte', "El reporte no es válido o no existe");
         }
     }
 

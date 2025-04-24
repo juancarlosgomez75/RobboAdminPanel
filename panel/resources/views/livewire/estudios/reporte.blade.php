@@ -2,7 +2,6 @@
     {{-- {{json_encode($informacion)}} --}}
     <div class="card shadow-custom">
         <div class="card-body">
-            <button wire:click="enviarCorreo(0)">Envar</button>
             <div class="row">
             
                 <div class="col-md-12 mb-3">
@@ -87,7 +86,7 @@
                 
                 @if($reporteListo)
                 <div class="col-md-12">
-                    {{json_encode($resultado)}}
+                    {{-- {{json_encode($resultado)}} --}}
                     <div class="accordion" id="accordionPanelsStayOpenExample">
                         @foreach ($resultado as $index => $item)
                             @if(array_key_exists("ResultsReport", $item))
@@ -255,8 +254,19 @@
                                             </table>
 
 
-                                            <div class="d-grid gap-2">
-                                                <button class="btn btn-outline-secondary" type="button" wire:click="verReporte({{$index}})">Ver reporte en PDF</button>
+                                            <div class="row">
+                                                <div class="col-md-3 mt-2 d-grid">
+                                                    <button class="btn btn-outline-secondary" type="button" wire:click="verReporte({{$index}})">Ver reporte en PDF</button>
+                                                </div>
+                                                <div class="col-md-3 mt-2 d-grid">
+                                                    <button class="btn btn-outline-primary" wire:click="enviarCorreo({{$index}})">Envar correo a manager</button>
+                                                </div>
+                                                <div class="col-md-4 mt-2 d-grid">
+                                                    <input type="email" class="form-control" wire:model="resultado.{{$index}}.CustomMail" placeholder="Mail para enviar: name@example.com">
+                                                </div>
+                                                <div class="col-md-2 mt-2 d-grid">
+                                                    <button class="btn btn-outline-primary" wire:click="enviarCorreoCustom({{$index}})">Envar correo</button>
+                                                </div>
                                             </div>
 
                                         </div>
