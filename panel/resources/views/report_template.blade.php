@@ -133,7 +133,7 @@
                 <td>{{ $data["ResultsReport"]["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
             </tr>
             <tr>
-                <td>Tiempo (min)</td>
+                <td>Tiempo (Minu)</td>
                 @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
                 <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
                 @endforeach
@@ -150,7 +150,7 @@
                 <td>{{ $data["ResultsReport"]["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
             </tr>
             <tr>
-                <td>Tiempo (min)</td>
+                <td>Tiempo (Minu)</td>
                 @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
                 <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
                 @endforeach
@@ -231,8 +231,8 @@
         <thead>
             <tr>
                 <th scope="col">Modelo</th>
-                <th scope="col">MOV (min)</th>
-                <th scope="col">CONTROL (min)</th>
+                <th scope="col">MOV (Minu)</th>
+                <th scope="col">CONTROL (Minu)</th>
                 <th scope="col">CUM</th>
                 <th scope="col">SCUM</th>
                 <th scope="col">XCUM</th>
