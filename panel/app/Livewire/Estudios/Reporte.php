@@ -217,20 +217,24 @@ class Reporte extends Component
     public function enviarCorreo($id){
 
         if(count($this->resultado)>$id){
-            $this->dispatch('mostrarToast', 'Continuar reporte', "Enviando correo");
             $datos=$this->resultado[$id];
 
             $pdfResponse = generateReportPDF($datos);
 
             if ($pdfResponse==False) {
-                $this->dispatch('mostrarToast', 'Continuar reporte', "No se pudo enviar el correo: ");
+                $this->dispatch('mostrarToast', 'Enviar reporte a manager', "No se pudo enviar el correo, el reporte no es válido o no existe");
+                return;
+            }
+
+            if($datos["Email"]=="" | !preg_match('/^[\w\.\-]+@([\w\-]+\.)+[a-zA-Z]{2,7}$/', $datos["Email"])){
+                $this->dispatch('mostrarToast', 'Enviar reporte a manager', "El correo no es válido o está vacío");
                 return;
             }
 
             //Genero la informacion
             $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
         
-            Mail::to("daenloye@gmail.com")->send(new EnviarReporte("Reporte prueba", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
+            Mail::to($datos["Email"])->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
         
             $this->dispatch('mostrarToast', 'Continuar reporte', "Mail enviado");
 
@@ -258,7 +262,7 @@ class Reporte extends Component
             //Genero la informacion
             $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
         
-            Mail::to($datos["CustomMail"])->send(new EnviarReporte("Reporte periódico", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
+            Mail::to($datos["CustomMail"])->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
         
             $this->dispatch('mostrarToast', 'Enviar reporte', "Correo enviado");
 

@@ -253,19 +253,48 @@
                                                 </tbody>
                                             </table>
 
+                                            <p><b>Información de contacto de estudio:</b></p>
+                                            <table class="table align-middle text-center">
+                                                <tr>
+                                                    <th>
+                                                        Nombre de contacto:
+                                                    </th>
+                                                    <td>
+                                                        {{$item["Contact"]}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        Razón social del estudio:
+                                                    </th>
+                                                    <td>
+                                                        {{$item["RazonSocial"] ?? "No encontrada"}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        Email de contacto/manager:
+                                                    </th>
+                                                    <td>
+                                                        {{$item["Email"] ?? "No encontrado"}}
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+
 
                                             <div class="row">
                                                 <div class="col-md-3 mt-2 d-grid">
                                                     <button class="btn btn-outline-secondary" type="button" wire:click="verReporte({{$index}})">Ver reporte en PDF</button>
                                                 </div>
                                                 <div class="col-md-3 mt-2 d-grid">
-                                                    <button class="btn btn-outline-primary" wire:click="enviarCorreo({{$index}})">Envar correo a manager</button>
+                                                    <button class="btn btn-outline-primary" wire:click="enviarCorreo({{$index}})">Enviar correo a manager</button>
                                                 </div>
                                                 <div class="col-md-4 mt-2 d-grid">
-                                                    <input type="email" class="form-control" wire:model="resultado.{{$index}}.CustomMail" placeholder="Mail para enviar: name@example.com">
+                                                    <input type="email" class="form-control" wire:model="resultado.{{$index}}.CustomMail" placeholder="Correo para enviar a otra persona: name@example.com">
                                                 </div>
                                                 <div class="col-md-2 mt-2 d-grid">
-                                                    <button class="btn btn-outline-primary" wire:click="enviarCorreoCustom({{$index}})">Envar correo</button>
+                                                    <button class="btn btn-outline-primary" wire:click="enviarCorreoCustom({{$index}})">Enviar correo</button>
                                                 </div>
                                             </div>
 
