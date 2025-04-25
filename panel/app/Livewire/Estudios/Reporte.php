@@ -200,45 +200,48 @@ class Reporte extends Component
 
             // $this->dispatch('mostrarToast', 'Generar reporte', "Reporte terminado");
 
-            $this->resultado= Cache::get("reportResult_" . Auth::user()->id);
+            $this->resultado= Cache::get("reportResult_" . Auth::user()->id,False);
             Cache::forget("reportResult_" . Auth::user()->id);
 
             //Reorganizo simulador y meto otras variables de inttterés
-            foreach($this->resultado as $key=>$elemento){
-                if (isset($elemento["ResultsReport"]['Paginas']['SIMULADOR'])) {
-                    $valor = $elemento["ResultsReport"]['Paginas']['SIMULADOR'];
-                    unset($this->resultado[$key]["ResultsReport"]['Paginas']['SIMULADOR']);     // Eliminar
-                    $this->resultado[$key]["ResultsReport"]['Paginas']['SIMULADOR'] = $valor;   // Reinsertar al final
-                    $this->resultado[$key]["FechaInicio"]=$this->fechaInicio;
-                    $this->resultado[$key]["FechaFin"]=$this->fechaFin;
-                }
-
-                //Ahora analizo el tipo de renta que es
-                $rentaCompartida = false;
-
-                foreach ($this->rentasCompartidas as $renta) {
-                    if (strpos(strtolower($elemento["StudyName"]), strtolower($renta)) !== false) {
-                        $rentaCompartida = true;
-                        break;
+            if($this->resultado != False){
+                foreach($this->resultado as $key=>$elemento){
+                    if (isset($elemento["ResultsReport"]['Paginas']['SIMULADOR'])) {
+                        $valor = $elemento["ResultsReport"]['Paginas']['SIMULADOR'];
+                        unset($this->resultado[$key]["ResultsReport"]['Paginas']['SIMULADOR']);     // Eliminar
+                        $this->resultado[$key]["ResultsReport"]['Paginas']['SIMULADOR'] = $valor;   // Reinsertar al final
+                        $this->resultado[$key]["FechaInicio"]=$this->fechaInicio;
+                        $this->resultado[$key]["FechaFin"]=$this->fechaFin;
                     }
+    
+                    //Ahora analizo el tipo de renta que es
+                    $rentaCompartida = false;
+    
+                    foreach ($this->rentasCompartidas as $renta) {
+                        if (strpos(strtolower($elemento["StudyName"]), strtolower($renta)) !== false) {
+                            $rentaCompartida = true;
+                            break;
+                        }
+                    }
+    
+                    //Ahora si lo encuentra o no
+                    if($rentaCompartida){
+                        $this->resultado[$key]["Renta"]="Compartida";
+                        $this->resultado[$key]["Montos"]=[
+                            "MOV"=>0.59,
+                            "CONTROL"=>0.59,
+                            "CUM"=>1.39,
+                            "SCUM"=>2.39,
+                            "XCUM"=>0.69,
+                        ];
+                    }else{
+                        $this->resultado[$key]["Renta"]="Fija";
+                    }
+    
+                    $this->resultado[$key]["CustomMail"]="";
                 }
-
-                //Ahora si lo encuentra o no
-                if($rentaCompartida){
-                    $this->resultado[$key]["Renta"]="Compartida";
-                    $this->resultado[$key]["Montos"]=[
-                        "MOV"=>0.59,
-                        "CONTROL"=>0.59,
-                        "CUM"=>1.39,
-                        "SCUM"=>2.39,
-                        "XCUM"=>0.69,
-                    ];
-                }else{
-                    $this->resultado[$key]["Renta"]="Fija";
-                }
-
-                $this->resultado[$key]["CustomMail"]="";
             }
+
         }
     }
 

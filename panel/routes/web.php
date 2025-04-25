@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
 Livewire::setUpdateRoute(function ($handle) {
-    return Route::get('/RobboAdminPanel/panel/public/livewire/update', $handle);
+    return Route::get(env('LIVEWIRE_CUSTOM_URL', '/RobboAdminPanel/panel/public/livewire/update'), $handle);
+    
 });
 
 Route::get('/', function () {
