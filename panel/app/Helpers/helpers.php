@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Request; // Importar Request;
 use Illuminate\Support\Facades\Http;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 if (!function_exists('registrarLog')) {
     function registrarLog($menu,$section, $action, $details,$result=true)
@@ -101,8 +102,19 @@ if (!function_exists('sendBackPython')) {
 }
 
 if (!function_exists('generateReportPDF')) {
-    function generateReportPDF($data)
+    function generateReportPDF($id)
     {
+
+        //Obtengo los estudios"reportResult_" . Auth::user()->id
+        $all=Cache::get("reportResult_" . Auth::user()->id,False);
+
+        //Obtengo la data que me interesa
+        if($all==False){
+            return False;
+        }
+
+        $data=$all[$id];
+
         $fechaActual = Carbon::now();
 
         $fechaInicioRaw = Carbon::parse($data["FechaInicio"]);

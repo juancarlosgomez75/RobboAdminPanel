@@ -34,29 +34,25 @@ class ProcesarEnvioReportes implements ShouldQueue
         $data=Cache::get("reportResult_" . $this->userId,False);
 
         if($data==False){
-            //Proceso los estudios
-            $studies=[];
-            foreach($data as $elemento){
-                if(array_key_exists("ResultsReport", $elemento)){
-                    $studies[]=$elemento;
+
+
+            foreach($data as $index =>$datos){
+
+                if(array_key_exists("ResultsReport", $datos)){
+                    //Genero el reporte PDF
+                    $pdfResponse = generateReportPDF($index);
+
+                    //Genero la informacion
+                    $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
+
+                    //Envio el correo
+                    //$sendto=$datos["Email"];
+                    $sendto="administracion@coolsofttechnology.com";
+
+                    sleep(1);
+
+                    Mail::to($sendto)->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
                 }
-            }
-
-            foreach($studies as $index =>$datos){
-
-                //Genero el reporte PDF
-                $pdfResponse = generateReportPDF($datos);
-
-                //Genero la informacion
-                $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
-
-                //Envio el correo
-                //$sendto=$datos["Email"];
-                $sendto="administracion@coolsofttechnology.com";
-
-                sleep(1);
-
-                Mail::to($sendto)->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
 
                 sleep(1);
 

@@ -268,7 +268,7 @@ class Reporte extends Component
         if(count($this->resultado)>$id){
             $datos=$this->resultado[$id];
 
-            $pdfResponse = generateReportPDF($datos);
+            $pdfResponse = generateReportPDF($id);
 
             if ($pdfResponse==False) {
                 $this->dispatch('mostrarToast', 'Enviar reporte a manager', "No se pudo enviar el correo, el reporte no es válido o no existe");
@@ -301,7 +301,7 @@ class Reporte extends Component
                 return;
             }
 
-            $pdfResponse = generateReportPDF($datos);
+            $pdfResponse = generateReportPDF($id);
 
             if ($pdfResponse==False) {
                 $this->dispatch('mostrarToast', 'Enviar reporte', "Ha ocurrido un error y no se ha podido enviar el correo");
