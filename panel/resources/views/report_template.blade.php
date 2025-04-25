@@ -261,6 +261,126 @@
     </table>
     
     @if($data["Renta"]=="Compartida")
+
+    <div class="page-break"></div>
+
+    <table>
+        <tr>
+            <td style="width: 50%">
+                <img src="data:image/jpeg;base64,{{ base64_encode(file_get_contents(public_path('img/Logo.jpg'))) }}" alt="Logo">
+            </td>
+            <td style="text-align: center">
+                <p>
+                    {{$fechaActual}}
+                    <br>
+                    <b style="color:#c84b46; font-size: 25px; padding-top: 50px;">
+                        REPORTE DE USO
+                    </b>
+                    <br>
+                    <b>Periodo: </b> {{ucfirst($fechaInicio)}} - {{ucfirst($fechaFin)}}
+                </p>
+            </td>
+        </tr>
+    </table>
+    <br><br>
+    <table>
+        <tr>
+            <td style="width: 50%">
+                <p>
+                    <b style="color:#c84b46; font-size: 16px;">Remitente:</b><br>
+                    <b>COOLSOFT TECHNOLOGY SAS</b><br>
+                    <span style="font-size: 12px;">
+                        NIT. 901389093<br>
+                        Calle 103 # 45A - 14<br>
+                        BOGOTÁ, COLOMBIA<br>
+                        3108197185
+                    </span>
+                </p>
+            </td>
+            <td>
+                <td style="width: 50%">
+                    <p>
+                        <b style="color:#c84b46; font-size: 16px;">Destinatario:</b><br>
+                        <b>{{$data["RazonSocial"]}}</b><br>
+                        <span style="font-size: 12px;">
+                            NIT. {{$data["Nit"]}}<br>
+                            {{$data["Address"]}}<br>
+                            {{$data["City"]}}<br>
+                            {{$data["Phone"]}}
+                        </span>
+                    </p>
+            </td>
+        </tr>
+    </table>
+
+    <br><br>
+    <b>Información de cobros por acciones:</b><br>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th scope="col">Acción</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Valor unidad</th>
+                <th scope="col">Total</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            {{-- MOV --}}
+            <tr>
+                <td>MOV (minutos)</td>
+                <td>{{ number_format(($data["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                <td>{{'$' . number_format($data["Montos"]["MOV"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["MOV"], 2)}}</td>
+                
+                
+            </tr>
+
+            {{-- CONTROL --}}
+            <tr>
+                <td>CONTROL (minutos)</td>
+                <td>{{ number_format(($data["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                <td>{{'$' . number_format($data["Montos"]["CONTROL"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["CONTROL"], 2)}}</td>
+            </tr>
+
+            {{-- CUM --}}
+            <tr>
+                <td>CUM</td>
+                <td>{{ $data["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                <td>{{'$' . number_format($data["Montos"]["CUM"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["CUM"], 2)}}</td>
+            </tr>
+
+            {{-- SCUM --}}
+            <tr>
+                <td>SCUM</td>
+                <td>{{ $data["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                <td>{{'$' . number_format($data["Montos"]["SCUM"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["SCUM"], 2)}}</td>
+            </tr>
+
+            {{-- XCUM --}}
+            <tr>
+                <td>XCUM</td>
+                <td>{{ $data["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                <td>{{'$' . number_format($data["Montos"]["XCUM"], 2)}}</td>
+                <td>{{'$' . number_format($data["CobrosTotales"]["XCUM"], 2)}}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border:0"></td>
+                <td>
+                    <b>Total: </b>
+                </td>
+                <td>
+                    <b>{{'$' . number_format($data["CobrosTotales"]["Total"], 2)}}</b>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
     <br><br>
     <b>Información de cobros por acciones por modelos:</b><br>
     <table class="report-table">
@@ -352,4 +472,5 @@
     </p>
 
 </body>
+
 </html>

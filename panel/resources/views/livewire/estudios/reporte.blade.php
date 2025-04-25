@@ -257,18 +257,50 @@
                                             <table class="table align-middle text-center">
                                                 <tr>
                                                     <th>
-                                                        Nombre de contacto:
+                                                        Razón social:
                                                     </th>
                                                     <td>
-                                                        {{$item["Contact"]}}
+                                                        {{$item["RazonSocial"] ?? "No encontrada"}}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th>
-                                                        Razón social del estudio:
+                                                        Nit:
                                                     </th>
                                                     <td>
-                                                        {{$item["RazonSocial"] ?? "No encontrada"}}
+                                                        {{$item["Nit"] ?? "No encontrada"}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        Dirección:
+                                                    </th>
+                                                    <td>
+                                                        {{$item["Address"] ?? "No encontrada"}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        Teléfono:
+                                                    </th>
+                                                    <td>
+                                                        {{$item["Phone"] ?? "No encontrada"}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        Ciudad:
+                                                    </th>
+                                                    <td>
+                                                        {{$item["City"] ?? "No encontrada"}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        Nombre de contacto:
+                                                    </th>
+                                                    <td>
+                                                        {{$item["Contact"]}}
                                                     </td>
                                                 </tr>
                                                 <tr>

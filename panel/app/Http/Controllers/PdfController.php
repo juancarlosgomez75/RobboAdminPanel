@@ -64,9 +64,9 @@ class PdfController extends Controller
             }
         }
         // Genera el PDF con los datos
-        $pdf = Pdf::loadView('report_template', compact('data','fechaActual','fechaInicio','fechaFin'));
+        $pdfg = Pdf::loadView('report_template', compact('data','fechaActual','fechaInicio','fechaFin'));
     
-        return $pdf->stream('reporte.pdf'); // Muestra el PDF en el navegador
+        return $pdfg->stream('reporte.pdf'); // Muestra el PDF en el navegador
     }
 
     public function getReport()
