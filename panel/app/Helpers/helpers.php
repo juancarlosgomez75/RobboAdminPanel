@@ -102,11 +102,14 @@ if (!function_exists('sendBackPython')) {
 }
 
 if (!function_exists('generateReportPDF')) {
-    function generateReportPDF($id)
+    function generateReportPDF($id,$userid=Null)
     {
 
         //Obtengo los estudios"reportResult_" . Auth::user()->id
-        $all=Cache::get("reportResult_" . Auth::user()->id,False);
+        if($userid==Null){
+            $userid=Auth::user()->id;
+        }
+        $all=Cache::get("reportResult_" . $userid,False);
 
         //Obtengo la data que me interesa
         if($all==False){

@@ -28,26 +28,33 @@ class ProcesarEnvioReportes implements ShouldQueue
      */
     public function handle(): void
     {
-        $total = count($this->studies);
 
         //Obtengo los estudios"reportResult_" . Auth::user()->id
         $data=Cache::get("reportResult_" . $this->userId,False);
 
-        if($data==False){
+        $total = count($data);
+
+        if($data!=False){
 
 
-            foreach($data as $index =>$datos){
+            foreach($data as $id =>$datos){
 
                 if(array_key_exists("ResultsReport", $datos)){
                     //Genero el reporte PDF
-                    $pdfResponse = generateReportPDF($index);
+                    $pdfResponse = generateReportPDF($id,$this->userId);
+
+                    if($pdfResponse==False){
+                        Cache::put("reportSendProgress_".$this->userId, -100, 600);
+                        return;
+                    }
 
                     //Genero la informacion
                     $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
 
                     //Envio el correo
                     //$sendto=$datos["Email"];
-                    $sendto="administracion@coolsofttechnology.com";
+                    // $sendto="administracion@coolsofttechnology.com";
+                    $sendto="daenloye@gmail.com";
 
                     sleep(1);
 
@@ -57,7 +64,7 @@ class ProcesarEnvioReportes implements ShouldQueue
                 sleep(1);
 
                 // Actualiza la barra de progreso (ej: en caché)
-                Cache::put("reportSendProgress_".$this->userId, round((($index + 1) / $total) * 100), 600);
+                Cache::put("reportSendProgress_".$this->userId, round((($id + 1) / $total) * 100), 600);
             }
         }else{
             Cache::put("reportSendProgress_".$this->userId, -100, 600);
