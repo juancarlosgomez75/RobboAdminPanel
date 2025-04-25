@@ -113,6 +113,7 @@ class Create extends Component
                         "ModelUserName"=>$this->drivername,
                         "ModelPersonalCm"=>($this->usecustomname == "1"),
                         "ModelPersonalCmName"=>$this->customname,
+                        "ModelActive"=>True,
                         "ModelPages"=>$this->paginas
                     ],
                     "UserData"=>[

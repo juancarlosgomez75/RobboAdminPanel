@@ -73,7 +73,8 @@ class ManagerCreate extends Component
                         "Name"=>$this->nombre,
                         "Phone"=> $this->telefono,
                         "Email"=> $this->email,
-                        "RolID"=>"1"
+                        "RolID"=>"1",
+                        "Activo"=>True
                     ]
                     ],
                 "DataStudy"=>[
