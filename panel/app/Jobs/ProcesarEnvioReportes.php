@@ -39,8 +39,8 @@ class ProcesarEnvioReportes implements ShouldQueue
             $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
 
             //Envio el correo
-            // $sendto=$datos["Email"];
-            $sendto="daenloye@gmail.com";
+            //$sendto=$datos["Email"];
+            $sendto="administracion@coolsofttechnology.com";
 
             Mail::to($sendto)->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
 

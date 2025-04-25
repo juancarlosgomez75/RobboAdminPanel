@@ -71,12 +71,12 @@
                 <td style="width: 50%">
                     <p>
                         <b style="color:#c84b46; font-size: 16px;">Destinatario:</b><br>
-                        <b>{{$data["RazonSocial"]}}</b><br>
+                        <b>{{$data["RazonSocial"]??"No encontrado"}}</b><br>
                         <span style="font-size: 12px;">
-                            NIT. {{$data["Nit"]}}<br>
-                            {{$data["Address"]}}<br>
-                            {{$data["City"]}}<br>
-                            {{$data["Phone"]}}
+                            NIT. {{$data["Nit"]??"No encontrado"}}<br>
+                            {{$data["Address"]??"No encontrado"}}<br>
+                            {{$data["City"]??"No encontrado"}}<br>
+                            {{$data["Phone"]??"No encontrado"}}
                         </span>
                     </p>
             </td>

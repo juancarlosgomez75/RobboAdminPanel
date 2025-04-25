@@ -10,6 +10,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
+use function PHPUnit\Framework\isFalse;
+
 class ProcesarConsultaReportes implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -19,14 +21,20 @@ class ProcesarConsultaReportes implements ShouldQueue
     public $fechaInicio;
     public $fechaFin;
     public $userId;
+    public $API_PROD=False;
 
     public $tipo;
-    public function __construct($userId,$studies,$fechaInicio,$fechaFin)
+    public function __construct($userId,$studies,$fechaInicio,$fechaFin,$API_URL=False)
     {
         $this->userId = $userId;
         $this->studies=$studies;
         $this->fechaInicio=$fechaInicio;
         $this->fechaFin=$fechaFin;
+
+        if($API_URL=="production"){
+            $this->API_PROD=True;
+        }
+        
 
         Cache::forget("reportProgress_".$userId);
     }
@@ -65,7 +73,7 @@ class ProcesarConsultaReportes implements ShouldQueue
                 ]
             ];
             //Obtengo la informacion que requiero
-            $data=sendBack($data_send);
+            $data=sendBack($data_send,"AAA",$this->API_PROD);
 
             if($data["Status"]??False){
                 if($data["Data"]["DetailedReport"]?? False){
