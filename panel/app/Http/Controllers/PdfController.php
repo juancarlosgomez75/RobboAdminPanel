@@ -7,6 +7,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Cache;
 
 Carbon::setLocale('es');
 
@@ -28,7 +29,16 @@ class PdfController extends Controller
     public function generateReport(Request $request)
     {
         // Accede a los datos enviados por POST
-        $data = json_decode($request->input('data'),true);
+        $information = json_decode($request->input('data'),true);
+
+        $resultado= Cache::get($information["Variable"],False);
+
+        if($resultado==False){
+            return "Error con la información";
+        }
+
+        $data=$resultado[$information["Id"]];
+
         $fechaActual = Carbon::now();
 
         $fechaInicioRaw = Carbon::parse($data["FechaInicio"]);

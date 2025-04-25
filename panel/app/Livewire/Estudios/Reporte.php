@@ -201,7 +201,7 @@ class Reporte extends Component
             // $this->dispatch('mostrarToast', 'Generar reporte', "Reporte terminado");
 
             $this->resultado= Cache::get("reportResult_" . Auth::user()->id,False);
-            Cache::forget("reportResult_" . Auth::user()->id);
+            // Cache::forget("reportResult_" . Auth::user()->id);
 
             //Reorganizo simulador y meto otras variables de inttterés
             if($this->resultado != False){
@@ -242,6 +242,7 @@ class Reporte extends Component
                 }
             }
 
+            Cache::put("reportResult_" . Auth::user()->id,  $this->resultado, 600);
         }
     }
 
@@ -249,7 +250,10 @@ class Reporte extends Component
     {
 
         if(count($this->resultado)>$id){
-            $datos=$this->resultado[$id];
+            $datos=[
+                "Variable"=>"reportResult_" . Auth::user()->id,
+                "Id"=>$id,
+            ];
             $this->dispatch('abrir-reporte', ['url' => route('reporte.pdf'),'data' => json_encode($datos)]);
         }else{
             $this->dispatch('mostrarToast', 'Continuar reporte', "El reporte no es válido o no existe");
