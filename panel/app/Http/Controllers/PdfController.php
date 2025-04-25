@@ -63,6 +63,8 @@ class PdfController extends Controller
                 $data["CobrosModelos"][$modelo]["Total"]=array_sum($data["CobrosModelos"][$modelo]);
             }
         }
+        ini_set('max_execution_time', 300); // 5 minutos
+        ini_set('memory_limit', '512M');
         // Genera el PDF con los datos
         $pdfg = Pdf::loadView('report_template', compact('data','fechaActual','fechaInicio','fechaFin'));
     

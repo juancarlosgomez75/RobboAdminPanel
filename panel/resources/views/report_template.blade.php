@@ -110,87 +110,109 @@
     </style>
 
     <b>Información de acciones por máquinas:</b><br>
+    @php
+    //Cuento las máquinas
+    $chunks=ceil(count($data["ResultsReport"]["Maquinas"])/8);
+    
+    @endphp
+
+    @for ($i = 0; $i < $chunks; $i++)
     <table class="report-table">
         <thead>
             <tr>
                 <th scope="col" colspan="2">Acción</th>
-                @foreach ($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                @foreach (array_slice($data["ResultsReport"]["Maquinas"], $i*8, 8, true) as $Maquina=>$info)
                 <th scope="col">#{{$Maquina}}</th>
                 @endforeach
-                <th scope="col">Total</th>
 
+                @if($i==$chunks-1)
+                <th scope="col">Total</th>
+                @endif
             </tr>
         </thead>
         <tbody>
-
             {{-- MOV --}}
             <tr>
                 <td rowspan="2">MOV</td>
                 <td>Cantidad</td>
-                @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                @foreach(array_slice($data["ResultsReport"]["Maquinas"], $i*8, 8, true) as $Maquina=>$info)
                 <td>{{ $info["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
                 @endforeach
+                @if($i==$chunks-1)
                 <td>{{ $data["ResultsReport"]["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
+                @endif
             </tr>
             <tr>
                 <td>Tiempo (Minu)</td>
-                @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                @foreach(array_slice($data["ResultsReport"]["Maquinas"], $i*8, 8, true) as $Maquina=>$info)
                 <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
                 @endforeach
+                @if($i==$chunks-1)
                 <td>{{ number_format(($data["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                @endif
             </tr>
 
             {{-- CONTROL --}}
             <tr>
                 <td rowspan="2">CONTROL</td>
                 <td>Cantidad</td>
-                @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                @foreach(array_slice($data["ResultsReport"]["Maquinas"], $i*8, 8, true) as $Maquina=>$info)
                 <td>{{ $info["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
                 @endforeach
+                @if($i==$chunks-1)
                 <td>{{ $data["ResultsReport"]["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
+                @endif
             </tr>
             <tr>
                 <td>Tiempo (Minu)</td>
-                @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                @foreach(array_slice($data["ResultsReport"]["Maquinas"], $i*8, 8, true) as $Maquina=>$info)
                 <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
                 @endforeach
+                @if($i==$chunks-1)
                 <td>{{ number_format(($data["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                @endif
             </tr>
-
             {{-- CUM --}}
             <tr>
                 <td>CUM</td>
                 <td>Cantidad</td>
-                @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                @foreach(array_slice($data["ResultsReport"]["Maquinas"], $i*8, 8, true) as $Maquina=>$info)
                 <td>{{ $info["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
                 @endforeach
+                @if($i==$chunks-1)
                 <td>{{ $data["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                @endif
             </tr>
 
             {{-- SCUM --}}
             <tr>
                 <td>SCUM</td>
                 <td>Cantidad</td>
-                @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                @foreach(array_slice($data["ResultsReport"]["Maquinas"], $i*8, 8, true) as $Maquina=>$info)
                 <td>{{ $info["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
                 @endforeach
+                @if($i==$chunks-1)
                 <td>{{ $data["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                @endif
             </tr>
 
             {{-- XCUM --}}
             <tr>
                 <td>XCUM</td>
                 <td>Cantidad</td>
-                @foreach($data["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                @foreach(array_slice($data["ResultsReport"]["Maquinas"], $i*8, 8, true) as $Maquina=>$info)
                 <td>{{ $info["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
                 @endforeach
+                @if($i==$chunks-1)
                 <td>{{ $data["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                @endif
             </tr>
-
         </tbody>
     </table>
+    <br>
+    @endfor
+    <br>
 
-    <br><br>
 
     <b>Información de tokens por páginas y modelos:</b><br>
     <table class="report-table">
