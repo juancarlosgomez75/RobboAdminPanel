@@ -16,10 +16,9 @@ class ProcesarEnvioReportes implements ShouldQueue
     public $studies;
     public $userId;
 
-    public function __construct($userId,$studies)
+    public function __construct($userId)
     {
         $this->userId = $userId;
-        $this->studies=$studies;
 
         Cache::forget("reportSendProgress_".$userId);
     }
@@ -30,22 +29,44 @@ class ProcesarEnvioReportes implements ShouldQueue
     public function handle(): void
     {
         $total = count($this->studies);
-        foreach($this->studies as $index =>$datos){
 
-            //Genero el reporte PDF
-            $pdfResponse = generateReportPDF($datos);
+        //Obtengo los estudios"reportResult_" . Auth::user()->id
+        $data=Cache::get("reportResult_" . $this->userId,False);
 
-            //Genero la informacion
-            $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
+        if($data==False){
+            //Proceso los estudios
+            $studies=[];
+            foreach($data as $elemento){
+                if(array_key_exists("ResultsReport", $elemento)){
+                    $studies[]=$elemento;
+                }
+            }
 
-            //Envio el correo
-            //$sendto=$datos["Email"];
-            $sendto="administracion@coolsofttechnology.com";
+            foreach($studies as $index =>$datos){
 
-            Mail::to($sendto)->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
+                //Genero el reporte PDF
+                $pdfResponse = generateReportPDF($datos);
 
-            // Actualiza la barra de progreso (ej: en caché)
-            Cache::put("reportSendProgress_".$this->userId, round((($index + 1) / $total) * 100), 600);
+                //Genero la informacion
+                $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
+
+                //Envio el correo
+                //$sendto=$datos["Email"];
+                $sendto="administracion@coolsofttechnology.com";
+
+                sleep(1);
+
+                Mail::to($sendto)->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
+
+                sleep(1);
+
+                // Actualiza la barra de progreso (ej: en caché)
+                Cache::put("reportSendProgress_".$this->userId, round((($index + 1) / $total) * 100), 600);
+            }
+        }else{
+            Cache::put("reportSendProgress_".$this->userId, -100, 600);
         }
+
+
     }
 }
