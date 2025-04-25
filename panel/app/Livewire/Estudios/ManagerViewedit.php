@@ -54,7 +54,8 @@ class ManagerViewedit extends Component
                         "Name"=>$this->nombre,
                         "Phone"=> $this->telefono,
                         "Email"=> $this->email,
-                        "RolID"=>"1"
+                        "RolID"=>"1",
+                        "Activo"=>$this->activo
                         ]
                     ],
                 "DataStudy"=>[

@@ -85,6 +85,13 @@
                 @endif
                 
                 @if($reporteListo)
+                @if($enviandoReportes)
+                <div class="col-md-12">
+                    <label>Enviando reportes...</label>
+                    @livewire("progressbar", ["userId" => Auth::user()->id,"functionId"=>"reportSendProgress","endSignal"=>"progressSendDone"])
+                </div>
+                <br><br>
+                @endif
                 <div class="col-md-12">
                     {{-- {{json_encode($resultado)}} --}}
                     <div class="accordion" id="accordionPanelsStayOpenExample">
@@ -338,6 +345,9 @@
                             @endif
                         @endforeach
                     </div>
+                </div>
+                <div class="col-md-12 mt-2 d-grid">
+                    <button class="btn btn-outline-primary" wire:click="enviarTodosReportes()">Enviar todos los reportes</button>
                 </div>
                 @endif
 

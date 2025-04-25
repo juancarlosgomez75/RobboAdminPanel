@@ -3,13 +3,14 @@
 namespace App\Livewire\Estudios;
 
 use App\Jobs\ProcesarConsultaReportes;
+use App\Jobs\ProcesarEnvioReportes;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 use Illuminate\Support\Facades\Mail;
-use App\Mail\EnviarReporte  ;
+use App\Mail\EnviarReporte;
 use Illuminate\Support\Facades\Http;
 
 class Reporte extends Component
@@ -32,7 +33,9 @@ class Reporte extends Component
     public $ejecutandoReporte=false;
     public $reporteListo=false;
 
-    protected $listeners = ['progressDone'];
+    public $enviandoReportes=False;
+
+    protected $listeners = ['progressDone','progressSendDone'];
 
     public $accionesInteres=["CUMTEST","MOVTEST","CONTROL","MOV","CUM","SCUM","XCUM"];
 
@@ -148,6 +151,45 @@ class Reporte extends Component
         registrarLog("Producción","Reportes","Generar reportes","Ha generado reporte ente las fechas ".$fechaInicioFormateada." y ".$fechaFinFormateada." para #".count($this->estudiosSeleccionados)." estudios",true);
 
 
+    }
+
+    public function enviarTodosReportes(){
+        $enviar=[];
+        //Analizo si los resultados son mayores
+
+        foreach($this->resultado as $elemento){
+            if(array_key_exists("ResultsReport", $elemento)){
+                $enviar[]=$elemento;
+            }
+        }
+
+        if(count($enviar)==0){
+            $this->dispatch('mostrarToast', 'Enviar todos los reportes', "No hay reportes para enviar");
+            return;
+        }
+
+        $this->enviandoReportes=True;
+
+        ProcesarEnvioReportes::dispatch(Auth::user()->id,$enviar);
+
+        //Cargo las fechas
+        $fechaInicioFormateada = Carbon::parse($this->fechaInicio)
+        ->setTime(0, 0)
+        ->format('Y-m-d H:i');
+
+        $fechaFinFormateada = Carbon::parse($this->fechaFin)
+        ->addDay()         // suma un día
+        ->setTime(0, 0)    // asegura que la hora sea 00:00
+        ->format('Y-m-d H:i');
+
+        registrarLog("Producción","Reportes","Enviar todos los reportes","Ha enviado los reportes ente las fechas ".$fechaInicioFormateada." y ".$fechaFinFormateada." para #".count($this->resultado)." estudios",true);
+    }
+    public function progressSendDone(){
+        if($this->enviandoReportes){
+            $this->enviandoReportes=False;
+            Cache::forget("reportSendResult_" . Auth::user()->id);
+            $this->dispatch('mostrarToast', 'Enviar todos los reportes', "Todos los reportes han sido enviados");
+        }
     }
 
     public function progressDone(){

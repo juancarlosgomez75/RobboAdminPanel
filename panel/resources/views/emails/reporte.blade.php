@@ -24,14 +24,16 @@
             <td style="padding:20px;">
               <p style="font-size:22px; margin-top:0;">Hola, <b style="color:#ca4a4c;">{{$informacion["Contact"]}}</b></p>
 
-              <p>En Robbocock queremos asegurarnos de que siempre cuentes con la información necesaria para tomar decisiones informadas sobre tu operación en <b style="color:#ca4a4c;">{{$informacion["StudyName"]}}</b>, por eso, te compartimos el reporte de las ventas generadas por tus artistas utilizando nuestros dispositivos en el periodo mencionado anteriormente.</p>
+              <p style="font-size:16px;">En Robbocock queremos que siempre tengas a tu alcance la información necesaria para tomar decisiones estratégicas sobre tu operación en <b style="color:#ca4a4c;">{{$informacion["StudyName"]}}</b>, por ello, te compartimos el reporte de ventas generadas por tus artistas mediante el uso de nuestros dispositivos.</p>
 
-              <p>Adjunto a este email encontrarás un reporte con toda la información detallada.</p>
+              <p style="font-size:16px;">Adjunto a este correo encontrarás el documento con todos los detalles.</p>
 
-              <p>Si tienes alguna duda, no dudes en ponerte en contacto con nosotros, te ayudaremos a resolver cualquier inquietud que tengas.</p>
+              <p style="font-size:16px;">Si tienes alguna duda, no dudes en ponerte en contacto con nosotros, te ayudaremos a resolver cualquier inquietud que tengas.</p>
 
-              <p style="font-size:22px;">Un saludo,</p>
-              <p style="font-size:22px; margin-top:-16px; color:#ca4a4c;"><b>Equipo de Robbocock</b></p>
+              <p style="font-size:20px;">
+                Un saludo,<br>
+                <b style="color:#ca4a4c;">Equipo de Robbocock</b>
+              </p>
             </td>
           </tr>
 
