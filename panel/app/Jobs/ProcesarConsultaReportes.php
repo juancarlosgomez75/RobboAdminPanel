@@ -24,7 +24,7 @@ class ProcesarConsultaReportes implements ShouldQueue
     public $API_PROD=False;
 
     public $tipo;
-    public function __construct($userId,$studies,$fechaInicio,$fechaFin,$API_URL=False)
+    public function __construct($userId,$studies,$fechaInicio,$fechaFin,$API_URL)
     {
         $this->userId = $userId;
         $this->studies=$studies;
