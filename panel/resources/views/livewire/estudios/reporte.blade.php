@@ -110,87 +110,97 @@
                                 <div id="collapse{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $index }}" data-bs-parent="#accordionPanelsStayOpenExample">
                                     <div class="accordion-body">
                                         <div class="row">
+
+                                            <style>
+                                                .table-container {
+                                                  max-width: width: calc(100% - 500px);; /* Asegura que el contenedor no exceda el ancho de la pantalla */
+                                                  overflow-x: auto; /* Habilita el scroll horizontal */
+                                                  -webkit-overflow-scrolling: touch; /* Mejora la experiencia en dispositivos móviles */
+                                                }
+                                              </style>
+
                                             <p><b>Información de acciones por máquinas:</b></p>
+                                            <div class="table-container">
+                                                <table class="table align-middle text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" colspan="2">Acción</th>
+                                                            @foreach ($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                            <th scope="col">#{{$Maquina}}</th>
+                                                            @endforeach
+                                                            <th scope="col">Total</th>
 
-                                            <table class="table align-middle text-center">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col" colspan="2">Acción</th>
-                                                        @foreach ($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
-                                                        <th scope="col">#{{$Maquina}}</th>
-                                                        @endforeach
-                                                        <th scope="col">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
 
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                                        {{-- MOV --}}
+                                                        <tr>
+                                                            <td rowspan="2">MOV</td>
+                                                            <td>Cantidad</td>
+                                                            @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                            <td>{{ $info["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
+                                                            @endforeach
+                                                            <td>{{ $item["ResultsReport"]["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Tiempo (min)</td>
+                                                            @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                            <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                            @endforeach
+                                                            <td>{{ number_format(($item["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        </tr>
 
-                                                    {{-- MOV --}}
-                                                    <tr>
-                                                        <td rowspan="2">MOV</td>
-                                                        <td>Cantidad</td>
-                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
-                                                        <td>{{ $info["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
-                                                        @endforeach
-                                                        <td>{{ $item["ResultsReport"]["Acciones"]["MOV"]["Cantidad"] ?? 0 }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Tiempo (min)</td>
-                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
-                                                        <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
-                                                        @endforeach
-                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
-                                                    </tr>
+                                                        {{-- CONTROL --}}
+                                                        <tr>
+                                                            <td rowspan="2">CONTROL</td>
+                                                            <td>Cantidad</td>
+                                                            @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                            <td>{{ $info["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
+                                                            @endforeach
+                                                            <td>{{ $item["ResultsReport"]["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Tiempo (min)</td>
+                                                            @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                            <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                            @endforeach
+                                                            <td>{{ number_format(($item["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        </tr>
 
-                                                    {{-- CONTROL --}}
-                                                    <tr>
-                                                        <td rowspan="2">CONTROL</td>
-                                                        <td>Cantidad</td>
-                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
-                                                        <td>{{ $info["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
-                                                        @endforeach
-                                                        <td>{{ $item["ResultsReport"]["Acciones"]["CONTROL"]["Cantidad"] ?? 0 }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Tiempo (min)</td>
-                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
-                                                        <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
-                                                        @endforeach
-                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
-                                                    </tr>
+                                                        {{-- CUM --}}
+                                                        <tr>
+                                                            <td>CUM</td>
+                                                            <td>Cantidad</td>
+                                                            @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                            <td>{{ $info["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                                                            @endforeach
+                                                            <td>{{ $item["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                                                        </tr>
 
-                                                    {{-- CUM --}}
-                                                    <tr>
-                                                        <td>CUM</td>
-                                                        <td>Cantidad</td>
-                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
-                                                        <td>{{ $info["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
-                                                        @endforeach
-                                                        <td>{{ $item["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
-                                                    </tr>
+                                                        {{-- SCUM --}}
+                                                        <tr>
+                                                            <td>SCUM</td>
+                                                            <td>Cantidad</td>
+                                                            @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                            <td>{{ $info["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                                                            @endforeach
+                                                            <td>{{ $item["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                                                        </tr>
 
-                                                    {{-- SCUM --}}
-                                                    <tr>
-                                                        <td>SCUM</td>
-                                                        <td>Cantidad</td>
-                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
-                                                        <td>{{ $info["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
-                                                        @endforeach
-                                                        <td>{{ $item["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
-                                                    </tr>
+                                                        {{-- XCUM --}}
+                                                        <tr>
+                                                            <td>XCUM</td>
+                                                            <td>Cantidad</td>
+                                                            @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
+                                                            <td>{{ $info["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                                                            @endforeach
+                                                            <td>{{ $item["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                                                        </tr>
 
-                                                    {{-- XCUM --}}
-                                                    <tr>
-                                                        <td>XCUM</td>
-                                                        <td>Cantidad</td>
-                                                        @foreach($item["ResultsReport"]["Maquinas"] as $Maquina=>$info)
-                                                        <td>{{ $info["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
-                                                        @endforeach
-                                                        <td>{{ $item["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
-                                                    </tr>
-
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <br>
                                             <p><b>Información de tokens por páginas y modelos:</b></p>
 
@@ -321,7 +331,8 @@
 
                                             </table>
 
-
+                                            @if (str_contains(url()->full(), 'localhost'))
+                                        
                                             <div class="row">
                                                 <div class="col-md-3 mt-2 d-grid">
                                                     <button class="btn btn-outline-secondary" type="button" wire:click="verReporte({{$index}})">Ver reporte en PDF</button>
@@ -336,6 +347,7 @@
                                                     <button class="btn btn-outline-primary" wire:click="enviarCorreoCustom({{$index}})">Enviar correo</button>
                                                 </div>
                                             </div>
+                                            @endif
 
                                         </div>
                                         
@@ -346,9 +358,11 @@
                         @endforeach
                     </div>
                 </div>
+                @if (str_contains(url()->full(), 'localhost'))
                 <div class="col-md-12 mt-2 d-grid">
                     <button class="btn btn-outline-primary" wire:click="enviarTodosReportes()">Enviar todos los reportes</button>
                 </div>
+                @endif
                 @endif
 
             </div>
