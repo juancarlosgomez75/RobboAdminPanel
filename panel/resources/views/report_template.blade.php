@@ -463,12 +463,19 @@
 
     <div class="page-break"></div>
 
-    <b style="color:#c84b46; font-size: 16px;">Términos y condiciones:</b><br>
+    <b style="color:#c84b46; font-size: 16px;">Aviso legal sobre facturación electrónica y plazos de pago:</b><br>
     <p style="font-size: 12px; text-align: justify;">
-        A esta remisión de servicios aplican las normas relativas a la letra de cambio (artículo 5 Ley 1231 de 2008). Con esta el Comprador declara haber recibido real y materialmente las mercancías o prestación de servicios descritos en este título - Valor. Número Autorización 18764017968771 aprobado en 20210913 prefijo CT desde el número 1 al 50 Vigencia: 12 Meses.  Para presentar cualquier queja o reclamo, comuníquese al 3108197185  dentro de los primeros 30 días hábiles posteriores la fecha de expedición de la factura.                                                                                                                                                                                
-        <br>
-        <br>
-        Por favor, informe si se encuentra excluido del pago de retención en la fuente según el articulo 369 del estatuto tributario. 
+        Nos permitimos informar a nuestros clientes que, conforme a nuestras políticas comerciales y en cumplimiento de la normativa vigente en materia de facturación electrónica, todas las facturas generadas por la adquisición de nuestros bienes y/o servicios serán enviadas al correo electrónico registrado previamente en la plataforma SIIGO. Este envío se efectuará dentro de un plazo máximo de cinco (5) días hábiles contados a partir de la fecha de realización de la operación comercial correspondiente.
+        <br><br>
+        Es responsabilidad del cliente asegurarse de que el correo electrónico suministrado en el sistema esté actualizado, activo y sea accesible, con el fin de garantizar la correcta recepción de los documentos electrónicos. Cualquier error en los datos de contacto que impida la recepción oportuna de la factura será responsabilidad exclusiva del cliente, por lo cual recomendamos revisar y confirmar que la información registrada en el sistema sea correcta.
+        <br><br>
+        Una vez recibida la factura electrónica, el cliente dispondrá de un plazo máximo de cinco (5) días hábiles, contados a partir de la fecha de recepción del documento, para efectuar el pago correspondiente en los términos y condiciones acordados. El incumplimiento en el pago dentro del plazo establecido podrá dar lugar a la aplicación de intereses moratorios, la suspensión de servicios, o cualquier otra medida que la empresa considere pertinente, conforme a lo establecido en el contrato de prestación de servicios o en las condiciones comerciales previamente aceptadas.
+        <br><br>
+        Agradecemos su atención a este aviso y su colaboración para el cumplimiento oportuno de las obligaciones derivadas de nuestras relaciones comerciales.
+        <br><br>
+        Este reporte tiene únicamente fines informativos y no constituye una factura electrónica. El presente documento se genera con el objetivo de brindar al cliente un resumen detallado de la transacción realizada y facilitar el seguimiento de la operación. No tiene validez comercial, fiscal ni contable, y no puede utilizarse como soporte para efectos tributarios o financieros.
+        <br><br>
+        Para cualquier duda o inquietud relacionada con el proceso de facturación o el estado de su cuenta, puede comunicarse con nuestro equipo de soporte a través de los canales oficiales de atención al cliente.
     </p>
 
 </body>
