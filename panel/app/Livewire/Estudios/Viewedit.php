@@ -138,7 +138,8 @@ class Viewedit extends Component
                     "Contact"=>$this->responsable,
                     "Phone"=>$this->telcontacto,
                     "Phone2"=>$this->telcontacto2,
-                    "Email"=>$this->email
+                    "Email"=>$this->email,
+                    "Active"=>$this->activo
                 ],
                 "Data"=>[
                     "UserId"=>"1"
