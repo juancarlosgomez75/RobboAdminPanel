@@ -144,6 +144,11 @@ class Order extends Component
         foreach($this->estudios as $estudio){
             //Analizo si el nombre coincide
             if(preg_match('/' . preg_quote(strtoupper($this->study_search), '/') . '/i', strtoupper($estudio["StudyName"]))){
+                
+                if(!$estudio["Active"]){
+                    $this->dispatch('mostrarToast', 'Buscar estudio', 'Se ha localizado al estudio, pero no se puede usar porque está inhabilitado');
+                    return;
+                }
                 //Indico que localicé el estudio
                 $this->studyFind=true;
 

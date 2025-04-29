@@ -43,7 +43,9 @@
                                 @if(!empty($listadoestudios))
                                 <option disabled value="0">Seleccionar un estudio</option>
                                 @foreach($listadoestudios as $estudio)
+                                @if($estudio["Active"])
                                 <option value="{{$estudio["Id"]}}">{{$estudio["FullName"]}}</option>
+                                @endif
                                 @endforeach
                                 @else
                                 <option disabled value="0"></option>

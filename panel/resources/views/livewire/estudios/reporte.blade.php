@@ -50,7 +50,9 @@
                         @if (!empty(($informacion)))
                         @foreach($informacion as $index=>$estudio)
                         @if(!in_array($index,$indexSeleccionados))
-                        <option value="{{$index+1}}">{{$estudio["StudyName"]." (".$estudio["City"].")"}}</option>
+                            @if($estudio["Active"])
+                            <option value="{{$index+1}}">{{$estudio["StudyName"]." (".$estudio["City"].")"}}</option>
+                            @endif
                         @endif
                         @endforeach
                         
