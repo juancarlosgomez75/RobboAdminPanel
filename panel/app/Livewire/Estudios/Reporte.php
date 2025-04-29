@@ -95,8 +95,8 @@ class Reporte extends Component
             return;
         }
     
-        if ($inicio->diffInDays($fin) > 15) {
-            $this->dispatch('mostrarToast', 'Continuar reporte', "No puede haber más de 15 días entre fechas");
+        if ($inicio->diffInDays($fin) > 31) {
+            $this->dispatch('mostrarToast', 'Continuar reporte', "No puede haber más de 31 días entre fechas");
             return;
         }
 
