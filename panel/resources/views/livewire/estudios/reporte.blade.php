@@ -97,6 +97,7 @@
                 <div class="col-md-12">
                     {{-- {{json_encode($resultado)}} --}}
                     <div class="accordion" id="accordionPanelsStayOpenExample">
+                        @if(!empty($resultado))
                         @foreach ($resultado as $index => $item)
                             @if(array_key_exists("ResultsReport", $item))
                             <div class="accordion-item">
@@ -358,6 +359,9 @@
                             </div>
                             @endif
                         @endforeach
+                        @else
+                        ERROR GENERANDO
+                        @endif
                     </div>
                 </div>
                 @if (str_contains(url()->full(), 'localhost'))
