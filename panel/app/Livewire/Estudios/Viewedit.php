@@ -35,6 +35,21 @@ class Viewedit extends Component
 
     public $estudioMoveInfo;
 
+    public $ordenarModelosPor = "user";
+    public $ordenarModelosDesc = true;
+
+    public function ordenarModelosBy($filtro){
+        //Analizo si cambia es la columna o la dirección
+        if($filtro == "manager" || $filtro == "user"){
+            if($filtro != $this->ordenarModelosPor){
+                $this->ordenarModelosPor = $filtro;
+                $this->ordenarModelosDesc = true;
+            }else{
+                $this->ordenarModelosDesc = !$this->ordenarModelosDesc;
+            } 
+        }
+    }
+    
     public function validar(){
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
@@ -474,6 +489,32 @@ class Viewedit extends Component
         usort($this->maquinas, function ($a, $b) {
             return strcmp($a["FirmwareID"], $b["FirmwareID"]);
         });
-        return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"modelos"=>$this->modelos, "maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades]);
+
+        $modelosFiltrados=$this->modelos;
+
+        //Aplico los filtros a los modelos
+        if($this->ordenarModelosPor=="manager"){
+            if($this->ordenarModelosDesc){
+                usort($modelosFiltrados, function ($a, $b) {
+                    return strcmp($a["manager_name"], $b["manager_name"]);
+                });
+            }else{
+                usort($modelosFiltrados, function ($a, $b) {
+                    return strcmp($b["manager_name"], $a["manager_name"]);
+                });
+            }
+        }else if($this->ordenarModelosPor=="user"){
+            if($this->ordenarModelosDesc){
+                usort($modelosFiltrados, function ($a, $b) {
+                    return strcmp($a["ModelUserName"], $b["ModelUserName"]);
+                });
+            }else{
+                usort($modelosFiltrados, function ($a, $b) {
+                    return strcmp($b["ModelUserName"], $a["ModelUserName"]);
+                });
+            }
+        }
+
+        return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"modelosOrdenados"=>$modelosFiltrados, "maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades]);
     }
 }

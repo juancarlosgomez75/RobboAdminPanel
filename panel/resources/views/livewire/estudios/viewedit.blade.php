@@ -143,20 +143,45 @@
                     <br>
                     <h5 class="card-title">Modelos registrados</h5>
                     <p class="card-text">Estos son los modelos registrados en este estudio</p><br>
-
                     <table class="table">
                         <thead>
                             <tr class="align-middle">
                                 <th scope="col">#</th>
-                                <th scope="col">Manager</th>
-                                <th scope="col">Username</th>
+                                <th scope="col" style="cursor: pointer;" wire:click="ordenarModelosBy('manager')">
+                                    @if($ordenarModelosPor=="manager")
+                                    @if($ordenarModelosDesc)
+                                        <a  class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-down me-2"></i>
+                                        </a>
+                                    @else
+                                        <a class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-up me-2"></i>
+                                        </a>
+                                    @endif
+                                    @endif
+                                    Manager
+                                </th>
+                                <th scope="col" style="cursor: pointer;" wire:click="ordenarModelosBy('user')">
+                                    @if($ordenarModelosPor=="user")
+                                    @if($ordenarModelosDesc)
+                                        <a  class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-down me-2"></i>
+                                        </a>
+                                    @else
+                                        <a class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-up me-2"></i>
+                                        </a>
+                                    @endif
+                                    @endif
+                                    Username
+                                </th>
                                 <th scope="col">Páginas</th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(!empty($modelos))
-                            @foreach ($modelos as $Model)
+                            @if(!empty($modelosOrdenados))
+                            @foreach ($modelosOrdenados as $Model)
                             <tr>
                                 <td>{{$Model["ModelId"]}}</td>
                                 <td>{{$Model["manager_name"]}}</td>
