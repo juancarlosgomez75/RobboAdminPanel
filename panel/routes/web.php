@@ -62,6 +62,7 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:4')->contro
 Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class)->group(function(){
     Route::get('/panel/perfil', 'profile_view')->name('panel.perfil.view');
     Route::get('/panel', 'index')->name('panel.index');
+    Route::get('/panel/consulta', 'consulta')->name('panel.consulta');
 });
 
 Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->controller(InventoryController::class)->group(function(){
