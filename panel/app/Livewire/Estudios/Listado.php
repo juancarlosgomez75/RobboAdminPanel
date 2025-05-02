@@ -12,7 +12,22 @@ class Listado extends Component
 
     public $filtroEstado="1";
     public $filtrosActivos = false;
+
+    public $ordenarPor = "name";
+    public $ordenarDesc = true;
     public $datos;
+
+    public function ordenarBy($filtro){
+        //Analizo si cambia es la columna o la dirección
+        if($filtro == "name" || $filtro == "city"){
+            if($filtro != $this->ordenarPor){
+                $this->ordenarPor = $filtro;
+                $this->ordenarDesc = true;
+            }else{
+                $this->ordenarDesc = !$this->ordenarDesc;
+            } 
+        }
+    }
 
     public function switchFiltros()
     {
@@ -44,10 +59,29 @@ class Listado extends Component
             return $nombreCoincide && $ciudadCoincide  && $estadoCoincide;
         });
 
-        //Ordeno
-        usort($filtrados, function ($a, $b) {
-            return strcmp($a["StudyName"], $b["StudyName"]);
-        });
+
+        //Ordeno según el tipo de ordenación
+        if($this->ordenarPor=="name"){
+            if($this->ordenarDesc){
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($a["StudyName"], $b["StudyName"]);
+                });
+            }else{
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($b["StudyName"], $a["StudyName"]);
+                });
+            }
+        }else if($this->ordenarPor=="city"){
+            if($this->ordenarDesc){
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($a["City"], $b["City"]);
+                });
+            }else{
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($b["City"], $a["City"]);
+                });
+            }
+        }
 
         return view('livewire.estudios.listado', [
             'texto' => $this->filtroNombre,

@@ -39,8 +39,34 @@
                         <thead>
                             <tr>
                                 <th class="w-10" scope="col" style="width: 7%;">#</th>
-                                <th class="w-40" scope="col">Nombre</th>
-                                <th class="w-30" scope="col">Ciudad</th>
+                                <th class="w-40" scope="col" style="cursor: pointer;" wire:click="ordenarBy('name')" >
+                                    @if($ordenarPor=="name")
+                                        @if($ordenarDesc)
+                                            <a  class="text-decoration-none text-dark"> 
+                                                <i class="fa-solid fa-angle-down me-2"></i>
+                                            </a>
+                                        @else
+                                            <a class="text-decoration-none text-dark"> 
+                                                <i class="fa-solid fa-angle-up me-2"></i>
+                                            </a>
+                                        @endif
+                                    @endif
+                                    Nombre 
+                                </th>
+                                <th class="w-30" scope="col" style="cursor: pointer;" wire:click="ordenarBy('city')">
+                                    @if($ordenarPor=="city")
+                                        @if($ordenarDesc)
+                                            <a  class="text-decoration-none text-dark"> 
+                                                <i class="fa-solid fa-angle-down me-2"></i>
+                                            </a>
+                                        @else
+                                            <a class="text-decoration-none text-dark"> 
+                                                <i class="fa-solid fa-angle-up me-2"></i>
+                                            </a>
+                                        @endif
+                                    @endif
+                                    Ciudad
+                                </th>
                                 <th></th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
