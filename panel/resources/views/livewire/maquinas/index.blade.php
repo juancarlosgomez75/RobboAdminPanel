@@ -35,10 +35,49 @@
                         <thead>
                             <tr>
                                 <th scope="col" style="width: 7%;">#</th>
-                                <th scope="col">Hardware</th>
+                                <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('hardware')">
+                                    @if($ordenarPor=="hardware")
+                                    @if($ordenarDesc)
+                                        <a  class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-down me-2"></i>
+                                        </a>
+                                    @else
+                                        <a class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-up me-2"></i>
+                                        </a>
+                                    @endif
+                                    @endif
+                                    Hardware
+                                </th>
                                 <th scope="col">Tipo</th>
-                                <th scope="col">Ciudad</th>
-                                <th scope="col">Estudio</th>
+                                <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('city')">
+                                    @if($ordenarPor=="city")
+                                    @if($ordenarDesc)
+                                        <a  class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-down me-2"></i>
+                                        </a>
+                                    @else
+                                        <a class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-up me-2"></i>
+                                        </a>
+                                    @endif
+                                    @endif
+                                    Ciudad
+                                </th>
+                                <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('study')">
+                                    @if($ordenarPor=="study")
+                                    @if($ordenarDesc)
+                                        <a  class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-down me-2"></i>
+                                        </a>
+                                    @else
+                                        <a class="text-decoration-none text-dark"> 
+                                            <i class="fa-solid fa-angle-up me-2"></i>
+                                        </a>
+                                    @endif
+                                    @endif
+                                    Estudio
+                                </th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>

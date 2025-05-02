@@ -11,7 +11,22 @@ class Index extends Component
     public $filtroEstudio = "";
     public $filtrosActivos = false;
 
+    public $ordenarPor = "hardware";
+    public $ordenarDesc = true;
+
     public $Maquinas;
+
+    public function ordenarBy($filtro){
+        //Analizo si cambia es la columna o la dirección
+        if($filtro == "hardware" || $filtro == "city"  || $filtro == "study"){
+            if($filtro != $this->ordenarPor){
+                $this->ordenarPor = $filtro;
+                $this->ordenarDesc = true;
+            }else{
+                $this->ordenarDesc = !$this->ordenarDesc;
+            } 
+        }
+    }
 
     public function switchFiltros()
     {
@@ -26,10 +41,6 @@ class Index extends Component
 
     public function mount($Maquinas){
         $this->Maquinas = $Maquinas;
-
-        usort($this->Maquinas, function ($a, $b) {
-            return strcmp($a["FirmwareID"], $b["FirmwareID"]);
-        });
     }
 
     public function render()
@@ -46,6 +57,39 @@ class Index extends Component
                 (empty($this->filtroEstudio) || 
                     (isset($dato["StudyData"]["StudyName"]) && stripos(mb_strtolower($dato["StudyData"]["StudyName"]), mb_strtolower($this->filtroEstudio)) !== false));
         }));
+
+        //Ordeno según el tipo de ordenación
+        if($this->ordenarPor=="hardware"){
+            if($this->ordenarDesc){
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($a["FirmwareID"], $b["FirmwareID"]);
+                });
+            }else{
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($b["FirmwareID"], $a["FirmwareID"]);
+                });
+            }
+        }else if($this->ordenarPor=="city"){
+            if($this->ordenarDesc){
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($a["Location"], $b["Location"]);
+                });
+            }else{
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($b["Location"], $a["Location"]);
+                });
+            }
+        }else if($this->ordenarPor=="study"){
+            if($this->ordenarDesc){
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($a['StudyData']["StudyName"], $b['StudyData']["StudyName"]);
+                });
+            }else{
+                usort($filtrados, function ($a, $b) {
+                    return strcmp($b['StudyData']["StudyName"], $a['StudyData']["StudyName"]);
+                });
+            }
+        }
         
         
         
