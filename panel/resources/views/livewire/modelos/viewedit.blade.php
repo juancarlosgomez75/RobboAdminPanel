@@ -23,7 +23,7 @@
                             <br>
                         </div>
                         <div class="col-md-4">
-                            <label for="customname" class="form-label">Nombre personalizado</label>
+                            <label for="customname" class="form-label">Mensaje personalizado</label>
                             <input type="text" class="form-control" id="customname" aria-describedby="customnameHelp" placeholder="Ejemplo: Labtesito" wire:model="customname" @if(!$editing) disabled @endif>
                             <div id="customnameHelp" class="form-text">Con el que el driver saluda si decides usarlo.</div>
                         </div>
