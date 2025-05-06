@@ -27,16 +27,10 @@ class ManagerCreate extends Component
 
             return false;
         }
-        elseif (!empty(trim($this->email))) {
-            $emails = explode(';', $this->email);
-            $regex = '/^[\w\.-]+@[\w\.-]+\.\w{2,}$/';
-            foreach ($emails as $email) {
-                $email = trim($email);
-                if (!preg_match($regex, $email)) {
-                    $this->dispatch('mostrarToast', 'Crear manager', "Alerta: El email '$email' no es válido");
-                    return false;
-                }
-            }
+        elseif(!(preg_match('/^[\w\.-]+@[\w\.-]+\.\w{2,}$/', $this->email) && !empty(trim($this->email)))){
+            $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El email no es válido");
+
+            return false;
         }
         return true;
     }
