@@ -1,7 +1,28 @@
 <div>
     <div class="w-100 mb-3">
         <div class="row ps-4 pe-4">
-            <div class="col-12 shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+            <div class="col-12 p-3 mb-1">
+                <div class="row text-center">
+                    <div class="col-3">
+                        <span>Dólares quincena</span><br>
+                        <span style="font-weight: bold; color: gray; font-size:1.2rem">$5.25</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Dólares ayer</span><br>
+                        <span style="font-weight: bold; color: gray; font-size:1.2rem">$5.25</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Dólares hoy</span><br>
+                        <span style="font-weight: bold; color: gray; font-size:1.2rem">$5.25</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Máquinas conectadas</span><br>
+                        <span style="font-weight: bold; color: gray; font-size:1.2rem">10</span>
+                    </div>
+                </div>
+            </div>
+            @for($i=0;$i<9;$i+=1)
+            <div class="col-12 shadow-sm p-3 mb-1 bg-body-tertiary rounded">
                 <div class="row">
                     <div class="col-12 d-flex align-items-center flex-wrap">
                         <a style="color:#ce3737; font-weight: bold; text-decoration: none;" href="#">XCELSIOR ESTUDIO (RF)</a>
@@ -21,18 +42,18 @@
                     
                         <a class="ms-5"></a>
                         <a href="#" class="bg-success me-1" style="padding: 5px; text-decoration: none; font-weight: bold; color:white; font-size: 0.8rem;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Chaturbate On">CH</a>
-                        <a href="#" class="bg-secondary me-1" style="padding: 5px; text-decoration: none; font-weight: bold; color:white; font-size: 0.8rem;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Chaturbate off">CH</a>
+                        <a href="#" class="bg-secondary me-1" style="padding: 5px; text-decoration: none; font-weight: bold; color:white; font-size: 0.8rem;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Stripchat off">SC</a>
                     
                         <span class="ms-auto">
-                            <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#collapse{{$i}}" aria-expanded="false" aria-controls="collapse{{$i}}">
                                 <i class="fa-solid fa-chevron-down"></i>
                             </button>
                             
                         </span>
                     </div>
-                    <div class="col-12 collapse mt-3" id="collapseExample">
+                    <div class="col-12 collapse mt-3" id="collapse{{$i}}">
                         <div class="row">
-                            <div class="col-8">
+                            <div class="col-12 col-xxl-8 mb-2">
                                 <div class="input-group">
                                     <input type="checkbox" class="btn-check" id="btn-check-4" autocomplete="off">
                                     <label class="btn btn-outline-secondary" for="btn-check-4">Voz</label>
@@ -51,7 +72,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-4">
+                            <div class="col-12 col-xxl-4 text-center">
                                 <div class="btn-group ps-4" role="group" aria-label="Basic example">
                                     <button type="button" class="btn btn-outline-secondary">Test move</button>
                                     <button type="button" class="btn btn-outline-secondary">Test cum</button>
@@ -64,6 +85,7 @@
                     </div>               
                 </div>
             </div>
+            @endfor
         </div>
     </div>
     <script>
