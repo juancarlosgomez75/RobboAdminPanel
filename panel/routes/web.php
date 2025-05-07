@@ -63,6 +63,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class
     Route::get('/panel/perfil', 'profile_view')->name('panel.perfil.view');
     Route::get('/panel', 'index')->name('panel.index');
     Route::get('/panel/consulta', 'consulta')->name('panel.consulta');
+    Route::get('/panel/dashboard', 'dashboard')->name('dashboard');
 });
 
 Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->controller(InventoryController::class)->group(function(){

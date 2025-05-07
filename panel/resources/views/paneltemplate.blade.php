@@ -221,6 +221,7 @@ body {
                             <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
                             <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
                             <li><a href="{{ route('reportes') }}">Reportes</a></li>
+                            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         </ul>
                     </li>
                     @endif

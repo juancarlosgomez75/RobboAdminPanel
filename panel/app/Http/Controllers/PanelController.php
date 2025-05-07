@@ -37,4 +37,8 @@ class PanelController extends Controller
 
         return json_encode($data);
     }
+
+    public function dashboard(){
+        return view("admin.dashboard");
+    }
 }
