@@ -124,6 +124,7 @@ class Categorias extends Component
                     $this->dispatch('mostrarToast', 'Crear categoría', 'Se ha creado la categoría con éxito');
                     registrarLog("Inventario","Categorías","Crear","Se ha creado la categoría #".$categoria->id.", con nombre: ".$categoria->name,true);
                     $this->dispatch('refrescarCategorias');
+                    $this->reset();
                 }else{
                     registrarLog("Inventario","Categorías","Crear","Se ha intentado crear la categoría #".$categoria->id.", con nombre: ".$categoria->name,false);
                     $this->dispatch('mostrarToast', 'Crear categoría', 'Error: Póngase en contacto con soporte');
