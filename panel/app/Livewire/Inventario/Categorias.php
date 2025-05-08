@@ -52,7 +52,9 @@ class Categorias extends Component
             $this->dispatch('mostrarToast', 'Editar categoría', 'Error: El nombre de la categoría no es válido o está vacía');
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description_edit) && !empty(trim($this->description_edit)))){
+        elseif (!empty(trim($this->description_edit)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description_edit)) {
+
+            
             $this->dispatch('mostrarToast', 'Editar categoría', 'Error: La descripción de la categoría no es válida o está vacía');
             return false;
         }
@@ -99,7 +101,7 @@ class Categorias extends Component
             $this->dispatch('mostrarToast', 'Crear categoría', 'Error: El nombre de la categoría no es válido o está vacío');
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description) && !empty(trim($this->description)))){
+        elseif (!empty(trim($this->description)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description)) {
             $this->dispatch('mostrarToast', 'Crear categoría', 'Error: La descripción de la categoría no es válida o está vacía');
             return false;
         }

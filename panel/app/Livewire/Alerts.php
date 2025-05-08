@@ -3,24 +3,25 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On; 
 
 class Alerts extends Component
 {
     public $toasts = [];
-    protected $listeners = ['mostrarToast'];
 
-    public function mostrarToast($titulo,$mensaje)
+    #[On('mostrarToast')] 
+    public function crearToast($title,$message)
     {
-        // Agregar nuevo toast al array
-        $this->toasts[] = ['titulo'=>$titulo,'mensaje' => $mensaje];
+        $this->toasts[] = ["Title"=>$title, "Message"=>$message];
 
-        // Eliminar el mensaje después de 3 segundos
-        $this->dispatch('ocultarToast');
+        // Cierra el toast después de 10 segundos (10000 ms)
+        $this->dispatch('closeToast', 5000);
     }
 
-    public function eliminarToast()
+    public function removeToast($index)
     {
-        array_shift($this->toasts); // Quita el primer mensaje
+        unset($this->toasts[$index]);
+        $this->toasts = array_values($this->toasts); // Reindexar el array
     }
 
     public function render()

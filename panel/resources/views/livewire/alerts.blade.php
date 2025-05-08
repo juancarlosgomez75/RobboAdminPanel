@@ -1,18 +1,28 @@
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 1050; width: auto;">
-    <div id="toast-container">
-        @foreach($toasts as $index => $toast)
-            <div class="toast show fade mb-2" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
-                <div class="toast-header">
-                    <img src="{{ asset('img/bb.jpg') }}" class="rounded me-2" alt="Icono" width="20">
-                    <strong class="me-auto">{{ $toast['titulo'] ?? 'Notificación' }}</strong>
-                    <small>Hace un momento</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
-                        wire:click="eliminarToast"></button>
-                </div>
-                <div class="toast-body">
-                    {{ $toast['mensaje'] }}
-                </div>
+<div style="position: fixed; top: 0; right: 20px; z-index: 1050;">
+    
+    @foreach ($toasts as $index => $toast)
+    {{-- class="toast show bg-success text-white" para añadir colores --}}
+        <div class="toast show mt-3" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="{{ asset('img/bb.jpg') }}" class="rounded me-2" alt="Icono" width="20">
+                <strong class="me-auto">{{ $toast['Title'] ?? 'Notificación' }}</strong>
+                <small>Hace un momento</small>
+                <button type="button" class="btn-close" wire:click="removeToast({{ $index }})" aria-label="Close"></button>
             </div>
-        @endforeach
-    </div>
+            <div class="toast-body">
+                {{ $toast["Message"] }}
+            </div>
+        </div>
+    @endforeach
+    {{-- <button wire:click="addTest()">aaaaaa</button> --}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('closeToast', event => {
+                setTimeout(() => {
+                    @this.removeToast(0);
+                }, event.detail);
+            });
+        });
+    </script>
 </div>

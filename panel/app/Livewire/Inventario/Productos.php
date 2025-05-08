@@ -29,8 +29,8 @@ class Productos extends Component
             $this->dispatch('mostrarToast', 'Crear producto', 'Error: El nombre del producto no es válido o está vacío');
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description) && !empty(trim($this->description)))){
-            $this->dispatch('mostrarToast', 'Crear producto', 'Error: La descripción del producto no es válida o está vacía');
+        elseif (!empty(trim($this->description)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->description)) {
+            $this->dispatch('mostrarToast', 'Crear producto', 'Error: La descripción del producto no es válida');
             return false;
         }
         elseif(!empty(trim($this->ref)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->ref)) {
@@ -79,6 +79,7 @@ class Productos extends Component
 
                 if($inventario->save()){
                     $this->dispatch('mostrarToast', 'Crear producto', 'Se ha creado el producto');
+                    $this->reset();
                 }else{
                     $this->dispatch('mostrarToast', 'Crear producto', 'Se ha producido un error al crear el inventario, contacte con soporte');
                 }
