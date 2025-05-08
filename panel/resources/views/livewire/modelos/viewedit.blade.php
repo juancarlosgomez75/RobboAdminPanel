@@ -2,6 +2,7 @@
     {{-- {{json_encode($ModelInformation)}} --}}
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{{route("estudios.index")}}" class="text-secondary">Estudios</a></li>
             <li class="breadcrumb-item "><a href="{{route("estudio.ver",$estudioactual)}}" class="text-secondary">Estudio</a></li>
             <li class="breadcrumb-item active" aria-current="page">Modelo</li>
         </ol>

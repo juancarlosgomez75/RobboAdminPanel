@@ -1,4 +1,10 @@
 <div>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item "><a href="{{route("estudios.index")}}" class="text-secondary">Estudios</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Estudio</li>
+        </ol>
+    </nav>
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
