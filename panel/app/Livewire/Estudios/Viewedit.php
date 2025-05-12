@@ -62,6 +62,11 @@ class Viewedit extends Component
     }
     public function importCsv()
     {
+        //Reinicio los registros
+        
+        $this->loadedModels=[];
+        $this->loadedResults=[];
+
         // Validación manual del archivo
         $validator = Validator::make(
             ['csv_file' => $this->csv_file],
