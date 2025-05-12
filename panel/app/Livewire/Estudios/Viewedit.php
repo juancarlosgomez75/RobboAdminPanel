@@ -223,6 +223,9 @@ class Viewedit extends Component
         //Almaceno los resultados
         $this->loadedResults=$resultados;
 
+        //Genero el log
+        registrarLog("Producción","Modelos","Crear por CSV","Se ha registrado a los modelos: ".json_encode($this->loadedModels)." y se obtuvieron los siguientes resultados: ".json_encode($this->loadedResults),true);
+
         //Envio a que se abra el modal
         $this->dispatch('abrirModalResults');
     }
