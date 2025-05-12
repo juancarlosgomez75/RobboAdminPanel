@@ -9,6 +9,9 @@ use Livewire\Component;
 
 class Productos extends Component
 {
+    public $filtroNombre = "";
+    public $filtroCat = "";
+
     public $name;
     public $description;
     public $category=-1;
@@ -18,7 +21,20 @@ class Productos extends Component
     protected $category_use;
     public $ref;
 
+    public $filtrosActivos=False;
+
     protected $listeners = ['refrescarCategorias'];
+
+    public function switchFiltros()
+    {
+        $this->filtrosActivos = !$this->filtrosActivos;
+        
+        if (!$this->filtrosActivos) {
+            $this->filtroCat="";
+            $this->filtroNombre="";
+        }
+    }
+    
 
     public function refrescarCategorias(){
         $this->render();
@@ -91,8 +107,23 @@ class Productos extends Component
     }
     public function render()
     {
+
         //Busco los productos
         $productos=Product::all();
+
+        // Aplicar filtro por nombre (si hay)
+        if (!empty($this->filtroNombre)) {
+            $productos = $productos->filter(function ($producto) {
+                return stripos($producto->name, $this->filtroNombre) !== false;
+            });
+        }
+
+        // Aplicar filtro por categoría (si hay)
+        if (!empty($this->filtroCat)) {
+            $productos = $productos->filter(function ($producto) {
+                return stripos(optional($producto->category_info)->name, $this->filtroCat) !== false;
+            });
+        }
 
         //Busco las categorías
         $categorias=ProductCategory::all();

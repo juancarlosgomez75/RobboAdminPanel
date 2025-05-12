@@ -1,4 +1,45 @@
 <div>
+    <style>
+    .custom-input {
+        display: flex;
+        align-items: center;
+        padding: 4px 10px; /* Reduce la altura */
+        border: 1px solid #ddd; /* Borde gris claro */
+        border-radius: 6px;
+        width: 100%;
+        font-size: 14px;
+        margin-bottom:0.5rem;
+        height: 30px; /* Controla la altura */
+    }
+
+    .custom-input:focus {
+        outline: none;
+        box-shadow: none; /* Elimina borde azul en focus */
+        border-color: #ccc; /* Borde ligeramente más oscuro al enfocar */
+    }
+
+    .hide{
+        display: none;
+    }
+
+    </style>
+    <div class="row mb-3">
+        <div class="col-2 d-flex align-items-center">
+            <button type="button" class="btn btn-sm action-btn btn-outline-secondary" wire:click="switchFiltros()">
+                <i class="fa-solid fa-filter"></i> Filtros
+            </button>
+        </div>
+        <div class="col-md-10 @if(!$filtrosActivos) hide @endif" id="Filtros">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" class="custom-input" placeholder="Filtrar por nombre" wire:model.change="filtroNombre">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="custom-input" placeholder="Filtrar por categoria" wire:model.change="filtroCat">
+                </div>
+            </div>
+        </div>
+    </div>
     <table class="table">
         <thead>
             <tr>
