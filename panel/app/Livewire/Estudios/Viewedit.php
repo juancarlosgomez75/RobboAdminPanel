@@ -91,9 +91,9 @@ class Viewedit extends Component
         $headers = array_map('trim', array_shift($data));
 
         $requiredColumns = [
-            'username', 'custom_name', 'use_custom', 'chaturbate', 'camsoda', 'stripchat',
-            'eplay', 'amateur', 'cams', 'streamate', 'bonga', 'manyvids', 'f4f', 'xlove',
-            'cam4', 'myfc'
+            'USERNAME', 'CUSTOM_NAME', 'USE_CUSTOM', 'CHATURBATE', 'CAMSODA', 'STRIPCHAT',
+            'EPLAY', 'AMATEUR', 'CAMS', 'STREAMATE', 'BONGA', 'MANYVIDS', 'F4F', 'XLOVE',
+            'CAM4', 'MYFC'
         ];
 
         // Validar columnas
@@ -121,22 +121,23 @@ class Viewedit extends Component
 
                 // Analizo y proceso
                 $modelInfo = [
-                    "Username"    => $rowData["username"],
-                    "Customname"  => $rowData["custom_name"],
-                    "UseCustom"   => $rowData["use_custom"],
+                    "Username"    => $rowData["USERNAME"],
+                    "Customname"  => $rowData["CUSTOM_NAME"],
+                    "UseCustom"   => $rowData["USE_CUSTOM"],
                     "Pages"       => []
                 ];
 
                 // Páginas disponibles (las que quieres revisar si están vacías o no)
                 $pageFields = [
-                    'chaturbate', 'camsoda', 'stripchat', 'eplay', 'amateur', 'cams',
-                    'streamate', 'bonga', 'manyvids', 'f4f', 'xlove', 'cam4', 'myfc'
+                    'CHATURBATE', 'CAMSODA', 'STRIPCHAT',
+                    'EPLAY', 'AMATEUR', 'CAMS', 'STREAMATE', 'BONGA', 'MANYVIDS', 'F4F', 'XLOVE',
+                    'CAM4', 'MYFC'
                 ];
 
                 // Solo incluir páginas no vacías
                 foreach ($pageFields as $page) {
                     if (!empty($rowData[$page])) {
-                        $modelInfo["Pages"][] = $page;
+                        $modelInfo["Pages"][$page] = $rowData[$page];
                     }
                 }
 
@@ -145,7 +146,8 @@ class Viewedit extends Component
         }
 
         // Éxito
-        $this->dispatch('mostrarToast', 'Cargar Información', "Se ha cargado el CSV correctamente.");
+        // $this->dispatch('mostrarToast', 'Cargar Información', "Se ha cargado el CSV correctamente.");
+        $this->dispatch('abrirModalSave');
     }
 
 

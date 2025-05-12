@@ -349,6 +349,91 @@
         </div>
     </div>
 
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Registro masivo de modelos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        A continuación se presenta la información almacenada por cada modelo, por favor verifica y si todo está bien, presiona en guardar para iniciar el proceso de almacenamiento.
+                    </p>
+
+                    @foreach($loadedModels as $model)
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <th>Username</th>
+                                    <th>Customname</th>
+                                    <th>Usar custom</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{$model["Username"]}}</td>
+                                        <td>{{$model["Customname"]}}</td>
+                                        <td>{{$model["UseCustom"]}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <table class="table mb-0 table-borderless text-center">
+                                                <thead>
+                                                    <tr>
+                                                        @foreach (array_keys($model['Pages']) as $header)
+                                                            <th>{{ $header }}</th>
+                                                        @endforeach
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        @foreach ($model['Pages'] as $valor)
+                                                            <td>{{ $valor }}</td>
+                                                        @endforeach
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+
+                    @endforeach
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" wire:click="guardarCambios()">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        Livewire.on('abrirModalSave', () => {
+            let modal = new bootstrap.Modal(document.getElementById('saveModal'));
+            modal.show();
+        });
+
+        Livewire.on('cerrarModalSave', () => {
+            let modalEl = document.getElementById('saveModal');
+            let modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+        });
+    });
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
