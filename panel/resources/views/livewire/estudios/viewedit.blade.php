@@ -5,7 +5,7 @@
             <li class="breadcrumb-item active" aria-current="page">Estudio</li>
         </ol>
     </nav>
-    {{json_encode($loadedModels)}}
+    {{-- {{json_encode($loadedModels)}} --}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
