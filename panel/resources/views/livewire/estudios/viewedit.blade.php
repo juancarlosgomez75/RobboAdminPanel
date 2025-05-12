@@ -224,11 +224,15 @@
                     </a>
                     
                 </div>
-                <div class="col-md-6 text-center">
-                    <form wire:submit.prevent="importCsv">
-                        <input class="form-control" type="file" wire:model.change="csv_file" accept=".csv">
-                        <button type="submit" class="btn btn-primary mt-2">Cargar CSV</button>
-                    </form>
+                <div class="col-md-5 text-center">
+                    
+                        <form wire:submit.prevent="importCsv">
+                            <div class="input-group">
+                            <input class="form-control" type="file" wire:model.change="csv_file" accept=".csv">
+                            <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Subir CSV</button>
+                            </div>
+                        </form>
+                    
                 </div>
                 <div class="col-md-12">
                     <br>
@@ -359,7 +363,8 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        A continuación se presenta la información almacenada por cada modelo, por favor verifica y si todo está bien, presiona en guardar para iniciar el proceso de almacenamiento.
+                        A continuación se presenta la información almacenada por cada modelo, por favor verifica y si todo está bien, presiona en guardar para iniciar el proceso de almacenamiento. <br>
+                        Los modelos ingresados serán asignados al primer manager registrado, si no hay, el sistema generará error.
                     </p>
 
                     @foreach($loadedModels as $model)
@@ -375,7 +380,13 @@
                                     <tr>
                                         <td>{{$model["Username"]}}</td>
                                         <td>{{$model["Customname"]}}</td>
-                                        <td>{{$model["UseCustom"]}}</td>
+                                        <td>
+                                            @if($model["UseCustom"])
+                                            Usarlo
+                                            @else
+                                            No Usarlo
+                                            @endif
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="3">
@@ -400,12 +411,6 @@
                                 </tbody>
                             </table>
 
-
-
-
-
-
-
                         </div>
                     </div>
 
@@ -415,6 +420,52 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="guardarModelos()">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="resultsModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Resultados de registro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Estos fueron los resultados del proceso de registro. Para visualizarlos, refresque la página.
+                    </p>
+
+                    <table class="table">
+                        <thead>
+                            <th>Modelo</th>
+                            <th>Resultado</th>
+                            <th>Observaciones</th>
+                        </thead>
+                        <tbody>
+                            @foreach($loadedResults as $modelo => $resultado)
+                            <tr>
+                                <td>{{ $modelo }}</td>
+                                <td>
+                                    @if($resultado["Valor"])
+                                        <span class="badge bg-success">Registrado</span>
+                                    @else
+                                        <span class="badge bg-danger">No registrado</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{$resultado["Observaciones"]}}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -432,6 +483,18 @@
             let modal = bootstrap.Modal.getInstance(modalEl);
             if (modal) modal.hide();
         });
+
+        Livewire.on('abrirModalResults', () => {
+            let modal = new bootstrap.Modal(document.getElementById('resultsModal'));
+            modal.show();
+        });
+
+        Livewire.on('cerrarModalResults', () => {
+            let modalEl = document.getElementById('resultsModal');
+            let modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+        });
+
     });
     </script>
 

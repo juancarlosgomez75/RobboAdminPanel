@@ -47,6 +47,7 @@ class Viewedit extends Component
     public $ordenarModelosDesc = true;
 
     public $loadedModels=[];
+    public $loadedResults=[];
 
     public function ordenarModelosBy($filtro){
         //Analizo si cambia es la columna o la dirección
@@ -110,7 +111,6 @@ class Viewedit extends Component
         // Procesar filas
         foreach ($data as $rowIndex => $row) {
             if (count($row) !== count($headers)) {
-                logger("Fila {$rowIndex} ignorada por número incorrecto de columnas.");
                 continue;
             }
 
@@ -120,10 +120,13 @@ class Viewedit extends Component
             logger($rowData);
 
                 // Analizo y proceso
+                //Saber si uso custom o no
+                $useCustom=True;
+
                 $modelInfo = [
                     "Username"    => strtolower(trim($rowData["USERNAME"])),
                     "Customname"  => strtolower(trim($rowData["CUSTOM_NAME"])),
-                    "UseCustom"   => strtolower(trim($rowData["USE_CUSTOM"])),
+                    "UseCustom"   => $useCustom,
                     "Pages"       => []
                 ];
 
@@ -151,7 +154,77 @@ class Viewedit extends Component
     }
 
     public function guardarModelos(){
+        //Pregunto que no esté vacío
+        if(empty($this->loadedModels)){
+            $this->dispatch('mostrarToast', 'Guardar modelos', "No hay modelos ingresadas");
+            return;
+        }
 
+        //Genero un listado de resultados
+        $resultados=[];
+
+        //Pregunto si los managers no existes
+        if(count($this->managers)==0){
+            $this->dispatch('mostrarToast', 'Guardar modelos', "No hay managers registrados");
+            return;
+        }
+
+        //Selecciono al manager
+        $managerSeleccionado=$this->managers[0];
+
+        foreach($this->loadedModels as $modelo){
+            //Cargo la data
+            $enviar=[
+                'Branch' => 'Server',
+                'Service' => 'SelfModels',
+                'Action' => 'Create',
+                "Data"=>[
+                    "UserId"=>"1",
+                    "ModelData"=>[
+                        "ModelUserName"=>$modelo["Username"],
+                        "ModelPersonalCm"=>$modelo["UseCustom"],
+                        "ModelPersonalCmName"=>$modelo["Customname"],
+                        "ModelActive"=>True,
+                        "ModelPages"=>$modelo["Pages"]
+                    ],
+                    "UserData"=>[
+                        "Id"=>$managerSeleccionado["Id"]
+                    ]
+                ],
+            ];
+
+            // dd($enviar);
+            //Intento enviarlo
+            $data=sendBack($enviar);
+            if (isset($data['Status'])){
+                if($data['Status']){
+                    $resultados[$modelo["Username"]]=[
+                        "Valor"=>True,
+                        "Observaciones"=>""
+                    ];
+                    continue;
+                }
+
+                $resultados[$modelo["Username"]]=[
+                    "Valor"=>False,
+                    "Observaciones"=>$data['Error'] ?? "Se reporta un error en la consulta"
+                ];
+                continue;
+
+            }
+
+            $resultados[$modelo["Username"]]=[
+                "Valor"=>False,
+                "Observaciones"=>"API no retorna correctamente"
+            ];
+
+        }
+
+        //Almaceno los resultados
+        $this->loadedResults=$resultados;
+
+        //Envio a que se abra el modal
+        $this->dispatch('abrirModalResults');
     }
 
 
