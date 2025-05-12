@@ -6,9 +6,17 @@ use App\Models\MachineHistory;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Validator;
+
+
 class Viewedit extends Component
 
 {
+    use WithFileUploads;
+
+    public $csv_file;
+
     public $activo;
     public $editing=false;
 
@@ -38,6 +46,8 @@ class Viewedit extends Component
     public $ordenarModelosPor = "user";
     public $ordenarModelosDesc = true;
 
+    public $loadedModels=[];
+
     public function ordenarModelosBy($filtro){
         //Analizo si cambia es la columna o la dirección
         if($filtro == "manager" || $filtro == "user"){
@@ -49,7 +59,96 @@ class Viewedit extends Component
             } 
         }
     }
-    
+    public function importCsv()
+    {
+        // Validación manual del archivo
+        $validator = Validator::make(
+            ['csv_file' => $this->csv_file],
+            ['csv_file' => 'required|file|mimes:csv,txt']
+        );
+
+        if ($validator->fails()) {
+            $this->dispatch('mostrarToast', 'Cargar Información', "El archivo debe ser un CSV válido");
+            return;
+        }
+
+        // Obtener la ruta temporal al archivo subido
+        $realPath = $this->csv_file->getRealPath();
+
+        if (!$realPath || !file_exists($realPath)) {
+            $this->dispatch('mostrarToast', 'Cargar Información', "No se pudo acceder al archivo CSV.");
+            return;
+        }
+
+        // Leer contenido del CSV
+        $data = array_map('str_getcsv', file($realPath));
+        if (empty($data) || count($data) < 2) {
+            $this->dispatch('mostrarToast', 'Cargar Información', "El archivo CSV está vacío o no tiene datos válidos.");
+            return;
+        }
+
+        // Obtener encabezados
+        $headers = array_map('trim', array_shift($data));
+
+        $requiredColumns = [
+            'username', 'custom_name', 'use_custom', 'chaturbate', 'camsoda', 'stripchat',
+            'eplay', 'amateur', 'cams', 'streamate', 'bonga', 'manyvids', 'f4f', 'xlove',
+            'cam4', 'myfc'
+        ];
+
+        // Validar columnas
+        if (array_diff($requiredColumns, $headers)) {
+            $this->dispatch('mostrarToast', 'Cargar Información', "El archivo no contiene las columnas necesarias.");
+            return;
+        }
+
+        if (count($requiredColumns) !== count($headers)) {
+            $this->dispatch('mostrarToast', 'Cargar Información', "Las columnas no coinciden exactamente.");
+            return;
+        }
+
+        // Procesar filas
+        foreach ($data as $rowIndex => $row) {
+            if (count($row) !== count($headers)) {
+                logger("Fila {$rowIndex} ignorada por número incorrecto de columnas.");
+                continue;
+            }
+
+            $rowData = array_combine($headers, $row);
+
+            // Procesamiento personalizado aquí (guardar, validar, etc.)
+            logger($rowData);
+
+                // Analizo y proceso
+                $modelInfo = [
+                    "Username"    => $rowData["username"],
+                    "Customname"  => $rowData["custom_name"],
+                    "UseCustom"   => $rowData["use_custom"],
+                    "Pages"       => []
+                ];
+
+                // Páginas disponibles (las que quieres revisar si están vacías o no)
+                $pageFields = [
+                    'chaturbate', 'camsoda', 'stripchat', 'eplay', 'amateur', 'cams',
+                    'streamate', 'bonga', 'manyvids', 'f4f', 'xlove', 'cam4', 'myfc'
+                ];
+
+                // Solo incluir páginas no vacías
+                foreach ($pageFields as $page) {
+                    if (!empty($rowData[$page])) {
+                        $modelInfo["Pages"][] = $page;
+                    }
+                }
+
+                //Almaceno
+                $this->loadedModels[]=$modelInfo;
+        }
+
+        // Éxito
+        $this->dispatch('mostrarToast', 'Cargar Información', "Se ha cargado el CSV correctamente.");
+    }
+
+
     public function validar(){
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){

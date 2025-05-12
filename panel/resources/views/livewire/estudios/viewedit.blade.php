@@ -5,6 +5,7 @@
             <li class="breadcrumb-item active" aria-current="page">Estudio</li>
         </ol>
     </nav>
+    {{json_encode($loadedModels)}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -217,10 +218,17 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-12 text-center">
+                <div class="col-md-6 text-center">
                     <a type="button" class="btn btn-outline-secondary" href="{{route("modelos.create",$informacion["Id"])}}">
                         Crear modelo
                     </a>
+                    
+                </div>
+                <div class="col-md-6 text-center">
+                    <form wire:submit.prevent="importCsv">
+                        <input class="form-control" type="file" wire:model.change="csv_file" accept=".csv">
+                        <button type="submit" class="btn btn-primary mt-2">Cargar CSV</button>
+                    </form>
                 </div>
                 <div class="col-md-12">
                     <br>
