@@ -377,5 +377,26 @@ class StudyController extends Controller
         return "Error general";
     }
 
+    public function prueba(){
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'StudyReport',
+            'Data' => [
+                "UserId" => "1",
+                "ModelData"=>[
+                    "InitialDate"=>'2025-04-16',
+                    "FinalDate"=>'2025-04-30'
+                ],
+                "UserData"=>[
+                    "Id"=>"52"
+                ]
+            ]
+        ];
+        $data=sendBack($data_send);
+
+        return json_encode($data);
+    }
+
 }
 

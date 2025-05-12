@@ -136,17 +136,20 @@ class Reporte extends Component
 
         //Cargo las fechas
         $fechaInicioFormateada = Carbon::parse($this->fechaInicio)
-        ->setTime(0, 0)
-        ->format('Y-m-d H:i');
+        ->format('Y-m-d');
 
         $fechaFinFormateada = Carbon::parse($this->fechaFin)
-        ->addDay()         // suma un día
-        ->setTime(0, 0)    // asegura que la hora sea 00:00
-        ->format('Y-m-d H:i');
+        ->format('Y-m-d');
 
 
         //Mando la orden para que se corra el job
-        ProcesarConsultaReportes::dispatch(Auth::user()->id,$this->estudiosSeleccionados,$fechaInicioFormateada,$fechaFinFormateada,session('API_used',"development"));
+        ProcesarConsultaReportes::dispatch(Auth::user()->id,$this->estudiosSeleccionados,$fechaInicioFormateada,$fechaFinFormateada,session('API_used',"development"),$this->rentasCompartidas,[
+                            "MOV"=>0.59,
+                            "CONTROL"=>0.59,
+                            "CUM"=>1.39,
+                            "SCUM"=>2.39,
+                            "XCUM"=>0.69,
+                        ]);
 
         registrarLog("Producción","Reportes","Generar reportes","Ha generado reporte ente las fechas ".$fechaInicioFormateada." y ".$fechaFinFormateada." para #".count($this->estudiosSeleccionados)." estudios",true);
 
@@ -222,20 +225,6 @@ class Reporte extends Component
                             $rentaCompartida = true;
                             break;
                         }
-                    }
-    
-                    //Ahora si lo encuentra o no
-                    if($rentaCompartida){
-                        $this->resultado[$key]["Renta"]="Compartida";
-                        $this->resultado[$key]["Montos"]=[
-                            "MOV"=>0.59,
-                            "CONTROL"=>0.59,
-                            "CUM"=>1.39,
-                            "SCUM"=>2.39,
-                            "XCUM"=>0.69,
-                        ];
-                    }else{
-                        $this->resultado[$key]["Renta"]="Fija";
                     }
     
                     $this->resultado[$key]["CustomMail"]="";

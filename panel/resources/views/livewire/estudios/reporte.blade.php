@@ -1,5 +1,6 @@
 <div>
     {{-- {{json_encode($informacion)}} --}}
+    {{-- {{json_encode($resultado)}} --}}
     <div class="card shadow-custom">
         <div class="card-body">
             
@@ -274,83 +275,83 @@
                                                 </tbody>
                                             </table>
 
-                                            <p><b>Información de contacto de estudio:</b></p>
-                                            <table class="table align-middle text-center">
-                                                <tr>
-                                                    <th>
-                                                        Razón social:
-                                                    </th>
-                                                    <td>
-                                                        {{$item["RazonSocial"] ?? "No encontrada"}}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        Nit:
-                                                    </th>
-                                                    <td>
-                                                        {{$item["Nit"] ?? "No encontrada"}}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        Dirección:
-                                                    </th>
-                                                    <td>
-                                                        {{$item["Address"] ?? "No encontrada"}}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        Teléfono:
-                                                    </th>
-                                                    <td>
-                                                        {{$item["Phone"] ?? "No encontrada"}}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        Ciudad:
-                                                    </th>
-                                                    <td>
-                                                        {{$item["City"] ?? "No encontrada"}}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        Nombre de contacto:
-                                                    </th>
-                                                    <td>
-                                                        {{$item["Contact"]}}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        Email de contacto/manager:
-                                                    </th>
-                                                    <td>
-                                                        {{$item["Email"] ?? "No encontrado"}}
-                                                    </td>
-                                                </tr>
+                                            @if($item["Renta"]=="Compartida")
+                                            <br>
+                                            <p><b>Información de cobros por acciones:</b></p>
 
+                                            <table class="table align-middle text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Acción</th>
+                                                        <th scope="col">Cantidad</th>
+                                                        <th scope="col">Valor unidad</th>
+                                                        <th scope="col">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item["CobrosTotales"] as $action=>$info)
+                                                    @if($action!="Total")
+                                                    <tr>
+                                                        <td>{{$action}}</td>
+                                                        @if($action=="MOV" || $action=="CONTROL")
+                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"][$action]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        @else
+                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"][$action]["Cantidad"] ?? 0), 2) }}</td>
+                                                        @endif
+                                                        <td>{{ number_format(($item["Montos"][$action] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($info ?? 0), 2) }}</td>
+                                                    </tr>
+                                                    @else
+                                                    <tr>
+                                                        <td colspan="2" style="border:0;"></td>
+                                                        <td><b>{{$action}}</b></td>
+                                                        <td>{{ number_format(($info ?? 0), 2) }}</td>
+                                                    </tr>
+                                                    @endif
+                                                    @endforeach
+                                                </tbody>
                                             </table>
 
-                                            @if (str_contains(url()->full(), 'localhost'))
-                                        
-                                            <div class="row">
-                                                <div class="col-md-3 mt-2 d-grid">
-                                                    <button class="btn btn-outline-secondary" type="button" wire:click="verReporte({{$index}})">Ver reporte en PDF</button>
-                                                </div>
-                                                <div class="col-md-3 mt-2 d-grid">
-                                                    <button class="btn btn-outline-primary" wire:click="enviarCorreo({{$index}})">Enviar correo a manager</button>
-                                                </div>
-                                                <div class="col-md-4 mt-2 d-grid">
-                                                    <input type="email" class="form-control" wire:model="resultado.{{$index}}.CustomMail" placeholder="Correo para enviar a otra persona: name@example.com">
-                                                </div>
-                                                <div class="col-md-2 mt-2 d-grid">
-                                                    <button class="btn btn-outline-primary" wire:click="enviarCorreoCustom({{$index}})">Enviar correo</button>
-                                                </div>
-                                            </div>
+                                            <br>
+                                            <p><b>Información de cobros por acciones por modelos:</b></p>
+
+                                            <table class="table align-middle text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Modelo</th>
+                                                        <th scope="col">MOV</th>
+                                                        <th scope="col">CONTROL</th>
+                                                        <th scope="col">CUM</th>
+                                                        <th scope="col">SCUM</th>
+                                                        <th scope="col">XCUM</th>
+                                                        <th scope="col">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item["CobrosModelos"] as $modelo=>$info)
+                                                    @if($modelo!="Total")
+                                                    <tr>
+                                                        <td><b>{{$modelo}}</b></td>
+                                                        <td>{{ number_format(($info["MOV"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($info["CONTROL"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($info["CUM"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($info["SCUM"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($info["XCUM"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($info["Total"] ?? 0), 2) }}</td>
+                                                    </tr>
+                                                    @endif
+                                                    @endforeach
+                                                    <tr>
+                                                        <td><b>Total</b></td>
+                                                        <td>{{ number_format(($item["CobrosTotales"]["MOV"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($item["CobrosTotales"]["CONTROL"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($item["CobrosTotales"]["CUM"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($item["CobrosTotales"]["SCUM"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($item["CobrosTotales"]["XCUM"] ?? 0), 2) }}</td>
+                                                        <td>{{ number_format(($item["CobrosTotales"]["Total"] ?? 0), 2) }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                             @endif
 
                                         </div>
