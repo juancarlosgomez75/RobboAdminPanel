@@ -121,9 +121,9 @@ class Viewedit extends Component
 
                 // Analizo y proceso
                 $modelInfo = [
-                    "Username"    => $rowData["USERNAME"],
-                    "Customname"  => $rowData["CUSTOM_NAME"],
-                    "UseCustom"   => $rowData["USE_CUSTOM"],
+                    "Username"    => strtolower(trim($rowData["USERNAME"])),
+                    "Customname"  => strtolower(trim($rowData["CUSTOM_NAME"])),
+                    "UseCustom"   => strtolower(trim($rowData["USE_CUSTOM"])),
                     "Pages"       => []
                 ];
 
@@ -137,7 +137,7 @@ class Viewedit extends Component
                 // Solo incluir páginas no vacías
                 foreach ($pageFields as $page) {
                     if (!empty($rowData[$page])) {
-                        $modelInfo["Pages"][$page] = $rowData[$page];
+                        $modelInfo["Pages"][$page] = strtolower(trim($rowData[$page]));
                     }
                 }
 
@@ -148,6 +148,10 @@ class Viewedit extends Component
         // Éxito
         // $this->dispatch('mostrarToast', 'Cargar Información', "Se ha cargado el CSV correctamente.");
         $this->dispatch('abrirModalSave');
+    }
+
+    public function guardarModelos(){
+
     }
 
 

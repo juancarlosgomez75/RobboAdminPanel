@@ -414,7 +414,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" wire:click="guardarCambios()">Guardar cambios</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="guardarModelos()">Guardar cambios</button>
                 </div>
             </div>
         </div>
