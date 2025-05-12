@@ -132,6 +132,8 @@ class Create extends Component
 
             // $data = $response->json();
 
+            // dd($enviar);
+
             $data=sendBack($enviar);
 
             if (isset($data['Status'])) {

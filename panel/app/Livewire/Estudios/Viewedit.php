@@ -63,7 +63,7 @@ class Viewedit extends Component
     public function importCsv()
     {
         //Reinicio los registros
-        
+
         $this->loadedModels=[];
         $this->loadedResults=[];
 
@@ -178,6 +178,16 @@ class Viewedit extends Component
         $managerSeleccionado=$this->managers[0];
 
         foreach($this->loadedModels as $modelo){
+            $paginas=[];
+
+            //Almaceno las páginas
+            foreach($modelo["Pages"] as $pagina=>$nickname){
+                $paginas[]=[
+                    "NickName"=>$nickname,
+                    "NickPage"=>$pagina
+                ];
+            }
+
             //Cargo la data
             $enviar=[
                 'Branch' => 'Server',
@@ -190,7 +200,7 @@ class Viewedit extends Component
                         "ModelPersonalCm"=>$modelo["UseCustom"],
                         "ModelPersonalCmName"=>$modelo["Customname"],
                         "ModelActive"=>True,
-                        "ModelPages"=>$modelo["Pages"]
+                        "ModelPages"=>$paginas
                     ],
                     "UserData"=>[
                         "Id"=>$managerSeleccionado["Id"]
@@ -200,6 +210,7 @@ class Viewedit extends Component
 
             // dd($enviar);
             //Intento enviarlo
+            
             $data=sendBack($enviar);
             if (isset($data['Status'])){
                 if($data['Status']){
