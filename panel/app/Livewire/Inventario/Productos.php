@@ -11,6 +11,7 @@ class Productos extends Component
 {
     public $filtroNombre = "";
     public $filtroCat = "";
+    public $filtroEstado="1";
 
     public $name;
     public $description;
@@ -23,7 +24,22 @@ class Productos extends Component
 
     public $filtrosActivos=False;
 
+    public $ordenarPor = "name";
+    public $ordenarDesc = true;
+
     protected $listeners = ['refrescarCategorias'];
+
+    public function ordenarBy($filtro){
+        //Analizo si cambia es la columna o la dirección
+        if($filtro == "name"){
+            if($filtro != $this->ordenarPor){
+                $this->ordenarPor = $filtro;
+                $this->ordenarDesc = true;
+            }else{
+                $this->ordenarDesc = !$this->ordenarDesc;
+            } 
+        }
+    }
 
     public function switchFiltros()
     {
@@ -107,9 +123,14 @@ class Productos extends Component
     }
     public function render()
     {
+        if($this->filtroEstado=="1" || $this->filtroEstado=="0"){
+            $productos=Product::where('available',"=",($this->filtroEstado=="1"))->get();
+        }else{
+            //Busco los productos
+            $productos=Product::all();
+        }
 
-        //Busco los productos
-        $productos=Product::all();
+
 
         // Aplicar filtro por nombre (si hay)
         if (!empty($this->filtroNombre)) {
@@ -123,6 +144,16 @@ class Productos extends Component
             $productos = $productos->filter(function ($producto) {
                 return stripos(optional($producto->category_info)->name, $this->filtroCat) !== false;
             });
+        }
+
+
+        //Aplico los filtros a los modelos
+        if($this->ordenarPor=="name"){
+            if($this->ordenarDesc){
+                $productos = $productos->sortBy('name');
+            }else{
+                $productos = $productos->sortByDesc('name');
+            }
         }
 
         //Busco las categorías

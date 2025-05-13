@@ -137,7 +137,7 @@ class Categorias extends Component
     public function render()
     {
         //Busco las categorias
-        $categorias=ProductCategory::all();
+        $categorias=ProductCategory::orderBy('name', 'asc')->get();
         return view('livewire.inventario.categorias',compact('categorias'));
     }
 }

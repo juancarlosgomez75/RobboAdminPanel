@@ -37,6 +37,13 @@
                 <div class="col-md-3">
                     <input type="text" class="custom-input" placeholder="Filtrar por categoria" wire:model.change="filtroCat">
                 </div>
+                <div class="col-md-3">
+                    <select class="form-select form-select-sm" wire:model.change="filtroEstado">
+                        <option value="-1">Todos</option>
+                        <option value="0">Inactivos</option>
+                        <option value="1">Activos</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -44,7 +51,20 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Nombre</th>
+                <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('name')">
+                    @if($ordenarPor=="name")
+                    @if($ordenarDesc)
+                        <a  class="text-decoration-none text-dark"> 
+                            <i class="fa-solid fa-angle-down me-2"></i>
+                        </a>
+                    @else
+                        <a class="text-decoration-none text-dark"> 
+                            <i class="fa-solid fa-angle-up me-2"></i>
+                        </a>
+                    @endif
+                    @endif
+                    Nombre
+                </th>
                 <th scope="col">Categoría</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Disponibles</th>
