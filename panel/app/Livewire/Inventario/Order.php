@@ -347,6 +347,8 @@ class Order extends Component
             //Intento guardar
             if($orden->save()){
 
+                registrarLog("Inventario","Órdenes","Crear","Ha creado una orden con la siguiente información: ".json_encode($orden),true);
+
                 //Ahora descargo los productos
                 foreach($this->listProducts as $element){
 
@@ -389,6 +391,7 @@ class Order extends Component
                 
             }else{
                 $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar el pedido, contacte a soporte');
+                registrarLog("Inventario","Órdenes","Crear","Ha intentado crear una orden con la siguiente información: ".json_encode($orden),false);
             }
 
             

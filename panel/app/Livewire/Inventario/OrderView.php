@@ -96,6 +96,9 @@ class OrderView extends Component
 
         //Si almaceno
         if($this->orden->save()){
+
+            registrarLog("Inventario","Órdenes","Alistar","Ha completado el alistamiento de la orden # ".$this->orden->id,true);
+
             //Genero los descargos
             foreach($this->preparacion_list as $element){
                 //Obtengo el producto
@@ -175,6 +178,7 @@ class OrderView extends Component
 
         }else{
             $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Error completando el alistamiento, contacte con soporte');
+            registrarLog("Inventario","Órdenes","Alistar","Ha intentado completar el alistamiento de la orden # ".$this->orden->id,false);
         }
     }
 
@@ -204,8 +208,10 @@ class OrderView extends Component
         if($this->orden->save()){
             $this->dispatch('mostrarToast', 'Reportar guía', 'Se ha reportado la guía del envío');
             $this->enviando=false;
+            registrarLog("Inventario","Órdenes","Reportar guia","Se ha reportado la guia de la orden # ".$this->orden->id,true);
         }else{
             $this->dispatch('mostrarToast', 'Reportar guía', 'Error reportando la guía, contacta con soporte');
+            registrarLog("Inventario","Órdenes","Reportar guia","Se ha intentado reportar la guia de la orden # ".$this->orden->id,false);
         }
     }
 
@@ -219,8 +225,10 @@ class OrderView extends Component
         if($this->orden->save()){
             $this->dispatch('mostrarToast', 'Reportar envío', 'Se ha completado el envío');
             $this->enviando=false;
+            registrarLog("Inventario","Órdenes","Reportar envio","Se ha enviado la orden #".$this->orden->id,true);
         }else{
             $this->dispatch('mostrarToast', 'Reportar envío', 'Error reportando el envío, contacta a soporte');
+            registrarLog("Inventario","Órdenes","Reportar envío","Se ha intentado reportar el envío de la orden # ".$this->orden->id,false);
         }
     }
 
@@ -244,6 +252,8 @@ class OrderView extends Component
 
         //Si almaceno
         if($this->orden->save()){
+            registrarLog("Inventario","Órdenes","Cancelar orden","Ha cancelado la orden # ".$this->orden->id,true);
+
             //Devuelvo el stock completo
             foreach(json_decode($this->orden->creation_list) as $element){
                 //Busco el producto
@@ -278,6 +288,7 @@ class OrderView extends Component
             $this->dispatch('mostrarToast', 'Cancelar orden', 'Se ha cancelado la orden');
 
         }else{
+            registrarLog("Inventario","Órdenes","Cancelar orden","Ha intentado cancelar la orden # ".$this->orden->id,false);
             $this->dispatch('mostrarToast', 'Cancelar orden', 'Error cancelando la orden, contacta con soporte');
         }
     }
