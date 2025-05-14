@@ -378,13 +378,15 @@ class Order extends Component
                         $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al actualizar stock, contacte a soporte');
                     }
 
-                    $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado el pedido satisfactoriamente');
-
-                    return redirect(route("orden.ver",$orden->id));
-
                 }
 
+                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado el pedido satisfactoriamente');
+
                 $this->resetExcept("estudios");
+
+                return redirect(route("orden.ver",$orden->id));
+
+                
             }else{
                 $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar el pedido, contacte a soporte');
             }

@@ -12,6 +12,7 @@
         Este producto no tiene stock disponible
     </div>
     @endif --}}
+    {{-- {{json_encode($listProducts)}} --}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
