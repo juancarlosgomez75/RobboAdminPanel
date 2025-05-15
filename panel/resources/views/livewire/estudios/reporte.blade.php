@@ -1,6 +1,7 @@
 <div>
     {{-- {{json_encode($informacion)}} --}}
-    {{-- {{json_encode($resultado)}} --}}
+    {{json_encode($resultado)}}
+    <br><br>
     {{json_encode($tiemposConexion)}}
     <div class="card shadow-custom">
         <div class="card-body">
@@ -275,6 +276,42 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+
+                                            <br>
+                                            <p><b>Información de tiempos de:</b></p>
+
+                                            {{-- <table class="table align-middle text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Modelo</th>
+                                                        <th scope="col">MOV (min)</th>
+                                                        <th scope="col">CONTROL (min)</th>
+                                                        <th scope="col">CUM</th>
+                                                        <th scope="col">SCUM</th>
+                                                        <th scope="col">XCUM</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($item["ResultsReport"]["Modelos"] as $modelo=>$info)
+                                                    <tr>
+                                                        <td>{{$modelo}}</td>
+                                                        <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>{{ $info["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                                                        <td>{{ $info["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                                                        <td>{{ $info["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                    <tr>
+                                                        <th scope="row">Total</th>
+                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
+                                                        <td>{{ $item["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table> --}}
 
                                             @if($item["Renta"]=="Compartida")
                                             <br>

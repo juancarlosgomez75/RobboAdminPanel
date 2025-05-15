@@ -277,10 +277,69 @@ class Reporte extends Component
                     }
     
                     $this->resultado[$key]["CustomMail"]="";
+
+                    // //Ahora genero el reporte de conexión
+                    // $this->resultado[$key]["ConReport"]=[
+                    //     "Maquinas"=>[],
+                    //     "Modelos"=>[],
+                    //     "Total"=>0
+                    // ];
+
+                    $reporteTiempo=[
+                        "Maquinas"=>[],
+                        "Modelos"=>[],
+                        "Total"=>0
+                    ];
+
+                    //Recorro buscando los resultados
+                    foreach($this->tiemposConexion as $fecha=>$estudios){
+                        //Consulto si existe este estudio este día
+                        if(array_key_exists($elemento["Id"], $estudios)){
+                            $tiempo=$estudios[$elemento["Id"]];
+                            //Comienzo a procesar, inicio sumando el tiempo
+                            $reporteTiempo["Total"]+=$tiempo["Total"];
+
+                            //Ahora recorro las máquinas
+                            foreach($tiempo["Maquinas"] as $firmware=>$maquina){
+                                //Analizo si existe, si no la creo
+                                if(!array_key_exists($firmware,$reporteTiempo["Maquinas"])){
+                                    $reporteTiempo["Maquinas"][$firmware]=0;
+                                }
+
+                                //Le sumo el total
+                                $reporteTiempo["Maquinas"][$firmware]+=$maquina["Total"];
+
+                                //Ahora recorro las modelos
+                                foreach($maquina["Modelos"] as $nombre=>$modeltime){
+                                    // ✅ Verifico correctamente con el nombre del modelo
+                                    if(!array_key_exists($nombre, $reporteTiempo["Modelos"])){
+                                        $reporteTiempo["Modelos"][$nombre] = [
+                                            "Maquinas" => [],
+                                            "Total" => 0
+                                        ];
+                                    }
+
+                                    // Sumo el tiempo al modelo
+                                    $reporteTiempo["Modelos"][$nombre]["Total"] += $modeltime;
+
+                                    // Verifico si la máquina está registrada dentro del modelo
+                                    if(!array_key_exists($firmware, $reporteTiempo["Modelos"][$nombre]["Maquinas"])){
+                                        $reporteTiempo["Modelos"][$nombre]["Maquinas"][$firmware] = 0;
+                                    }
+
+                                    // Sumo el tiempo de esta máquina a este modelo
+                                    $reporteTiempo["Modelos"][$nombre]["Maquinas"][$firmware] += $modeltime;
+                                }
+                            }
+                        }
+                    }
+
+                    $this->resultado[$key]["ConReport"]=$reporteTiempo;
                 }
             }
 
-            Cache::put("reportResult_" . Auth::user()->id,  $this->resultado, 600);
+
+            Cache::forget("reportResult_" . Auth::user()->id);
         }
     }
 
