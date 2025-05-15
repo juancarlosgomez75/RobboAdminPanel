@@ -1,8 +1,8 @@
 <div>
-    {{-- {{json_encode($informacion)}} --}}
+    {{-- {{json_encode($informacion)}}
     {{json_encode($resultado)}}
     <br><br>
-    {{json_encode($tiemposConexion)}}
+    {{json_encode($tiemposConexion)}} --}}
     <div class="card shadow-custom">
         <div class="card-body">
             
@@ -278,40 +278,52 @@
                                             </table>
 
                                             <br>
-                                            <p><b>Información de tiempos de:</b></p>
+                                            <p><b>Información de tiempos de conexión de modelos por máquina:</b></p>
+                                            <div class="table-container">
+                                                <table class="table align-middle text-center">
+                                                    @if(!empty($item["ConReport"]["Maquinas"]))
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Modelo</th>
+                                                            @foreach($item["ConReport"]["Maquinas"] as $Maquina=>$Tiempo)
+                                                            <th scope="col">#{{$Maquina}}</th>
+                                                            @endforeach
+                                                            <th scope="col">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($item["ConReport"]["Modelos"] as $Modelo=>$DataModelo)
+                                                        <tr>
+                                                            <td>{{$Modelo}}</td>
+                                                            
+                                                            @foreach($item["ConReport"]["Maquinas"] as $Maquina=>$Tiempo)
+                                                            <td>{{$DataModelo["Maquinas"][$Maquina]??"0"}}</td>
+                                                            @endforeach
 
-                                            {{-- <table class="table align-middle text-center">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Modelo</th>
-                                                        <th scope="col">MOV (min)</th>
-                                                        <th scope="col">CONTROL (min)</th>
-                                                        <th scope="col">CUM</th>
-                                                        <th scope="col">SCUM</th>
-                                                        <th scope="col">XCUM</th>
+                                                            <td>{{$DataModelo["Total"]}}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                        <tr>
+                                                            <td>
+                                                                <b>Total:</b>
+                                                            </td>
+                                                            @foreach($item["ConReport"]["Maquinas"] as $Maquina=>$Tiempo)
+                                                            <td>{{$Tiempo}}</td>
+                                                            @endforeach
+                                                            <td>
+                                                                <b>{{$item["ConReport"]["Total"]}}</b>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody>
+                                                    </tbody>
+                                                    @else
+                                                    <tr class="text-center">
+                                                        <td>No se encontraron registros de tiempo de conexión en este periodo</td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($item["ResultsReport"]["Modelos"] as $modelo=>$info)
-                                                    <tr>
-                                                        <td>{{$modelo}}</td>
-                                                        <td>{{ number_format(($info["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
-                                                        <td>{{ number_format(($info["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
-                                                        <td>{{ $info["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
-                                                        <td>{{ $info["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
-                                                        <td>{{ $info["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
-                                                    </tr>
-                                                    @endforeach
-                                                    <tr>
-                                                        <th scope="row">Total</th>
-                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["MOV"]["Tiempo"] ?? 0) / 60, 2) }}</td>
-                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"]["CONTROL"]["Tiempo"] ?? 0) / 60, 2) }}</td>
-                                                        <td>{{ $item["ResultsReport"]["Acciones"]["CUM"]["Cantidad"] ?? 0 }}</td>
-                                                        <td>{{ $item["ResultsReport"]["Acciones"]["SCUM"]["Cantidad"] ?? 0 }}</td>
-                                                        <td>{{ $item["ResultsReport"]["Acciones"]["XCUM"]["Cantidad"] ?? 0 }}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table> --}}
+                                                    @endif
+                                                </table>
+                                            </div>
 
                                             @if($item["Renta"]=="Compartida")
                                             <br>
@@ -386,7 +398,7 @@
                                                         <td>{{ number_format(($item["CobrosTotales"]["CUM"] ?? 0), 2) }}</td>
                                                         <td>{{ number_format(($item["CobrosTotales"]["SCUM"] ?? 0), 2) }}</td>
                                                         <td>{{ number_format(($item["CobrosTotales"]["XCUM"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($item["CobrosTotales"]["Total"] ?? 0), 2) }}</td>
+                                                        <td><b>{{ number_format(($item["CobrosTotales"]["Total"] ?? 0), 2) }}</b></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
