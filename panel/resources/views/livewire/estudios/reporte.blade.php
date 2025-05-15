@@ -278,7 +278,7 @@
                                             </table>
 
                                             <br>
-                                            <p><b>Información de tiempos de conexión de modelos por máquina:</b></p>
+                                            <p><b>Información de tiempo (segundos) de conexión de modelos por máquina:</b></p>
                                             <div class="table-container">
                                                 <table class="table align-middle text-center">
                                                     @if(!empty($item["ConReport"]["Maquinas"]))
@@ -344,18 +344,18 @@
                                                     <tr>
                                                         <td>{{$action}}</td>
                                                         @if($action=="MOV" || $action=="CONTROL")
-                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"][$action]["Tiempo"] ?? 0) / 60, 2) }}</td>
+                                                        <td>${{ number_format(($item["ResultsReport"]["Acciones"][$action]["Tiempo"] ?? 0) / 60, 2) }}</td>
                                                         @else
-                                                        <td>{{ number_format(($item["ResultsReport"]["Acciones"][$action]["Cantidad"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($item["ResultsReport"]["Acciones"][$action]["Cantidad"] ?? 0), 2) }}</td>
                                                         @endif
-                                                        <td>{{ number_format(($item["Montos"][$action] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($info ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($item["Montos"][$action] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($info ?? 0), 2) }}</td>
                                                     </tr>
                                                     @else
                                                     <tr>
                                                         <td colspan="2" style="border:0;"></td>
                                                         <td><b>{{$action}}</b></td>
-                                                        <td>{{ number_format(($info ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($info ?? 0), 2) }}</td>
                                                     </tr>
                                                     @endif
                                                     @endforeach
@@ -382,23 +382,23 @@
                                                     @if($modelo!="Total")
                                                     <tr>
                                                         <td><b>{{$modelo}}</b></td>
-                                                        <td>{{ number_format(($info["MOV"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($info["CONTROL"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($info["CUM"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($info["SCUM"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($info["XCUM"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($info["Total"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($info["MOV"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($info["CONTROL"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($info["CUM"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($info["SCUM"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($info["XCUM"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($info["Total"] ?? 0), 2) }}</td>
                                                     </tr>
                                                     @endif
                                                     @endforeach
                                                     <tr>
                                                         <td><b>Total</b></td>
-                                                        <td>{{ number_format(($item["CobrosTotales"]["MOV"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($item["CobrosTotales"]["CONTROL"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($item["CobrosTotales"]["CUM"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($item["CobrosTotales"]["SCUM"] ?? 0), 2) }}</td>
-                                                        <td>{{ number_format(($item["CobrosTotales"]["XCUM"] ?? 0), 2) }}</td>
-                                                        <td><b>{{ number_format(($item["CobrosTotales"]["Total"] ?? 0), 2) }}</b></td>
+                                                        <td>${{ number_format(($item["CobrosTotales"]["MOV"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($item["CobrosTotales"]["CONTROL"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($item["CobrosTotales"]["CUM"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($item["CobrosTotales"]["SCUM"] ?? 0), 2) }}</td>
+                                                        <td>${{ number_format(($item["CobrosTotales"]["XCUM"] ?? 0), 2) }}</td>
+                                                        <td><b>${{ number_format(($item["CobrosTotales"]["Total"] ?? 0), 2) }}</b></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
