@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarReporte;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Http;
 
 class Reporte extends Component
@@ -40,6 +41,8 @@ class Reporte extends Component
     public $accionesInteres=["CUMTEST","MOVTEST","CONTROL","MOV","CUM","SCUM","XCUM"];
 
     public $rentasCompartidas=["Dreams","EAW","Colombia Cam","Sensattion","Vanessa","Labo"];
+
+    public $tiemposConexion=[];
 
     public function mount($information){
         $this->informacion=$information;
@@ -141,6 +144,52 @@ class Reporte extends Component
         $fechaFinFormateada = Carbon::parse($this->fechaFin)
         ->format('Y-m-d');
 
+        //Consulto el JSON de tiempos de conexión
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'CxTimeReport',
+            'Data' => [
+                "UserId" => "1",
+                "ModelData"=>[
+                    "InitialDate"=>$this->fechaInicio,
+                    "FinalDate"=>$this->fechaFin
+                ],
+            ]
+        ];
+        //Obtengo la informacion que requiero
+        $this->tiemposConexion=[];
+
+        $data=sendBack($data_send);
+        if(isset($data["Status"])){
+            if($data["Status"]??False){
+                // // Crear el periodo de fechas
+                // $periodo = CarbonPeriod::create($fechaInicioFormateada, $fechaFinFormateada);
+                
+                // // Generar el array de fechas
+                // $fechas = [];
+                // foreach ($periodo as $fecha) {
+                //     $fechas[] = $fecha->format('Y-m-d');
+                // }
+
+                //Ahora recorro y formateo
+                foreach($data["Data"]["CxTimeArchives"] as $index=>$archive){
+                    if($archive["ArchiveExist"]){
+                        //Decodifico
+                        $decoded = base64_decode($archive["Archive"], true);
+                        
+                        //Si no logra decodificar que salte
+                        if ($decoded === false) {
+                            continue;
+                        }
+
+                        //Ahora almaceno
+                        $this->tiemposConexion[$archive["ArchiveDate"]]=json_decode($decoded, true);
+
+                    }
+                }
+            }
+        }
 
         //Mando la orden para que se corra el job
         ProcesarConsultaReportes::dispatch(Auth::user()->id,$this->estudiosSeleccionados,$fechaInicioFormateada,$fechaFinFormateada,session('API_used',"development"),$this->rentasCompartidas,[

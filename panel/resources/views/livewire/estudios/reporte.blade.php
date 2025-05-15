@@ -1,6 +1,7 @@
 <div>
     {{-- {{json_encode($informacion)}} --}}
     {{-- {{json_encode($resultado)}} --}}
+    {{json_encode($tiemposConexion)}}
     <div class="card shadow-custom">
         <div class="card-body">
             
