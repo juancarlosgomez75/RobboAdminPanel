@@ -278,52 +278,47 @@
                                             </table>
 
                                             <br>
-                                            <p><b>Información de tiempo (segundos) de conexión de modelos por máquina:</b></p>
+                                            <p><b>Información de tiempo (horas) de conexión de modelos por máquina:</b></p>
                                             <div class="table-container">
                                                 <table class="table align-middle text-center">
                                                     @if(!empty($item["ConReport"]["Maquinas"]))
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Modelo</th>
-                                                            @foreach($item["ConReport"]["Maquinas"] as $Maquina=>$Tiempo)
-                                                            <th scope="col">#{{$Maquina}}</th>
+                                                            @foreach($item["ConReport"]["Maquinas"] as $Maquina => $Tiempo)
+                                                                <th scope="col">#{{ $Maquina }}</th>
                                                             @endforeach
                                                             <th scope="col">Total</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach($item["ConReport"]["Modelos"] as $Modelo=>$DataModelo)
-                                                        <tr>
-                                                            <td>{{$Modelo}}</td>
-                                                            
-                                                            @foreach($item["ConReport"]["Maquinas"] as $Maquina=>$Tiempo)
-                                                            <td>{{$DataModelo["Maquinas"][$Maquina]??"0"}}</td>
-                                                            @endforeach
+                                                        @foreach($item["ConReport"]["Modelos"] as $Modelo => $DataModelo)
+                                                            <tr>
+                                                                <td>{{ $Modelo }}</td>
+                                                                
+                                                                @foreach($item["ConReport"]["Maquinas"] as $Maquina => $Tiempo)
+                                                                    <td>{{ number_format(($DataModelo["Maquinas"][$Maquina] ?? 0) / 3600, 2) }}</td>
+                                                                @endforeach
 
-                                                            <td>{{$DataModelo["Total"]}}</td>
-                                                        </tr>
+                                                                <td>{{ number_format($DataModelo["Total"] / 3600, 2) }}</td>
+                                                            </tr>
                                                         @endforeach
                                                         <tr>
-                                                            <td>
-                                                                <b>Total:</b>
-                                                            </td>
-                                                            @foreach($item["ConReport"]["Maquinas"] as $Maquina=>$Tiempo)
-                                                            <td>{{$Tiempo}}</td>
+                                                            <td><b>Total:</b></td>
+                                                            @foreach($item["ConReport"]["Maquinas"] as $Maquina => $Tiempo)
+                                                                <td>{{ number_format($Tiempo / 3600, 2) }}</td>
                                                             @endforeach
-                                                            <td>
-                                                                <b>{{$item["ConReport"]["Total"]}}</b>
-                                                            </td>
+                                                            <td><b>{{ number_format($item["ConReport"]["Total"] / 3600, 2) }}</b></td>
                                                         </tr>
-                                                    </tbody>
-                                                    <tbody>
                                                     </tbody>
                                                     @else
                                                     <tr class="text-center">
-                                                        <td>No se encontraron registros de tiempo de conexión en este periodo</td>
+                                                        <td colspan="100%">No se encontraron registros de tiempo de conexión en este periodo</td>
                                                     </tr>
                                                     @endif
                                                 </table>
                                             </div>
+
 
                                             @if($item["Renta"]=="Compartida")
                                             <br>
