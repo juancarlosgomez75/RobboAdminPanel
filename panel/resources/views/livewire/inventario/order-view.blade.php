@@ -450,7 +450,7 @@
 
                             <tr>
                                 <th scope="row">Guía de seguimiento</th>
-                                <td><a href="#">{{$orden->tracking}}</a></td>
+                                <td>{{$orden->tracking}}</td>
                             </tr>
 
                         </tbody>

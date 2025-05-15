@@ -294,7 +294,7 @@ class Order extends Component
         }
 
         //Ahora valido las observaciones
-        if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
+        if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
             $this->dispatch('mostrarToast', 'Crear pedido', 'Las observaciones no son válidas');
             return false;
         }
