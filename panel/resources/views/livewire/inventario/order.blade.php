@@ -78,6 +78,16 @@
                         @endif
                     </div> 
                 </div>
+                <div class="col-md-12 pt-3 mb-2">
+                    <h5 class="card-title">Tipo de orden</h5>
+                    <p class="card-text">Indique aquí la naturaleza de esta orden</p>
+                    
+                    <select class="form-select" wire:model="tipoOrden">
+                        <option disabled value="0">Seleccione una opción</option>
+                        <option value="-1">Envío: Los items se descontarán del inventario</option>
+                        <option value="1">Recogida: Los items se sumarán al inventario</option>
+                    </select>
+                </div>
                 <div class="col-md-12 pt-3">
                     <h5 class="card-title">Listado de productos</h5>
                     <p class="card-text">Este es el listado de elementos que se deberán enviar en esta orden.</p>

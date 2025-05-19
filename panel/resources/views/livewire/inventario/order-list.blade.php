@@ -19,13 +19,20 @@
                 <div class="col-md-12 @if(!$filtrosActivos) hide @endif" id="Filtros">
 
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <input type="text" class="custom-input" placeholder="Filtrar por fecha" wire:model.change="filtroFecha">
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="custom-input" placeholder="Filtrar por destinatario" wire:model.change="filtroNombre">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <select class="custom-input" wire:model.change="filtroTipo">
+                                <option value="0" selected>Todas</option>
+                                <option value="-1">Envío</option>
+                                <option value="1">Recogida</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
                             <select class="custom-input" wire:model.change="filtroEstado">
                                 <option value="" selected>Todas</option>
                                 <option value="canceled">Cancelado</option>
@@ -45,6 +52,7 @@
                                 <th scope="col">Fecha creación</th>
                                 <th scope="col">Ciudad</th>
                                 <th scope="col">Destinatario</th>
+                                <th scope="col">Tipo</th>
                                 <th scope="col">Estado</th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
@@ -57,6 +65,7 @@
                                     <td>{{ $pedido->created_at }}</td>
                                     <td>{{ $pedido->city }}</td>
                                     <td>{{ $pedido->name }}</td>
+                                    <td>{{ ($pedido->type=="shipping") ? "Envío":"Recogida" }}</td>
                                     <td>
                                         @if($pedido->status=="created")
                                         <span style="color:#e47d08">Creado</span>

@@ -70,7 +70,7 @@ class Logs extends Component
             ->when($this->filtroAutor, function ($query) {
                 return $query->whereRaw("LOWER(author) LIKE ?", [strtolower($this->filtroAutor) . '%']);
             })
-            ->paginate(20);
+            ->paginate(80);
 
 
         return view('livewire.admin.logs',compact('logs'));

@@ -247,6 +247,10 @@
                                 <th scope="row">Comentarios</th>
                                 <td>{{$orden->creation_notes}}</td>
                             </tr>
+                            <tr>
+                                <th scope="row">Tipo de orden</th>
+                                <td>{{($orden->type=="shipping") ? "Envío" : "Recogida"}}</td>
+                            </tr>
 
                         </tbody>
                     </table>

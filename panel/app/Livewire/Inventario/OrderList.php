@@ -15,6 +15,7 @@ class OrderList extends Component
     public $filtroNombre = "";
     public $filtroFecha = "";
     public $filtroEstado="";
+    public $filtroTipo="0";
     public $filtrosActivos = false;
 
     public function switchFiltros()
@@ -22,6 +23,10 @@ class OrderList extends Component
         $this->filtrosActivos = !$this->filtrosActivos;
         
         if (!$this->filtrosActivos) {
+            $this->filtroNombre = "";
+            $this->filtroFecha = "";
+            $this->filtroEstado="";
+            $this->filtroTipo="0";
         }
     }
     public function render()
@@ -35,6 +40,9 @@ class OrderList extends Component
         })
         ->when(!empty($this->filtroEstado), function ($query) {
             return $query->where("status", $this->filtroEstado);
+        })
+        ->when($this->filtroTipo=="-1" || $this->filtroTipo=="1", function ($query) {
+            return $query->where("type", ($this->filtroTipo=="-1")?'shipping':'collection');
         })
         ->paginate(20);
 

@@ -26,6 +26,7 @@ class Order extends Component
     public $city= "";
     public $receiver="";
     public $phone="";
+    public $tipoOrden="0";
 
     //Información de los productos
     public $listProducts=[];
@@ -293,6 +294,12 @@ class Order extends Component
             return false;
         }
 
+        //Valido el tipo
+        if($this->tipoOrden!="-1" && $this->tipoOrden!="1"){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'El tipo de orden no es válido');
+            return false;
+        }
+
         //Ahora valido las observaciones
         if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
             $this->dispatch('mostrarToast', 'Crear pedido', 'Las observaciones no son válidas');
@@ -306,7 +313,7 @@ class Order extends Component
             $buscado=Product::find($product['id']);
 
             if($buscado){
-                if($buscado->inventory->stock_available<$product['amount']){
+                if($buscado->inventory->stock_available<$product['amount'] && $this->tipoOrden=="-1"){
                     $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no tiene stock suficiente para completar la orden');
                     return false;
                 }
@@ -335,6 +342,9 @@ class Order extends Component
             $orden->name=$this->receiver;
             $orden->phone=$this->phone;
 
+            //Cargo el tipo
+            $orden->type=($this->tipoOrden == -1) ? 'shipping' : 'collection';
+
             if($this->studyFind){
                 $orden->study_id=$this->studyId;
             }
@@ -360,11 +370,15 @@ class Order extends Component
 
                     //Almaceno la información
                     $mov->inventory_id=$pto->inventory->id;
-                    $mov->type="expense";
+                    
+                    $mov->type=($this->tipoOrden == -1) ? 'expense' : 'income';
                     $mov->reason="Alistamiento de orden";
                     $mov->amount=$element["amount"];
                     $mov->stock_before=$pto->inventory->stock_available;
-                    $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
+
+                    // $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
+                    $mov->stock_after=($this->tipoOrden == -1) ? $pto->inventory->stock_available-$element["amount"] : $pto->inventory->stock_available+$element["amount"];
+
                     $mov->author=Auth::id();
                     $mov->order_id=$orden->id;
 

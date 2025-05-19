@@ -109,6 +109,8 @@ class OrderView extends Component
 
                     //Ahora actualizo si usa firmware o no
                     if($element["use_firmware"] && $this->orden->study_id!=null){
+
+
                         
                         $apiData=[
                             'Branch' => 'Server',
@@ -121,7 +123,7 @@ class OrderView extends Component
                                 ]
                                 ],
                             'DataStudy' => [
-                                "Id"=>$this->orden->study_id,
+                                "Id"=>($this->orden->type=="shipping") ? $this->orden->study_id : "1",
                             ]
                         ];
 

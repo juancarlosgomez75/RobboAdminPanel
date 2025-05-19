@@ -28,6 +28,7 @@ return new class extends Migration
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->text('creation_notes')->nullable();
             $table->json("creation_list");
+            $table->enum('type', ['shipping', 'collection'])->default('shipping');
 
             //Información de empaquetado
             $table->unsignedBigInteger('prepared_by')->nullable();

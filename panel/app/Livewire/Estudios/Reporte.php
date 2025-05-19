@@ -296,6 +296,7 @@ class Reporte extends Component
                         //Consulto si existe este estudio este día
                         if(array_key_exists($elemento["Id"], $estudios)){
                             $tiempo=$estudios[$elemento["Id"]];
+                            
                             //Comienzo a procesar, inicio sumando el tiempo
                             $reporteTiempo["Total"]+=$tiempo["Total"];
 
