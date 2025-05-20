@@ -8,6 +8,7 @@ use App\Models\ProductInventory;
 use App\Models\ProductInventoryMovement;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class Viewedit extends Component
 {
@@ -36,10 +37,23 @@ class Viewedit extends Component
     public $movimientos;
 
     public function activarEdicion(){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Editar producto', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
+
         $this->editing=true;
     }
 
     public function validar(){
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Editar producto', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
+
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
             $this->dispatch('mostrarToast', 'Editar producto', 'Error: El nombre del producto no es válido');
             return false;
@@ -83,6 +97,13 @@ class Viewedit extends Component
     }
 
     public function desactivar(){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Desactivar producto', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
+
         $this->producto=Product::find($this->producto->id);
         $this->producto->available=false;
         if($this->producto->save()){
@@ -97,6 +118,11 @@ class Viewedit extends Component
     }
 
     public function activar(){
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Activar producto', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
         $this->producto=Product::find($this->producto->id);
         $this->producto->available=true;
         if($this->producto->save()){

@@ -249,6 +249,11 @@ class Viewedit extends Component
 
     public function validar(){
 
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Editar estudio', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
 
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El nombre del estudio no es válido");
@@ -594,6 +599,11 @@ class Viewedit extends Component
     }
 
     public function desactivarEstudio(){
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Desactivar estudio', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
         $information=$this->informacion;
         $information["Active"]=false;
 
@@ -620,6 +630,12 @@ class Viewedit extends Component
     }
 
     public function activarEstudio(){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Activar estudio', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
         $information=$this->informacion;
         $information["Active"]=true;
 

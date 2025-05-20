@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductInventory;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class Productos extends Component
 {
@@ -57,6 +58,14 @@ class Productos extends Component
     }
 
     public function validar(){
+        //Pregunta el rango
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Crear producto', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
+
+
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
             $this->dispatch('mostrarToast', 'Crear producto', 'Error: El nombre del producto no es válido o está vacío');
             return false;
@@ -93,6 +102,7 @@ class Productos extends Component
     }
 
     public function guardar(){
+
         if($this->validar()){
             //Creo el nuevo producto
             $producto=new Product();

@@ -33,11 +33,11 @@ Route::middleware(['auth','checkuserstatus'])->controller(StudyController::class
     Route::middleware('checkrank:4')->get('/panel/estudios/crear', 'create')->name('estudios.create');
 
     Route::middleware('checkrank:4')->get('/panel/estudio/manager/crear/{idestudio}', 'manager_create')->name('manager.create');
-    Route::get('/panel/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
+    Route::middleware('checkrank:4')->get('/panel/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
     
     Route::get('/panel/estudio/{idestudio}', 'viewedit')->name('estudio.ver');
 
-    Route::get('/panel/reportes', 'report')->name('reportes');
+    Route::middleware('checkrank:4')->get('/panel/reportes', 'report')->name('reportes');
     Route::get('/panel/prueba', 'prueba')->name('prueba');
 });
 

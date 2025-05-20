@@ -60,6 +60,7 @@
                             <label class="form-label">Stock mínimo (Para alerta)</label>
                             <input type="number" class="form-control" wire:model="stockmin" min="0" step="1" required @if(!$editing) disabled @endif>
                         </div>
+                        @if(auth()->check() && auth()->user()->rank >= 4)
                         <div class="col-md-12 text-center">
                             @if(!$editing)
                             <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
@@ -82,6 +83,7 @@
                             @endif
 
                         </div>
+                        @endif
                     </div> 
                 </div>
                 <div class="col-md-8 pt-3">
@@ -89,9 +91,11 @@
                     <p class="card-text">Estos son los últimos movimientos que se han efectuado para este producto.</p>
                 </div>
                 <div class="col-md-4 pt-4 text-end">
+                    @if(auth()->check() && auth()->user()->rank >= 4)
                     <a class="btn btn-outline-secondary btn-sm" href="{{route("inventario.movimiento",$inventario->id)}}">
                         Crear un movimiento
                     </a>
+                    @endif
                 </div>
                 <div class="col-md-12 pt-2">
                     <table class="table text-center" >

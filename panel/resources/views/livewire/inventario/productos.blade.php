@@ -111,10 +111,12 @@
             @endif
         </tbody>
     </table>
-
+    
+    @if(auth()->check() && auth()->user()->rank >= 4)
     <center><a class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#createProduct">Crear nuevo producto</a></center>
 
     <!-- Modal -->
+    
     <div class="modal fade" id="createProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createProductLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -170,4 +172,5 @@
             </div>
         </div>
     </div>
+    @endif
 </div>

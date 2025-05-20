@@ -70,6 +70,7 @@
                             <div id="emailnameHelp" class="form-text">Correo al que llegarán los soportes</div>
                             <br>
                         </div>
+                        @if(auth()->check() && auth()->user()->rank >= 4)
                         <div class="col-md-12 text-center">
                             @if(!$editing)
                             <button type="button" class="btn btn-outline-primary" wire:click="activarEdicion">
@@ -92,7 +93,7 @@
                             @endif
 
                         </div>
-                        
+                        @endif
                     </div>
                     
                 </div>
@@ -126,7 +127,9 @@
                                         @endif
                                     </td>
                                     <td>
+                                        @if(auth()->check() && auth()->user()->rank >= 4)
                                         <a type="button" class="btn btn-outline-primary btn-sm" href="manager/{{ $manager['Id'] }}">Visualizar</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -140,12 +143,14 @@
                         </tbody>
                     </table>
                 </div>
+                @if(auth()->check() && auth()->user()->rank >= 4)
                 <div class="col-md-12 text-center">
                     {{-- <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$estudioactual}}"> --}}
                     <a type="button" class="btn btn-outline-secondary" href="manager/crear/{{$informacion["Id"]}}">
                         Crear nuevo manager
                     </a>
                 </div>
+                @endif
                 <div class="col-md-12">
                     <br>
                     <h5 class="card-title">Modelos registrados</h5>

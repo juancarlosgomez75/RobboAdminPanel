@@ -4,6 +4,7 @@ namespace App\Livewire\Inventario;
 
 use App\Models\ProductCategory;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class Categorias extends Component
 {
@@ -30,6 +31,12 @@ class Categorias extends Component
     }
 
     public function eliminar($id){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Eliminar categoría', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
         $product = ProductCategory::find($id);
 
         if($product){
@@ -47,6 +54,11 @@ class Categorias extends Component
     }
 
     public function validar_edit(){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Editar categoría', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name_edit) && !empty(trim($this->name_edit)))){
             $this->dispatch('mostrarToast', 'Editar categoría', 'Error: El nombre de la categoría no es válido o está vacía');
@@ -96,6 +108,11 @@ class Categorias extends Component
     }
 
     public function validar(){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Crear categoría', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->name) && !empty(trim($this->name)))){
             $this->dispatch('mostrarToast', 'Crear categoría', 'Error: El nombre de la categoría no es válido o está vacío');

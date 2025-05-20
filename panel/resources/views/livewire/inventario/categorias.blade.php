@@ -14,8 +14,10 @@
                 <th scope="row">{{$categoria->id}}</th>
                 <td>{{$categoria->name}}</td>
                 <td>
+                    @if(auth()->check() && auth()->user()->rank >= 4)
                     <a type="button" class="btn btn-outline-secondary btn-sm" wire:click="editar({{$categoria->id}})">Editar</a>
                     <a type="button" class="btn btn-outline-danger btn-sm" wire:click="eliminar({{$categoria->id}})">Eliminar</a>
+                    @endif
                 </td>
             </tr>
             @endforeach
@@ -28,6 +30,7 @@
         </tbody>
     </table>
 
+    @if(auth()->check() && auth()->user()->rank >= 4)
     <center><a class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#createCategory">Crear nueva categoría</a></center>
 
     <!-- Modal -->
@@ -90,6 +93,7 @@
             </div>
         </div>
     </div>
+    @endif
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
