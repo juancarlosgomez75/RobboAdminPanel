@@ -17,6 +17,7 @@ class Request extends Component
     public $telefono="";
     public $nombre="";
     public $fecha="";
+    public $observaciones="";
     
     //Información de los productos
     public $listProducts=[];
@@ -120,19 +121,19 @@ class Request extends Component
             $this->dispatch('mostrarToast', 'Crear pedido', 'El nombre de eempresa no es válido');
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
+        elseif($this->direccion!="" && !(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
             $this->dispatch('mostrarToast', 'Crear pedido', 'La dirección no es válida');
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->ciudad) && !empty(trim($this->ciudad)))){
+        elseif($this->ciudad!="" && !(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->ciudad) && !empty(trim($this->ciudad)))){
             $this->dispatch('mostrarToast', 'Crear pedido', 'La ciudad no es válida');
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
+        elseif($this->nombre!="" && !(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
             $this->dispatch('mostrarToast', 'Crear pedido', 'El nombre de encargado no es válido');
             return false;
         }
-        elseif(!(preg_match('/^[\d+\-]+$/', $this->telefono) && !empty(trim($this->telefono)))){
+        elseif($this->telefono!="" && !(preg_match('/^[\d+\-]+$/', $this->telefono) && !empty(trim($this->telefono)))){
             $this->dispatch('mostrarToast', 'Crear pedido', 'El teléfono de contacto no es válido');
             return false;
         }
@@ -154,7 +155,7 @@ class Request extends Component
         }
 
         //Valido los productos
-        foreach($this->listProducts as $product){
+        foreach($this->listProducts as $index=>$product){
 
             //Analizo si es de tipo externo o interno
             if($product["internal"]){
@@ -165,10 +166,15 @@ class Request extends Component
                     $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no fue encontrado');
                     return false;
                 }
+            }else{
+                if(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $product["name"]) && !empty(trim($product["name"])))){
+                    $this->dispatch('mostrarToast', 'Crear pedido', 'El producto #'.($index+1).' no tiene un nombre válido');
+                    return false;
+                }
             }
 
             if($product["amount"]<1){
-                $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no tiene una cantidad válida');
+                $this->dispatch('mostrarToast', 'Crear pedido', 'El producto #'.($index+1).' no tiene una cantidad válida');
                 return false;
             }
         }
