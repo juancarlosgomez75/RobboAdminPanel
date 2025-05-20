@@ -179,7 +179,7 @@
                 </div>
                 @if($pedido->status=="canceled")
                 <div class="col-md-12 pb-1 text-center">
-                    <h5 style="color:red">Orden cancelada</h5>
+                    <h5 style="color:red">Pedido cancelado</h5>
                 </div>
                 @endif
                 <div class="col-md-12 pt-2">
@@ -232,7 +232,34 @@
                         </tbody>
                     </table>
                 </div>
-                @if(!is_null($deliveryList))
+                @if($pedido->status=="canceled")
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de cancelación</h5>
+                    <p class="card-text">Esta es la información relacionada con la cancelación de la orden</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de cancelación</th>
+                                <td>{{$pedido->cancel_date??"No reporta"}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién canceló la orden?</th>
+                                <td>{{(!is_null($pedido->canceled_by))? $pedido->canceler_info->name." (".$pedido->canceler_info->id." - ".$pedido->canceler_info->username.")":"No reporta"}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Razón de cancelación</th>
+                                <td>{{$pedido->cancellation_reason??"No reporta"}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                @endif
+                                @if(!is_null($deliveryList))
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de entregas</h5>
                     <p class="card-text">Este es el listado de comentarios de las entregas reportadas.</p>
