@@ -62,4 +62,8 @@ class InventoryController extends Controller
     public function request_list(){
         return view("inventario.request_list");
     }
+
+    public function request(){
+        return view("inventario.request");
+    }
 }

@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
 
             //Información del contratista
-            $table->string('name');
-            $table->string('city')->nullable();;
-            $table->string('address')->nullable();;
-            $table->string('phone')->nullable();;
+            $table->string('enterprise');
+            $table->string('city')->nullable();
+            $table->string('address')->nullable();
+            $table->string('name')->nullable();
+            $table->string('phone')->nullable();
 
             //Información de creación
             $table->unsignedBigInteger('created_by')->nullable();
@@ -28,20 +29,12 @@ return new class extends Migration
             $table->timestamp('tentative_delivery_date')->nullable();
 
             //Información de entrega
-            $table->json("pending_list");
             $table->json("delivery_list")->nullable();
 
             //Información de estado
-            $table->enum('status', ['created', 'partial delivery', 'delivered', 'inventoried', 'canceled'])->default('created');
-            
+            $table->enum('status', ['created', 'partial delivery', 'delivered', 'canceled'])->default('created');
 
             //Cancelación
-            $table->unsignedBigInteger('inventoried_by')->nullable();
-            $table->foreign('inventoried_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
-            $table->text('inventoried_notes')->nullable();
-            $table->timestamp('inventoried_date')->nullable();
-
-            //Inventarialización
             $table->unsignedBigInteger('canceled_by')->nullable();
             $table->foreign('canceled_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->text('cancellation_reason')->nullable();
