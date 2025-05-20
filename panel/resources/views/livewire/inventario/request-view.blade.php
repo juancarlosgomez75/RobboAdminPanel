@@ -247,6 +247,18 @@
                                 @if($entregaActive)
                                 <th scope="col">Reporte de entrega</th>
                                 @endif
+                                @if(!is_null($deliveryList))
+                                @foreach($deliveryList as $fecha=>$contenido)
+                                <th scope="col">
+                                    {{$fecha}}
+                                    @if($contenido["inventoried"])
+                                    <i class="fa-solid fa-check ms-2 text-success"></i>
+                                    @else
+                                    <i class="fa-solid fa-hourglass-start ms-2 text-primary"></i>
+                                    @endif
+                                </th>
+                                @endforeach
+                                @endif
                                 <th scope="col">Pendiente</th>
                             </tr>
                         </thead>
@@ -274,6 +286,11 @@
                                         <input class="form-control form-control-sm" type="number" min="0" wire:model="entregando.{{$index}}">
                                     </td>
                                     @endif
+                                    @if(!is_null($deliveryList))
+                                    @foreach($deliveryList as $fecha=>$contenido)
+                                    <td scope="col">{{$contenido["products"][$index]}}</td>
+                                    @endforeach
+                                    @endif
                                     <td>
                                         {{$pendientes[$index]}}
                                     </td>
@@ -286,18 +303,21 @@
                 </div>
                     <div class="col-12 d-flex justify-content-center">
                         <div class="d-flex gap-3 justify-content-center w-100" style="max-width: 36rem;">
-                            @if(!$entregaActive)
-                            <button type="button" class="btn btn-outline-secondary" wire:click="iniciarEntrega()">
-                                Reportar entrega
-                            </button>
-                            @else
-                            <button type="button" class="btn btn-outline-primary" wire:click="completarEntrega()">
-                                Completar entrega
-                            </button>
+                            @if($pedido->status!="delivered")
+                                @if(!$entregaActive)
+                                <button type="button" class="btn btn-outline-secondary" wire:click="iniciarEntrega()">
+                                    Reportar entrega
+                                </button>
+                                @else
+                                <button type="button" class="btn btn-outline-primary" wire:click="completarEntrega()">
+                                    Completar entrega
+                                </button>
+                                @endif
+                                
+                                <button type="button" class="btn btn-outline-danger" wire:click="cancelarPedido()">
+                                    Cancelar pedido
+                                </button>
                             @endif
-                            <button type="button" class="btn btn-outline-danger" wire:click="cancelarPedido()">
-                                Cancelar pedido
-                            </button>
                         </div>
                     </div>
 

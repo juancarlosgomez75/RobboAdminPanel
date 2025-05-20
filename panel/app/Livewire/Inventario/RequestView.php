@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 class RequestView extends Component
 {
     public $pedido;
+
+    public $deliveryList=[];
     public $pendientes=[];
     public $entregando=[];
     public $entregaActive=False;
@@ -33,6 +35,8 @@ class RequestView extends Component
                 }
             }
         }
+
+        $this->deliveryList=json_decode($this->pedido->delivery_list,True);
     }
 
     public function mount($pedido){
@@ -76,6 +80,17 @@ class RequestView extends Component
 
         //Intento actualizar
         $this->pedido->delivery_list=json_encode($delivery);
+
+        //Analizo si se completó la entrega
+        $delCompleted=True;
+        foreach($this->entregando as $index=>$cantidad){
+            if(($this->pendientes[$index]-$cantidad)>0){
+                $delCompleted=False;
+                break;
+            }
+        }
+
+        $this->pedido->status=$delCompleted?"delivered":"partial delivery";
 
         //Intento guardar
         if($this->pedido->save()){
