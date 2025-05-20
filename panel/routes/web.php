@@ -76,8 +76,11 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->contro
 
     //órdenes
     Route::get('/panel/ordenes', 'order_list')->name('ordenes');
-    Route::get('/panel/ordenes/crear', 'order_create')->name('ordenes.create');
+    Route::middleware('checkrank:4')->get('/panel/ordenes/crear', 'order_create')->name('ordenes.create');
     Route::get('/panel/orden/{idorden}', 'order_view')->name('orden.ver');
+
+    //Pedidos
+    Route::get('/panel/pedidos', 'request_list')->name('pedidos');
 });
 
 Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->controller(PdfController::class)->group(function(){
