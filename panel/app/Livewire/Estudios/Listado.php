@@ -84,11 +84,12 @@ class Listado extends Component
         }else if($this->ordenarPor=="id"){
             if ($this->ordenarDesc) {
                 usort($filtrados, function ($a, $b) {
-                    return intval($b["Id"]) <=> intval($a["Id"]);
+                    return intval($a["Id"]) <=> intval($b["Id"]);
                 });
             } else {
+
                 usort($filtrados, function ($a, $b) {
-                    return intval($a["Id"]) <=> intval($b["Id"]);
+                    return intval($b["Id"]) <=> intval($a["Id"]);
                 });
             }
         }
