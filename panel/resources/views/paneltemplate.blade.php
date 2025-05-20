@@ -220,7 +220,7 @@ body {
                         <ul class="submenu">
                             <li><a href="{{ route('estudios.index') }}">Estudios</a></li>
                             <li><a href="{{ route('maquinas.index') }}">Máquinas</a></li>
-                            <li><a href="{{ route('reportes') }}">Reportes</a></li>
+                            @if(auth()->check() && auth()->user()->rank >= 4)<li><a href="{{ route('reportes') }}">Reportes</a></li>@endif
                             <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         </ul>
                     </li>

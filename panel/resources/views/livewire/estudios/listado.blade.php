@@ -38,7 +38,20 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="w-10" scope="col" style="width: 7%;">#</th>
+                                <th class="w-10" scope="col" style="cursor: pointer;" wire:click="ordenarBy('id')" style="width: 7%;">
+                                    @if($ordenarPor=="id")
+                                        @if($ordenarDesc)
+                                            <a  class="text-decoration-none text-dark"> 
+                                                <i class="fa-solid fa-angle-down me-2"></i>
+                                            </a>
+                                        @else
+                                            <a class="text-decoration-none text-dark"> 
+                                                <i class="fa-solid fa-angle-up me-2"></i>
+                                            </a>
+                                        @endif
+                                    @endif
+                                    #
+                                </th>
                                 <th class="w-40" scope="col" style="cursor: pointer;" wire:click="ordenarBy('name')" >
                                     @if($ordenarPor=="name")
                                         @if($ordenarDesc)

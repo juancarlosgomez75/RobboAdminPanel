@@ -409,7 +409,7 @@
                             <div class="col-md-5">
                                 <label class="form-label">Empresa</label>
                                 <select class="form-select" wire:model="courier_enterprise">
-                                    <option selected disabled value="0">Seleccionar un producto</option>
+                                    <option selected disabled value="0">Seleccionar una empresa</option>
                                     @foreach ($mensajerias as $mensajeria)
                                         <option value="{{$mensajeria->id}}">{{$mensajeria->name}}</option>
                                     @endforeach

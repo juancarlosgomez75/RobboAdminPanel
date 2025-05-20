@@ -19,7 +19,7 @@ class Listado extends Component
 
     public function ordenarBy($filtro){
         //Analizo si cambia es la columna o la dirección
-        if($filtro == "name" || $filtro == "city"){
+        if($filtro == "name" || $filtro == "city" || $filtro=="id"){
             if($filtro != $this->ordenarPor){
                 $this->ordenarPor = $filtro;
                 $this->ordenarDesc = true;
@@ -79,6 +79,16 @@ class Listado extends Component
             }else{
                 usort($filtrados, function ($a, $b) {
                     return strcmp($b["City"], $a["City"]);
+                });
+            }
+        }else if($this->ordenarPor=="id"){
+            if ($this->ordenarDesc) {
+                usort($filtrados, function ($a, $b) {
+                    return intval($b["Id"]) <=> intval($a["Id"]);
+                });
+            } else {
+                usort($filtrados, function ($a, $b) {
+                    return intval($a["Id"]) <=> intval($b["Id"]);
                 });
             }
         }

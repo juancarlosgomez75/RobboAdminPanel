@@ -70,7 +70,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(PanelController::class
 Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->controller(InventoryController::class)->group(function(){
     //Productos
     Route::get('/panel/productos', 'index')->name('inventario.index');
-    Route::get('/panel/producto/movimiento/{idinventario}', 'movement')->name('inventario.movimiento');
+    Route::middleware('checkrank:4')->get('/panel/producto/movimiento/{idinventario}', 'movement')->name('inventario.movimiento');
     Route::get('/panel/producto/{idproducto}', 'viewedit')->name('inventario.viewedit');
     Route::get('/panel/mensajeria', 'couriers')->name('inventario.couriers');
 
