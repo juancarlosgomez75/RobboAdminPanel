@@ -14,6 +14,7 @@ class RequestView extends Component
     public $pendientes=[];
     public $entregando=[];
     public $entregaActive=False;
+    public $observaciones="";
 
     public function loadData(){
         //Reinicio la data
@@ -64,6 +65,11 @@ class RequestView extends Component
             }
         }
 
+        if (!empty(trim($this->observaciones)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->observaciones)){
+            $this->dispatch('mostrarToast', 'Reportar entrega', 'Las observaciones no son válidas');
+            return false;
+        }
+
         //Analizo si es la única entrega para iniciar reporte o no
         if(is_null($this->pedido->delivery_list)){
             $delivery=[];
@@ -75,7 +81,8 @@ class RequestView extends Component
         $delivery[Carbon::now()->toDateString()]=[
             "products"=>$this->entregando,
             "author"=>Auth::id(),
-            "inventoried"=>False
+            "inventoried"=>False,
+            "details"=>$this->observaciones
         ];
 
         //Intento actualizar

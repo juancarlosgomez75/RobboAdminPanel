@@ -232,8 +232,22 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-12">
-                    <p class="card-text">Estos son los productos que se deben enviar y el estado de entrega</p>
+                @if(!is_null($deliveryList))
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de entregas</h5>
+                    <p class="card-text">Este es el listado de comentarios de las entregas reportadas.</p>
+                    @foreach($deliveryList as $fecha=>$contenido)
+                    <p>
+                        <b>{{$fecha}}</b><br>
+                        {{$contenido["details"]??"Sin comentarios"}}
+                    </p>
+                    @endforeach
+                </div>
+                @endif
+
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de productos</h5>
+                    <p class="card-text">Estos son los productos que deben ser entrgados</p>
                 </div>
                 <div class="col-md-12 pt-2">
                     <table class="table text-center" >
@@ -300,28 +314,52 @@
                     </table>
 
                 </div>
-                    <div class="col-12 d-flex justify-content-center">
-                        <div class="d-flex gap-3 justify-content-center w-100" style="max-width: 36rem;">
-                            @if($pedido->status!="delivered")
-                                @if(!$entregaActive)
-                                <button type="button" class="btn btn-outline-secondary" wire:click="iniciarEntrega()">
-                                    Reportar entrega
-                                </button>
-                                @else
-                                <button type="button" class="btn btn-outline-primary" wire:click="completarEntrega()">
-                                    Completar entrega
-                                </button>
-                                @endif
-                                
-                                <button type="button" class="btn btn-outline-danger" wire:click="cancelarPedido()">
-                                    Cancelar pedido
-                                </button>
+                <div class="col-12 d-flex justify-content-center">
+                    <div class="d-flex gap-3 justify-content-center w-100" style="max-width: 36rem;">
+                        @if($pedido->status!="delivered")
+                            @if(!$entregaActive)
+                            <button type="button" class="btn btn-outline-secondary" wire:click="iniciarEntrega()">
+                                Reportar entrega
+                            </button>
+                            @else
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                Completar entrega
+                            </button>
                             @endif
-                        </div>
+                            
+                            <button type="button" class="btn btn-outline-danger" wire:click="cancelarPedido()">
+                                Cancelar pedido
+                            </button>
+                        @endif
                     </div>
-
+                </div>
 
             </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de reporte de entrega</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Al presionar en confirmar, aceptas que toda la información aquí descrita está bien. Por seguridad, la información no podrá ser editada manualmente.
+                </p>
+                <div class="mb-3">
+                    <label class="form-label">Observaciones de entrega</label>
+                    <textarea class="form-control" rows="3" wire:model="observaciones"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="completarEntrega()" >Crear pedido</button>
+            </div>
+        </div>
         </div>
     </div>
     <br>
