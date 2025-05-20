@@ -149,26 +149,26 @@
                             </div>
                             <span>Creado</span>
                         </li>
-                        <li @if($pedido->status=="created") class="current" @endif>
+                        <li @if($pedido->status=="created" || $pedido->status=="partial delivery") class="current" @endif>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-box"></i>
                             </div>
                             <span>
                                 @if($pedido->status=="created")
                                 Esperando entrega
+                                @elseif($pedido->status=="partial delivery")
+                                Entrega parcial
                                 @else
                                 Preparado
                                 @endif
                             </span>
                         </li>
-                        <li @if($pedido->status=="prepared") class="current" @endif>
+                        <li @if($pedido->status=="delivered") class="current" @endif>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-circle-check"></i>
                             </div>
                             <span>
-                                @if($pedido->status=="prepared")
-                                Esperando completar
-                                @elseif($pedido->status!="created")
+                                @if($pedido->status=="delivered")
                                 Completado
                                 @else
                                 Pendiente
@@ -219,7 +219,6 @@
                                 <th scope="row">Fecha tentativa de entrega</th>
                                 <td>{{$pedido->tentative_delivery_date}}</td>
                             </tr>
-                            {{json_encode($pendientes)}}
 
                             <tr>
                                 <th scope="row">Creador</th>
