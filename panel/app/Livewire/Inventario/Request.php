@@ -3,11 +3,22 @@
 namespace App\Livewire\Inventario;
 
 use App\Models\Product;
+use App\Models\Request as ModelsRequest;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class Request extends Component
 {
-        //Información de los productos
+    //Información del pedido
+    public $empresa="";
+    public $ciudad="";
+    public $direccion="";
+    public $telefono="";
+    public $nombre="";
+    public $fecha="";
+    
+    //Información de los productos
     public $listProducts=[];
     public $addingProduct=false;
 
@@ -54,7 +65,7 @@ class Request extends Component
         foreach($this->listProducts as $product){
             if($product["id"]==$busqueda->id){
 
-                $this->dispatch('mostrarToast', 'Añadir producto', 'Advertencia: Este producto ya está en el carrito');
+                $this->dispatch('mostrarToast', 'Añadir producto', 'Advertencia: Este producto interno ya está en el carrito');
                 return;
             }
         }
@@ -67,7 +78,7 @@ class Request extends Component
             "internal"=>True
         ];
 
-        $this->dispatch('mostrarToast', 'Añadir producto', 'Producto añadido');
+        $this->dispatch('mostrarToast', 'Añadir producto', 'Producto interno añadido');
 
     }
 
@@ -81,7 +92,7 @@ class Request extends Component
             "internal"=>False
         ];
 
-        $this->dispatch('mostrarToast', 'Añadir producto', 'Producto añadido');
+        $this->dispatch('mostrarToast', 'Añadir producto', 'Producto externo añadido');
 
     }
 
@@ -100,6 +111,109 @@ class Request extends Component
         unset($this->listProducts[$index]); // Elimina el elemento del array
         $this->listProducts = array_values($this->listProducts); // Reorganiza los índices
         $this->dispatch('mostrarToast', 'Quitar producto', 'Se ha quitado el producto del carrito');
+
+    }
+
+    public function validar(){
+        //Analizo los campos
+        if(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->empresa) && !empty(trim($this->empresa)))){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'El nombre de eempresa no es válido');
+            return false;
+        }
+        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'La dirección no es válida');
+            return false;
+        }
+        elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->ciudad) && !empty(trim($this->ciudad)))){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'La ciudad no es válida');
+            return false;
+        }
+        elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'El nombre de encargado no es válido');
+            return false;
+        }
+        elseif(!(preg_match('/^[\d+\-]+$/', $this->telefono) && !empty(trim($this->telefono)))){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'El teléfono de contacto no es válido');
+            return false;
+        }
+        elseif (empty($this->fecha) || !Carbon::hasFormat($this->fecha, 'Y-m-d') ||Carbon::parse($this->fecha)->lt(Carbon::today())) {
+            $this->dispatch('mostrarToast', 'Crear pedido', 'La fecha tentativa de entrega no es válida o es anterior a hoy');
+            return false;
+        }
+
+        //Ahora valido si tiene o no producto añadidos
+        if(empty($this->listProducts)){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'El carrito de compras está vacío');
+            return false;
+        }
+
+        //Ahora valido las observaciones
+        if (!empty(trim($this->observaciones)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->observaciones)){
+            $this->dispatch('mostrarToast', 'Crear pedido', 'Las observaciones no son válidas');
+            return false;
+        }
+
+        //Valido los productos
+        foreach($this->listProducts as $product){
+
+            //Analizo si es de tipo externo o interno
+            if($product["internal"]){
+                //Busco el producto
+                $buscado=Product::find($product['id']);
+
+                if(!$buscado){
+                    $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no fue encontrado');
+                    return false;
+                }
+            }
+
+            if($product["amount"]<1){
+                $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no tiene una cantidad válida');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function crear(){
+
+        if($this->validar()){
+            //Creo el objeto
+            $orden=new ModelsRequest();
+
+            //Cargo la información básica
+            $orden->enterprise=$this->empresa;
+            $orden->city=$this->ciudad;
+            $orden->address=$this->direccion;
+            $orden->name=$this->nombre;
+            $orden->phone=$this->telefono;
+
+            //Genero los detalles de creación
+            $orden->created_by=Auth::id();
+            $orden->creation_notes=$this->observaciones;
+            $orden->creation_list=json_encode($this->listProducts);
+            $orden->tentative_delivery_date=$this->fecha;
+
+            //Intento guardar
+            if($orden->save()){
+
+                registrarLog("Inventario","Pedidos","Crear","Ha creado un pedido con la siguiente información: ".json_encode($orden),true);
+
+                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado el pedido satisfactoriamente');
+
+                $this->reset();
+
+                return redirect(route("pedido.ver",$orden->id));
+
+                
+            }else{
+                $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar el pedido, contacte a soporte');
+                registrarLog("Inventario","Órdenes","Crear","Ha intentado crear un pedido con la siguiente información: ".json_encode($orden),false);
+            }
+
+            
+        }
 
     }
 

@@ -190,7 +190,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="text-center">
-                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Registrar pedido en sistema</a>
+                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Registrar orden en sistema</a>
                     </div>   
                 </div>
             </div>
@@ -201,7 +201,7 @@
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de creación de pedido</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de creación de orden</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -211,7 +211,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="crear()" >Crear pedido</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="crear()" >Crear orden</button>
                 </div>
             </div>
             </div>

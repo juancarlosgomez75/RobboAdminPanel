@@ -264,19 +264,19 @@ class Order extends Component
         //Analizo los campos si no es un estudio
         if(!$this->studyFind){
             if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->address) && !empty(trim($this->address)))){
-                $this->dispatch('mostrarToast', 'Crear pedido', 'La dirección no es válida');
+                $this->dispatch('mostrarToast', 'Crear orden', 'La dirección no es válida');
                 return false;
             }
             elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->city) && !empty(trim($this->city)))){
-                $this->dispatch('mostrarToast', 'Crear pedido', 'La ciudad no es válida');
+                $this->dispatch('mostrarToast', 'Crear orden', 'La ciudad no es válida');
                 return false;
             }
             elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->receiver) && !empty(trim($this->receiver)))){
-                $this->dispatch('mostrarToast', 'Crear pedido', 'El nombre de quién recibe no es válido');
+                $this->dispatch('mostrarToast', 'Crear orden', 'El nombre de quién recibe no es válido');
                 return false;
             }
             elseif(!(preg_match('/^[\d+\-]+$/', $this->phone) && !empty(trim($this->phone)))){
-                $this->dispatch('mostrarToast', 'Crear pedido', 'El teléfono de contacto no es válido');
+                $this->dispatch('mostrarToast', 'Crear orden', 'El teléfono de contacto no es válido');
                 return false;
             }
         }
@@ -290,19 +290,19 @@ class Order extends Component
 
         //Ahora valido si tiene o no producto añadidos
         if(empty($this->listProducts)){
-            $this->dispatch('mostrarToast', 'Crear pedido', 'El carrito de compras está vacío');
+            $this->dispatch('mostrarToast', 'Crear orden', 'El carrito de compras está vacío');
             return false;
         }
 
         //Valido el tipo
         if($this->tipoOrden!="-1" && $this->tipoOrden!="1"){
-            $this->dispatch('mostrarToast', 'Crear pedido', 'El tipo de orden no es válido');
+            $this->dispatch('mostrarToast', 'Crear orden', 'El tipo de orden no es válido');
             return false;
         }
 
         //Ahora valido las observaciones
         if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
-            $this->dispatch('mostrarToast', 'Crear pedido', 'Las observaciones no son válidas');
+            $this->dispatch('mostrarToast', 'Crear orden', 'Las observaciones no son válidas');
             return false;
         }
 
@@ -314,15 +314,15 @@ class Order extends Component
 
             if($buscado){
                 if($buscado->inventory->stock_available<$product['amount'] && $this->tipoOrden=="-1"){
-                    $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no tiene stock suficiente para completar la orden');
+                    $this->dispatch('mostrarToast', 'Crear orden', 'El producto: '.$product["name"].' no tiene stock suficiente para completar la orden');
                     return false;
                 }
                 elseif($product['amount']<=0){
-                    $this->dispatch('mostrarToast', 'Crear pedido', 'La cantidad del producto: '.$product["name"].' no es válida');
+                    $this->dispatch('mostrarToast', 'Crear orden', 'La cantidad del producto: '.$product["name"].' no es válida');
                     return false;
                 }
             }else{
-                $this->dispatch('mostrarToast', 'Crear pedido', 'El producto: '.$product["name"].' no fue encontrado');
+                $this->dispatch('mostrarToast', 'Crear orden', 'El producto: '.$product["name"].' no fue encontrado');
                 return false;
             }
         }
@@ -384,19 +384,19 @@ class Order extends Component
 
                     //Guardo
                     if(!$mov->save()){
-                        $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                        $this->dispatch('mostrarToast', 'Crear orden', 'Se ha generado un error al generar un movimiento, contacte a soporte');
                     }
 
                     //Ahora modifico el stock
                     $pto->inventory->stock_available=$mov->stock_after;
 
                     if(!$pto->inventory->save()){
-                        $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                        $this->dispatch('mostrarToast', 'Crear orden', 'Se ha generado un error al actualizar stock, contacte a soporte');
                     }
 
                 }
 
-                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado el pedido satisfactoriamente');
+                $this->dispatch('mostrarToast', 'Crear orden', 'Se ha generado la pedido satisfactoriamente');
 
                 $this->resetExcept("estudios");
 
@@ -404,7 +404,7 @@ class Order extends Component
 
                 
             }else{
-                $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar el pedido, contacte a soporte');
+                $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar la orden, contacte a soporte');
                 registrarLog("Inventario","Órdenes","Crear","Ha intentado crear una orden con la siguiente información: ".json_encode($orden),false);
             }
 

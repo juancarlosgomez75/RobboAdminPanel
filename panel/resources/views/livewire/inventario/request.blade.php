@@ -49,7 +49,9 @@
                 </div>
                 <div class="col-md-12 pt-3">
                     <h5 class="card-title">Listado de productos</h5>
-                    <p class="card-text">Este es el listado de elementos que se solicitarán en este pedido.</p>
+                    <p class="card-text">Este es el listado de elementos que se solicitarán en este pedido.
+                        Los productos internos corresponden a los inventariados, mientras que los externos son productos que hacen parte del pedido pero no del inventario.
+                    </p>
                 </div>
                                 <div class="col-md-12 pt-2">
                     <table class="table text-center" >
@@ -149,10 +151,10 @@
                 </div>
                 <div class="col-md-12 pt-3">
                     <h5 class="card-title">Observaciones</h5>
-                    <p class="card-text">Aquí podrás añadir las observaciones que consideres importantes para esta orden.</p>
+                    <p class="card-text">Aquí podrás añadir las observaciones que consideres importantes para este pedido.</p>
                     
                     <div class="mb-3">
-                        <textarea class="form-control" rows="3" wire:model="details"></textarea>
+                        <textarea class="form-control" rows="3" wire:model="observaciones"></textarea>
                     </div>
 
                 </div>
@@ -162,5 +164,29 @@
                     </div>   
                 </div>
 
+            </div>
+        </div>  
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmación de creación de pedido</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Al presionar en confirmar, aceptas que toda la información aquí descrita está bien. Por seguridad, la información no podrá ser editada manualmente.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Regresar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="crear()" >Crear pedido</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
 </div>
