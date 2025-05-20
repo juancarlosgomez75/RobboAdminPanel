@@ -40,7 +40,7 @@ class Reporte extends Component
 
     public $accionesInteres=["CUMTEST","MOVTEST","CONTROL","MOV","CUM","SCUM","XCUM"];
 
-    public $rentasCompartidas=["Dreams","EAW","Colombia Cam","Sensattion","Vanessa","Labo"];
+    public $rentasCompartidas=["Dreams","EAW","Colombia Cam","Sensattion","Labo"];
 
     public $tiemposConexion=[];
 
