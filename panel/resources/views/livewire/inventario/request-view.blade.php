@@ -235,7 +235,7 @@
                 @if($pedido->status=="canceled")
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de cancelación</h5>
-                    <p class="card-text">Esta es la información relacionada con la cancelación de la orden</p>
+                    <p class="card-text">Esta es la información relacionada con la cancelación de el pedido</p>
                 </div>
                 <div class="col-md-12 pt-2">
                     <table class="table">
@@ -246,7 +246,7 @@
                             </tr>
 
                             <tr>
-                                <th scope="row">¿Quién canceló la orden?</th>
+                                <th scope="row">¿Quién canceló el pedido?</th>
                                 <td>{{(!is_null($pedido->canceled_by))? $pedido->canceler_info->name." (".$pedido->canceler_info->id." - ".$pedido->canceler_info->username.")":"No reporta"}}</td>
                             </tr>
 
@@ -360,7 +360,7 @@
                             </button>
                             @endif
                             
-                            <button type="button" class="btn btn-outline-danger" wire:click="cancelarPedido()">
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelarPedido">
                                 Cancelar pedido
                             </button>
                         @endif
@@ -395,5 +395,32 @@
         </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="cancelarPedido" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelarPedidoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="cancelarPedidoLabel">Cancelar el pedido</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Al reportar la cancelación de el pedido, esta se cerrará inmediatamente y no permitirá ingresar el resto de valores. Por favor reporta la razón de por qué se canceló el pedido.
+                </p>
+                <div class="mb-3">
+                    <label class="form-label">Motivo de cancelación</label>
+                    <textarea class="form-control" rows="3" wire:model="reasonCancel"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" wire:click="cancelarPedido()">Cancelar orden</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
     <br>
 </div>

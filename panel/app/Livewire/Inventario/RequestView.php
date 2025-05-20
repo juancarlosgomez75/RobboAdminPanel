@@ -15,6 +15,7 @@ class RequestView extends Component
     public $entregando=[];
     public $entregaActive=False;
     public $observaciones="";
+    public $reasonCancel="";
 
     public function loadData(){
         //Reinicio la data
@@ -115,6 +116,34 @@ class RequestView extends Component
 
         }else{
             $this->dispatch('mostrarToast', 'Reportar entrega', "Error guardando la entrega, contacte a soporte");
+        }
+    }
+
+    public function cancelarPedido(){
+        //Valido la razon
+        if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->reasonCancel) && !empty(trim($this->reasonCancel)))){
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'La razón tiene caracteres no válidos');
+            return false;
+        }
+
+        if($this->pedido->status=="sended"){
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'No se puede cancelar una orden enviada');
+            return false;
+        }
+
+        //Edito la información
+        $this->pedido->canceled_by=Auth::id();
+        $this->pedido->cancel_date=now();
+        $this->pedido->cancellation_reason=$this->reasonCancel;
+        $this->pedido->status="canceled";
+
+        //Si almaceno
+        if($this->pedido->save()){
+            $this->dispatch('mostrarToast', 'Cancelar pedido', 'Se ha cancelado el pedido');
+            $this->entregaActive=False;
+
+        }else{
+            $this->dispatch('mostrarToast', 'Cancelar pedido', 'Error cancelando el pedido, contacta con soporte');
         }
     }
 
