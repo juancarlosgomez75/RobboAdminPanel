@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductInventory;
 use App\Models\ProductOrder;
+use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -65,5 +66,17 @@ class InventoryController extends Controller
 
     public function request(){
         return view("inventario.request");
+    }
+
+
+    public function request_view($idpedido){
+        //Localizar la orden
+        $pedido=ModelsRequest::find($idpedido);
+        if($pedido){
+            return view("inventario.request_view",compact("pedido"));
+        }else{
+            return redirect(route("pedidos"));
+        }
+        
     }
 }

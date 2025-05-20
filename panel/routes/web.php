@@ -81,7 +81,8 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->contro
 
     //Pedidos
     Route::get('/panel/pedidos', 'request_list')->name('pedidos');
-    Route::middleware('checkrank:4')->get('/panel/pedido', 'request')->name('pedido');
+    Route::middleware('checkrank:4')->get('/panel/pedido/crear', 'request')->name('pedido');
+    Route::get('/panel/pedido/{idpedido}', 'request_view')->name('pedido.ver');
 });
 
 Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->controller(PdfController::class)->group(function(){
