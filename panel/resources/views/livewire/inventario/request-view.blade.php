@@ -229,16 +229,12 @@
                                 <th scope="row">Comentarios de creación</th>
                                 <td>{{$pedido->creation_notes}}</td>
                             </tr>
-                            <tr>
-                                <th scope="row">Tipo de orden</th>
-                                <td>{{($pedido->type=="shipping") ? "Envío" : "Recogida"}}</td>
-                            </tr>
 
                         </tbody>
                     </table>
                 </div>
                 <div class="col-md-12">
-                    <p class="card-text">Esta estos son los productos que se deben enviar</p>
+                    <p class="card-text">Estos son los productos que se deben enviar y el estado de entrega</p>
                 </div>
                 <div class="col-md-12 pt-2">
                     <table class="table text-center" >
@@ -248,6 +244,9 @@
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Cantidad</th>
                                 <th scope="col">¿Registrado?</th>
+                                @if($entregaActive)
+                                <th scope="col">Reporte de entrega</th>
+                                @endif
                                 <th scope="col">Pendiente</th>
                             </tr>
                         </thead>
@@ -270,14 +269,38 @@
                                         No
                                         @endif
                                     </td>
+                                    @if($entregaActive)
+                                    <td>
+                                        <input class="form-control form-control-sm" type="number" min="0" wire:model="entregando.{{$index}}">
+                                    </td>
+                                    @endif
                                     <td>
                                         {{$pendientes[$index]}}
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+
                 </div>
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="d-flex gap-3 justify-content-center w-100" style="max-width: 36rem;">
+                            @if(!$entregaActive)
+                            <button type="button" class="btn btn-outline-secondary" wire:click="iniciarEntrega()">
+                                Reportar entrega
+                            </button>
+                            @else
+                            <button type="button" class="btn btn-outline-primary" wire:click="completarEntrega()">
+                                Completar entrega
+                            </button>
+                            @endif
+                            <button type="button" class="btn btn-outline-danger" wire:click="cancelarPedido()">
+                                Cancelar pedido
+                            </button>
+                        </div>
+                    </div>
+
 
             </div>
         </div>

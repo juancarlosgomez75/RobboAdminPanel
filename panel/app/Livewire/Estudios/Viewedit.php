@@ -260,7 +260,7 @@ class Viewedit extends Component
 
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))){
+        elseif(!(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s&]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))){
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La razón social no es válida");
 
             return false;

@@ -30,9 +30,8 @@ class Create extends Component
 
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))){
+        elseif (!(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s&]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))) {
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: La razón social no es válida");
-
             return false;
         }
         elseif(!(is_numeric($this->nit) && $this->nit > 0)){
