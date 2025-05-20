@@ -82,6 +82,8 @@ class RequestView extends Component
             "products"=>$this->entregando,
             "author"=>Auth::id(),
             "inventoried"=>False,
+            "inventoried_by"=>null,
+            "inventoried_date"=>null,
             "details"=>$this->observaciones
         ];
 

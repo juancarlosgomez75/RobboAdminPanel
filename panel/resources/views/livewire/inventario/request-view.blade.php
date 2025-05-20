@@ -238,7 +238,13 @@
                     <p class="card-text">Este es el listado de comentarios de las entregas reportadas.</p>
                     @foreach($deliveryList as $fecha=>$contenido)
                     <p>
-                        <b>{{$fecha}}</b><br>
+                        <b>{{$fecha}}</b> - 
+                        @if($contenido["inventoried"])
+                        <span class="text-success">{{"Reportada en inventario el: ".$contenido["inventoried_date"]??"N/F"." por #".$contenido["inventoried_by"]??"N/R"}}</span>
+                        @else 
+                        <span class="text-primary">Sin reportar en inventario</span>
+                        @endif
+                        <br>
                         {{$contenido["details"]??"Sin comentarios"}}
                     </p>
                     @endforeach
