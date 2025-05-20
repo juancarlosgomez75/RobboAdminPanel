@@ -269,7 +269,7 @@
                                 @if(!is_null($deliveryList))
                                 @foreach($deliveryList as $fecha=>$contenido)
                                 <th scope="col">
-                                    {{$fecha}}
+                                    {{ \Carbon\Carbon::parse($fecha)->toDateString() }}
                                     @if($contenido["inventoried"])
                                     <i class="fa-solid fa-check ms-2 text-success"></i>
                                     @else

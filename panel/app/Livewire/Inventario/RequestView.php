@@ -78,7 +78,7 @@ class RequestView extends Component
         }
 
         //Genero la estructura
-        $delivery[Carbon::now()->toDateString()]=[
+        $delivery[Carbon::now()->toDateTimeString()]=[
             "products"=>$this->entregando,
             "author"=>Auth::id(),
             "inventoried"=>False,
