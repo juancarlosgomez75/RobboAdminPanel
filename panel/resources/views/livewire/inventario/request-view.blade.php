@@ -349,7 +349,7 @@
                 </div>
                 <div class="col-12 d-flex justify-content-center">
                     <div class="d-flex gap-3 justify-content-center w-100" style="max-width: 36rem;">
-                        @if($pedido->status!="delivered")
+                        @if($pedido->status!="delivered" && $pedido->status!="canceled")
                             @if(!$entregaActive)
                             <button type="button" class="btn btn-outline-secondary" wire:click="iniciarEntrega()">
                                 Reportar entrega
