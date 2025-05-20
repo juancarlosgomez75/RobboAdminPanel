@@ -206,6 +206,7 @@ body {
                             <li><a href="{{ route('inventario.couriers') }}">Empresas mensajería</a></li>
                             <li><a href="{{ route('inventario.index') }}">Productos</a></li>
                             <li><a href="{{ route('ordenes') }}">Órdenes</a></li>
+                            <li><a href="{{ route('pedidos') }}">Pedidos</a></li>
                         </ul>
                     </li>
                     @endif
