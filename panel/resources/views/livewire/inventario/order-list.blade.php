@@ -42,6 +42,7 @@
                                 <option value="prepared">Preparado</option>
                                 <option value="waiting">Esperando recogida</option>
                                 <option value="sended">Enviado</option>
+                                <option value="collected">Recibido</option>
                             </select>
                         </div>
                     </div>
@@ -77,6 +78,8 @@
                                         <span style="color:#004a8f">Esperando recogida</span>
                                         @elseif($pedido->status=="sended")
                                         <span style="color:#0ea800">Enviado</span>
+                                        @elseif($pedido->status=="collected")
+                                        <span style="color:#0ea800">Recibido</span>
                                         @elseif($pedido->status=="canceled")
                                         <span style="color:#8f0000">Cancelado</span>
                                         @endif
