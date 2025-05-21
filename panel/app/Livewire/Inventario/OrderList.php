@@ -35,8 +35,8 @@ class OrderList extends Component
         ->when(!empty($this->filtroFecha), function ($query) {
             return $query->whereRaw("TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') LIKE ?", [$this->filtroFecha . '%']);
         })
-        ->when(!empty($this->filtroCiudad), function ($query) {
-            return $query->whereRaw("city LIKE ?", [strtolower($this->filtroCiudad) . '%']);
+        ->when(!empty($this->filtroNombre), function ($query) {
+            return $query->whereRaw("name LIKE ?", [strtolower($this->filtroNombre) . '%']);
         })
         ->when(!empty($this->filtroEstado), function ($query) {
             return $query->where("status", $this->filtroEstado);
