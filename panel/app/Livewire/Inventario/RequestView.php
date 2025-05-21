@@ -128,6 +128,11 @@ class RequestView extends Component
     }
 
     public function cancelarPedido(){
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
         //Valido la razon
         if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->reasonCancel) && !empty(trim($this->reasonCancel)))){
             $this->dispatch('mostrarToast', 'Cancelar orden', 'La razón tiene caracteres no válidos');
@@ -156,6 +161,11 @@ class RequestView extends Component
     }
 
     public function reportarInventario(){
+        
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Reportar inventario', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
         //Analizo si tengo pendientes o no
         if($this->pendienteInventariar){
             //Recorro los delivery list

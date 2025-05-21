@@ -359,16 +359,19 @@
                                 Completar entrega
                             </button>
                             @endif
-                            
+                            @if(auth()->check() && auth()->user()->rank >= 4)
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelarPedido">
                                 Cancelar pedido
                             </button>
+                            @endif
                         @endif
 
+                        @if(auth()->check() && auth()->user()->rank >= 4)
                         @if($pendienteInventariar)
                             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reportarInventario">
                                 Reportar inventario
                             </button>
+                        @endif
                         @endif
                     </div>
                 </div>
@@ -401,7 +404,7 @@
         </div>
         </div>
     </div>
-
+    @if(auth()->check() && auth()->user()->rank >= 4)
     <!-- Modal -->
     <div class="modal fade" id="cancelarPedido" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="cancelarPedidoLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -426,7 +429,8 @@
             </div>
         </div>
     </div>
-
+    @endif
+    @if(auth()->check() && auth()->user()->rank >= 4)
     <!-- Modal -->
     <div class="modal fade" id="reportarInventario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportarInventarioLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -447,6 +451,7 @@
             </div>
         </div>
     </div>
+    @endif
 
 
     <br>
