@@ -38,7 +38,8 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="w-10" scope="col" style="cursor: pointer;" wire:click="ordenarBy('id')" style="width: 7%;">
+                                <th class="w-10" scope="col" style="width: 5%;">#</th>
+                                <th class="w-10" scope="col" style="cursor: pointer;" wire:click="ordenarBy('id')" style="width: 5%;">
                                     @if($ordenarPor=="id")
                                         @if($ordenarDesc)
                                             <a  class="text-decoration-none text-dark"> 
@@ -50,7 +51,7 @@
                                             </a>
                                         @endif
                                     @endif
-                                    #
+                                    Id
                                 </th>
                                 <th class="w-40" scope="col" style="cursor: pointer;" wire:click="ordenarBy('name')" >
                                     @if($ordenarPor=="name")
@@ -88,6 +89,7 @@
                             @if(!empty($datosUsar))
                             @foreach($datosUsar as $index => $dato)
                                 <tr>
+                                    <th scope="row">{{$index+1}}</th>
                                     <th scope="row">{{ $dato['Id'] }}</th>
                                     <td>{{ $dato["StudyName"] ?? 'Sin Nombre' }}</td>
                                     <td>{{ $dato['City'] ?? 'No especificada' }}</td>

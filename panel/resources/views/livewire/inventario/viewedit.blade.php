@@ -108,6 +108,7 @@
                                 <th scope="col">Stock despues</th>
                                 <th scope="col">Autor</th>
                                 <th scope="col"># Orden</th>
+                                <th scope="col">Comentarios</th>
                             </tr>
                         </thead>
                         <tbody class="align-center">
@@ -136,8 +137,13 @@
                                     No
                                     @endif
                                 </td>
+                                <td>
+                                    @if(!is_null($movimiento->details) && $movimiento->details!="")
+                                    {{$movimiento->details}}
+                                    @endif
+                                </td>
                             </tr>
-                            
+
                             @endforeach
                             @else
                             <tr>

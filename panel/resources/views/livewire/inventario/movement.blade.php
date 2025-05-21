@@ -29,6 +29,10 @@
                         <option value="0">Retiro</option>
                     </select>
                 </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Detalles de movimiento:</label>
+                    <textarea class="form-control" rows="3" wire:model="details" placeholder="Ejemplo: Se entregan N productos a X persona"></textarea>
+                </div>
                 <div class="col-md-12 text-center">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                         Registrar movimiento

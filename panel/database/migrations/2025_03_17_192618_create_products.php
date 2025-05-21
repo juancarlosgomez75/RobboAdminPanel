@@ -73,6 +73,7 @@ return new class extends Migration
 
             //Ahora información del movimiento
             $table->text('reason');
+            $table->text('details')->nullable();;
             $table->integer('amount')->default(0);
             $table->integer('stock_before')->default(0);
             $table->integer('stock_after')->default(0);

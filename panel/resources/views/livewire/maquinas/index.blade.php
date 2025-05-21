@@ -34,7 +34,8 @@
                     <table class="table align-middle">
                         <thead>
                             <tr>
-                                <th scope="col" style="width: 7%;">#</th>
+                                <th scope="col" style="width: 5%;">#</th>
+                                <th scope="col" style="width: 5%;">Id</th>
                                 <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('hardware')">
                                     @if($ordenarPor=="hardware")
                                     @if($ordenarDesc)
@@ -85,6 +86,7 @@
                             @if(!empty($Machines))
                             @foreach($Machines as $index => $Maquina)
                                 <tr>
+                                    <th scope="row">{{ $index }}</th>
                                     <th scope="row">{{ $Maquina['ID'] }}</th>
                                     <td>{{ $Maquina["FirmwareID"] ?? 'N/R' }}</td>
                                     <td>{{ $Maquina['Tipo'] ?? 'N/R' }}</td>
