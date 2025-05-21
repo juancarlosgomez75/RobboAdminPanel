@@ -64,13 +64,15 @@ class Logs extends Component
         ->when(!empty($this->filtroFecha), function ($query) {
             return $query->whereRaw("TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') LIKE ?", [$this->filtroFecha . '%']);
         })
-            ->when($this->filtroAccion, function ($query) {
-                return $query->whereRaw("LOWER(action) LIKE ?", [strtolower($this->filtroAccion) . '%']);
-            })
-            ->when($this->filtroAutor, function ($query) {
-                return $query->whereRaw("LOWER(author) LIKE ?", [strtolower($this->filtroAutor) . '%']);
-            })
-            ->paginate(80);
+        ->when($this->filtroAccion, function ($query) {
+            return $query->whereRaw("LOWER(action) LIKE ?", [strtolower($this->filtroAccion) . '%']);
+        })
+        ->when($this->filtroAutor, function ($query) {
+            return $query->whereHas('author_info', function ($q) {
+                $q->whereRaw("LOWER(name) LIKE ?", [strtolower($this->filtroAutor) . '%']);
+            });
+        })
+        ->paginate(80);
 
 
         return view('livewire.admin.logs',compact('logs'));

@@ -44,7 +44,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(!empty($logs))
+                            @if($logs->count())
                             @foreach ($logs as $log)
                                 <tr>
                                     <td>{{$log->created_at}}</td>
@@ -73,7 +73,10 @@
                                     </td>
                                 </tr>
                             @endforeach
-                            
+                            @else
+                            <tr>
+                                <td colspan="8">No hay logs registrados</td>
+                            </tr>
                             @endif
                         </tbody>
                     </table>
