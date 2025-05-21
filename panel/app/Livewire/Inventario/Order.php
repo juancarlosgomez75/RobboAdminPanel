@@ -359,42 +359,45 @@ class Order extends Component
 
                 registrarLog("Inventario","Órdenes","Crear","Ha creado una orden con la siguiente información: ".json_encode($orden),true);
 
-                //Ahora descargo los productos
-                foreach($this->listProducts as $element){
+                //Ahora descargo los productossi es de tipo shipping
+                if($orden->type=="shipping"){
+                    foreach($this->listProducts as $element){
 
-                    //Busco el producto
-                    $pto=Product::find($element['id']);
+                        //Busco el producto
+                        $pto=Product::find($element['id']);
 
-                    //Genero un nuevo movimiento
-                    $mov=new ProductInventoryMovement();
+                        //Genero un nuevo movimiento
+                        $mov=new ProductInventoryMovement();
 
-                    //Almaceno la información
-                    $mov->inventory_id=$pto->inventory->id;
-                    
-                    $mov->type=($this->tipoOrden == -1) ? 'expense' : 'income';
-                    $mov->reason="Alistamiento de orden";
-                    $mov->amount=$element["amount"];
-                    $mov->stock_before=$pto->inventory->stock_available;
+                        //Almaceno la información
+                        $mov->inventory_id=$pto->inventory->id;
+                        
+                        $mov->type='expense';
+                        $mov->reason="Alistamiento de orden";
+                        $mov->amount=$element["amount"];
+                        $mov->stock_before=$pto->inventory->stock_available;
 
-                    // $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
-                    $mov->stock_after=($this->tipoOrden == -1) ? $pto->inventory->stock_available-$element["amount"] : $pto->inventory->stock_available+$element["amount"];
+                        // $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
+                        $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
 
-                    $mov->author=Auth::id();
-                    $mov->order_id=$orden->id;
+                        $mov->author=Auth::id();
+                        $mov->order_id=$orden->id;
 
-                    //Guardo
-                    if(!$mov->save()){
-                        $this->dispatch('mostrarToast', 'Crear orden', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                        //Guardo
+                        if(!$mov->save()){
+                            $this->dispatch('mostrarToast', 'Crear orden', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                        }
+
+                        //Ahora modifico el stock
+                        $pto->inventory->stock_available=$mov->stock_after;
+
+                        if(!$pto->inventory->save()){
+                            $this->dispatch('mostrarToast', 'Crear orden', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                        }
+
                     }
-
-                    //Ahora modifico el stock
-                    $pto->inventory->stock_available=$mov->stock_after;
-
-                    if(!$pto->inventory->save()){
-                        $this->dispatch('mostrarToast', 'Crear orden', 'Se ha generado un error al actualizar stock, contacte a soporte');
-                    }
-
                 }
+
 
                 $this->dispatch('mostrarToast', 'Crear orden', 'Se ha generado la pedido satisfactoriamente');
 

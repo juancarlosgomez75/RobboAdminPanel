@@ -51,8 +51,14 @@ return new class extends Migration
             $table->foreign('sended_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->timestamp('send_date')->nullable();
 
+            //Información de llegada
+            $table->unsignedBigInteger('received_by')->nullable();
+            $table->foreign('received_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->timestamp('received_date')->nullable();
+            $table->text('received_notes')->nullable();
+
             //Información de estado
-            $table->enum('status', ['created', 'prepared', 'waiting', 'sended', 'canceled'])->default('created');
+            $table->enum('status', ['created', 'prepared', 'waiting', 'sended', 'canceled','collected'])->default('created');
 
             //Cancelación
             $table->unsignedBigInteger('canceled_by')->nullable();

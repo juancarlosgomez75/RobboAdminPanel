@@ -8,7 +8,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10vw; /* Espacio entre los elementos */
+            gap: 9.3vw; /* Espacio entre los elementos */
             padding: 20px 0; /* Espaciado superior e inferior */
             position: relative;
         }
@@ -20,7 +20,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 0.5em;
+            gap: 0.4em;
             position: relative;
         }
     
@@ -48,7 +48,8 @@
             content: "";
             position: absolute;
             top: 25px;
-            width: 15.2vw; /* Ajusta el tamaño de la línea */
+            width: {{ $orden->type == 'collection' ? '13vw' : '15.2vw' }}; /* Ajusta el tamaño de la línea */
+            
             height: 5px; /* Grosor de la línea */
             background-color: #c0c0c0; /* Color de la línea */
             left: 50%;
@@ -189,6 +190,22 @@
                                 @endif
                             </span>
                         </li>
+                        @if($orden->type=="collection")
+                        <li @if($orden->status=="sended") class="current" @endif>
+                            <div class="icon-circle">
+                                <i class="fa-brands fa-get-pocket"></i>
+                            </div>
+                            <span>
+                                @if($orden->status=="sended")
+                                Esperando entrega
+                                @elseif($orden->status=="collected")
+                                Enviado
+                                @else
+                                Entrega
+                                @endif
+                            </span>
+                        </li>
+                        @endif
                     </ul>
                 </div>
                 @if($orden->status=="canceled")
@@ -461,7 +478,6 @@
                     </table>
                 </div>
                 @endif
-
                 @if($orden->status=="waiting")
                 <div class="col-md-12 pt-2">
                     <div class="text-center">
@@ -508,8 +524,8 @@
                     </table>
                 </div>
                 @endif
-
-                @if(($orden->status=="prepared" || $orden->status=="created" || $orden->status!="waiting")&&$orden->status!="canceled")
+                
+                @if(($orden->status=="prepared" || $orden->status=="created" || $orden->status=="waiting") && $orden->status!="canceled")
                 <div class="col-md-12 pt-3">
                     <div class="text-center">
                         <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelarOrden">Reportar cancelación de la orden</a>
@@ -564,6 +580,66 @@
 
                         </tbody>
                     </table>
+                </div>
+                @endif
+
+                @if($orden->status=="collected")
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de recepción</h5>
+                    <p class="card-text">Esta es la información relacionada con la recepción del paquete.</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de recepción</th>
+                                <td>{{$orden->received_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién recibió?</th>
+                                <td>{{$orden->receiver_info->name." (".$orden->receiver_info->id." - ".$orden->receiver_info->username.")"}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Comentarios</th>
+                                <td>{{$orden->received_notes}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                @endif
+                
+                @if($orden->status=="sended" && $orden->type=="collection")
+                <div class="col-md-12 pt-3">
+                    <div class="text-center">
+                        <a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reportarLlegada">Reportar llegada</a>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="reportarLlegada" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportarLlegadaLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="reportarLlegadaLabel">Reportar llegada</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    Al reportar la llegada de la orden, todos los productos solicitados pasarán a hacer parte del inventario automáticamente
+                                </p>
+                                <div class="mb-3">
+                                    <label class="form-label">Comentarios de llegada</label>
+                                    <textarea class="form-control" rows="3" wire:model="recibirNotas"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="reportarLlegada()">Confirmar llegada</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
                 </div>
                 @endif
 

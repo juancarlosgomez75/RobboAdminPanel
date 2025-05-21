@@ -24,6 +24,7 @@ class OrderView extends Component
     public $tracking_code="";
 
     public $reasonCancel="";
+    public $recibirNotas="";
 
     public function iniciarAlistamiento(){
         //Actualizo el estado
@@ -293,6 +294,65 @@ class OrderView extends Component
             registrarLog("Inventario","Órdenes","Cancelar orden","Ha intentado cancelar la orden # ".$this->orden->id,false);
             $this->dispatch('mostrarToast', 'Cancelar orden', 'Error cancelando la orden, contacta con soporte');
         }
+    }
+
+    public function reportarLlegada(){
+        //Analizo si la descripción está bien
+        if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->recibirNotas) && !empty(trim($this->recibirNotas)))){
+            $this->dispatch('mostrarToast', 'Reportar llegada', 'Los comentarios tienen caracteres no válidos');
+            return false;
+        }
+
+        //Edito la información
+        $this->orden->received_by=Auth::id();
+        $this->orden->received_date=now();
+        $this->orden->received_notes=$this->recibirNotas;
+        $this->orden->status="collected";
+
+        //Intento almacenar
+        //Si almaceno
+        if($this->orden->save()){
+            registrarLog("Inventario","Órdenes","Recibir orden","Ha recibido la orden # ".$this->orden->id,true);
+
+            //Devuelvo el stock completo
+            foreach(json_decode($this->orden->creation_list) as $element){
+                //Busco el producto
+                $pto=Product::find($element->id);
+
+                //Genero un nuevo movimiento
+                $mov=new ProductInventoryMovement();
+
+                //Almaceno la información
+                $mov->inventory_id=$pto->inventory->id;
+                $mov->type="income";
+                $mov->reason="Recepción de orden";
+                $mov->amount=$element->amount;
+                $mov->stock_before=$pto->inventory->stock_available;
+                $mov->stock_after=$pto->inventory->stock_available+$element->amount;
+                $mov->author=Auth::id();
+                $mov->order_id=$this->orden->id;
+
+                //Guardo
+                if(!$mov->save()){
+                    $this->dispatch('mostrarToast', 'Recibir orden', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                }
+
+                //Ahora modifico el stock
+                $pto->inventory->stock_available=$mov->stock_after;
+
+                if(!$pto->inventory->save()){
+                    $this->dispatch('mostrarToast', 'Recibir orden', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                }
+            }
+
+            $this->dispatch('mostrarToast', 'Recibir orden', 'Se ha recibido la orden');
+
+        }else{
+            registrarLog("Inventario","Órdenes","Recibir orden","Ha intentado recibir la orden # ".$this->orden->id,false);
+            $this->dispatch('mostrarToast', 'Recibir orden', 'Error recibiendo la orden, contacta con soporte');
+        }
+
+        //Ahora reporto la llegada
     }
 
     public function mount($orden){
