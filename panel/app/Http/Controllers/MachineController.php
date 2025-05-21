@@ -79,18 +79,11 @@ class MachineController extends Controller
                 return view("maquinas.index",["Maquinas"=>$data['Data']['Machines']]);
 
             }
-            return "Error de status";
+            return abort(400, 'Error de status');
             
         }
         
-        
-        return "Error general";
-
-
-
-
-
-
+        return abort(404, 'No se ha encontrado este recurso');
 
     }
 
@@ -169,17 +162,11 @@ class MachineController extends Controller
 
                 return view("maquinas.create",["information"=>$data["ListStudyData"]]);
             }
-            return "Error de status";
+            return abort(400, 'Error de status');
             
         }
         
-        
-        return "Error general";
-
-
-
-
-
+        return abort(404, 'No se ha encontrado este recurso');
 
     }
 
@@ -231,17 +218,11 @@ class MachineController extends Controller
 
                 return view("maquinas.view",["Maquina"=>$data["Data"]["Machines"][0]]);
             }
-            return "Error de status";
+            return abort(400, 'Error de status');
             
         }
         
-        
-        return "Error general";
-
-
-
-
-
+        return abort(404, 'No se ha encontrado este recurso');
 
     }
 

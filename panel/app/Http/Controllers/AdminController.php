@@ -27,10 +27,10 @@ class AdminController extends Controller
                 return view("admin.account",compact("usuario"));
             }
 
-            return "Error de permisos";
+            return abort(403, 'No tienes permisos para acceder a esta página.');
         }
 
-        return "Error";
+        return abort(404, 'No se ha encontrado este recurso');
     }
 
     public function logs(){

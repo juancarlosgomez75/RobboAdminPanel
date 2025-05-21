@@ -39,10 +39,10 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if(auth()->user()->rank < $account->rank)
-                                        Sin acciones
-                                        @elseif(auth()->user()->id == $account->id)
+                                        @if(auth()->user()->id == $account->id)
                                         Tu cuenta
+                                        @elseif(auth()->user()->rank <= $account->rank)
+                                        Sin acciones
                                         @else
                                         <a type="button" class="btn btn-outline-primary btn-sm" href="{{route('admin.account.view',$account->id)}}">Visualizar</a>
                                         @endif
