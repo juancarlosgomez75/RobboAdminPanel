@@ -85,6 +85,10 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id')->nullable(); //Queda pendiente de amarrarse
             $table->foreign('order_id')->references('id')->on('product_orders')->onDelete('set null')->onUpdate('cascade');
 
+            //Ahora información del pedido, si existe
+            $table->unsignedBigInteger('request_id')->nullable(); //Queda pendiente de amarrarse
+            $table->foreign('request_id')->references('id')->on('requests')->onDelete('set null')->onUpdate('cascade');
+
             //Timestamp
             $table->timestamps();
         });

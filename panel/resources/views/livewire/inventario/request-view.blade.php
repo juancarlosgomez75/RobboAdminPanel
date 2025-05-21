@@ -267,12 +267,12 @@
                     <p>
                         <b>{{$fecha}}</b> - 
                         @if($contenido["inventoried"])
-                        <span class="text-success">{{"Reportada en inventario el: ".$contenido["inventoried_date"]??"N/F"." por #".$contenido["inventoried_by"]??"N/R"}}</span>
+                        <span class="text-success">{{"Reportado en inventario el: ".($contenido["inventoried_date"]??"N/F")." por usuario con id #".$contenido["inventoried_by"]??"N/R"}}</span>
                         @else 
                         <span class="text-primary">Sin reportar en inventario</span>
                         @endif
                         <br>
-                        {{$contenido["details"]??"Sin comentarios"}}
+                        {{(is_null($contenido["details"]) || $contenido["details"]=="")?"Sin comentarios":$contenido["details"]}}
                     </p>
                     @endforeach
                 </div>
@@ -322,7 +322,7 @@
                                     </td>
                                     <td>
                                         @if($pd->internal)
-                                        <a href="{{route("inventario.viewedit",$pd->id)}}"></a>
+                                        <a href="{{route("inventario.viewedit",$pd->id)}}">#{{$pd->id}}</a>
                                         @else 
                                         No
                                         @endif
@@ -362,6 +362,12 @@
                             
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelarPedido">
                                 Cancelar pedido
+                            </button>
+                        @endif
+
+                        @if($pendienteInventariar)
+                            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reportarInventario">
+                                Reportar inventario
                             </button>
                         @endif
                     </div>
@@ -416,6 +422,27 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal" wire:click="cancelarPedido()">Cancelar orden</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="reportarInventario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportarInventarioLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="reportarInventarioLabel">Reportar inventario</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Al reportar inventario, enviarás todas las entregas disponibles (y que aún no han sido reportadas) al inventario del sistema. Los productos que fueron marcados como <b>No registrados</b> no serán inventariados.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="reportarInventario()">Reportar inventario</button>
             </div>
             </div>
         </div>

@@ -129,7 +129,9 @@
                                 <td scope="row">{{$movimiento->author_info->username}}</td>
                                 <td>
                                     @if($movimiento->order_id)
-                                    <a href="{{route("orden.ver",$movimiento->order_id)}}">{{$movimiento->order_id}}</a>
+                                    <a href="{{route("orden.ver",$movimiento->order_id)}}">O#{{$movimiento->order_id}}</a>
+                                    @elseif($movimiento->request_id)
+                                    <a href="{{route("pedido.ver",$movimiento->request_id)}}">P#{{$movimiento->request_id}}</a>
                                     @else
                                     No
                                     @endif

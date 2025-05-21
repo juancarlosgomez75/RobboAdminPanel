@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Inventario;
 
+use App\Models\Product;
+use App\Models\ProductInventoryMovement;
 use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +18,7 @@ class RequestView extends Component
     public $entregaActive=False;
     public $observaciones="";
     public $reasonCancel="";
+    public $pendienteInventariar=False;
 
     public function loadData(){
         //Reinicio la data
@@ -34,6 +37,11 @@ class RequestView extends Component
                 //Ahora recorro los productos
                 foreach($delivery["products"] as $index=>$producto){
                     $this->pendientes[$index]=$this->pendientes[$index]-$producto;
+                }
+
+                //Ahora analizo si estoy pendiente de inventariar o no
+                if(!$delivery["inventoried"]){
+                    $this->pendienteInventariar=True;
                 }
             }
         }
@@ -75,7 +83,7 @@ class RequestView extends Component
         if(is_null($this->pedido->delivery_list)){
             $delivery=[];
         }else{
-            $delivery=json_encode($this->pedido->delivery_list,True);
+            $delivery=json_decode($this->pedido->delivery_list,True);
         }
 
         //Genero la estructura
@@ -144,6 +152,73 @@ class RequestView extends Component
 
         }else{
             $this->dispatch('mostrarToast', 'Cancelar pedido', 'Error cancelando el pedido, contacta con soporte');
+        }
+    }
+
+    public function reportarInventario(){
+        //Analizo si tengo pendientes o no
+        if($this->pendienteInventariar){
+            //Recorro los delivery list
+            foreach(json_decode($this->pedido->delivery_list,true) as $fecha=>$delivery){
+                //Ahora analizo si está pendiente el inventariar
+                if(!$delivery["inventoried"]){
+                    //Recorro los productos registrados
+                    foreach(json_decode($this->pedido->creation_list,true) as $index=>$producto){
+                        //Analizo si es un producto interno
+                        if($producto["internal"]){
+                            //Busco el producto
+                            $pto=Product::find($producto['id']);
+
+                            //Genero un nuevo movimiento
+                            $mov=new ProductInventoryMovement();
+
+                            //Almaceno la información
+                            $mov->inventory_id=$pto->inventory->id;
+
+                            $mov->type='income';
+                            $mov->reason="Inventariar pedido";
+                            $mov->amount=$delivery["products"][$index];
+                            $mov->stock_before=$pto->inventory->stock_available;
+
+                            // $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
+                            $mov->stock_after=$pto->inventory->stock_available+$delivery["products"][$index];
+
+                            $mov->author=Auth::id();
+                            $mov->request_id=$this->pedido->id;
+
+                            //Guardo
+                            if(!$mov->save()){
+                                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                            }
+
+                            //Ahora modifico el stock
+                            $pto->inventory->stock_available=$mov->stock_after;
+
+                            if(!$pto->inventory->save()){
+                                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                            }
+                        }
+                    }
+
+                    //Ahora indico que ya inventarié
+                    $todos=json_decode($this->pedido->delivery_list,true);
+                    $todos[$fecha]["inventoried"]=True;
+                    $todos[$fecha]["inventoried_date"]=Carbon::now()->toDateTimeString();
+                    $todos[$fecha]["inventoried_by"]=Auth::id();
+
+                    //Modifico y almaceno
+                    $this->pedido->delivery_list=json_encode($todos);
+
+                    //Guardo
+                    if($this->pedido->save()){
+                        $this->dispatch('mostrarToast', 'Reportar inventario', 'Se ha reportado en inventario la entrega del dia '.$fecha);
+                    }
+
+                }
+
+            }
+            $this->loadData();
+            $this->pendienteInventariar=False;
         }
     }
 
