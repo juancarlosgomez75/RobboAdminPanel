@@ -337,9 +337,9 @@ class Order extends Component
             $orden=new ProductOrder();
 
             //Cargo la información básica
-            $orden->address=$this->address;
-            $orden->city=$this->city;
-            $orden->name=$this->receiver;
+            $orden->address=mb_strtoupper($this->address, 'UTF-8');
+            $orden->city=mb_strtoupper($this->city, 'UTF-8');
+            $orden->name=mb_strtoupper($this->receiver, 'UTF-8');
             $orden->phone=$this->phone;
 
             //Cargo el tipo
