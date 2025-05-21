@@ -71,12 +71,12 @@ class Create extends Component
         }
 
         //Valido todas las páginas ingresadas
-        foreach($this->paginas as $pagina){
+        foreach($this->paginas as $index=>$pagina){
             
             //Analizo el nickname
             if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $pagina["NickName"]) && !empty(trim($pagina["NickName"])))){
 
-                $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: El nombre de usuario: ".$pagina["NickName"]." no es válido");
+                $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: El nombre de usuario de la página #".$index." no es válido");
                 return;
             }
 
@@ -90,7 +90,7 @@ class Create extends Component
 
             if(!$paginaencontrada){
 
-                $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: La página: ".$pagina["NickPage"]." no es válida");
+                $this->dispatch('mostrarToast', 'Crear modelo', "Alerta: La página #".$index." no es válida");
                 return;
             }
 

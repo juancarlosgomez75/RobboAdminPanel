@@ -49,7 +49,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(MachineController::cla
 
 Route::middleware(['auth','checkuserstatus'])->controller(ModelController::class)->group(function(){
     Route::get('/panel/modelos', 'view')->name('modelos.view');
-    Route::middleware('checkrank:4')->get('/panel/modelos/crear/{idestudio}', 'create')->name('modelos.create');
+    Route::get('/panel/modelos/crear/{idestudio}', 'create')->name('modelos.create');
     Route::get('/panel/modelo/{idmodelo}', 'viewedit')->name('modelo.viewedit');
 });
 
