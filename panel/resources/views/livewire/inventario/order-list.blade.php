@@ -7,9 +7,11 @@
                     {{-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> --}}
                 </div>
                 <div class="col-md-3 justify-content-end" style="display: flex; gap:0.6rem">
+                    @if(auth()->check() && auth()->user()->rank >= 4)
                     <a href="{{route("ordenes.create")}}" class="btn btn-sm action-btn btn-outline-secondary">
                         <i class="fa-solid fa-plus"></i> Crear
                     </a>
+                    @endif
                     
                     <a type="button" class="btn btn-sm action-btn btn-outline-secondary" wire:click="switchFiltros()">
                         <i class="fa-solid fa-filter"></i> Filtros
