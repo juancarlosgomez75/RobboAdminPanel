@@ -121,8 +121,10 @@ class RequestView extends Component
             $this->entregaActive=False;
 
             //Reinicio el diccionario de entregando
+            registrarLog("Inventario","Pedidos","Reportar entrega","Ha reportado una entrega de la siguiente forma: ".json_encode($delivery),true);
 
         }else{
+            registrarLog("Inventario","Pedidos","Reportar entrega","Ha intentado reportar una entrega de la siguiente forma: ".json_encode($delivery),false);
             $this->dispatch('mostrarToast', 'Reportar entrega', "Error guardando la entrega, contacte a soporte");
         }
     }
@@ -155,7 +157,10 @@ class RequestView extends Component
             $this->dispatch('mostrarToast', 'Cancelar pedido', 'Se ha cancelado el pedido');
             $this->entregaActive=False;
 
+            registrarLog("Inventario","Pedidos","Cancelar pedido","Ha cancelado el pedido con id # : ".$this->pedido->id,true);
+
         }else{
+            registrarLog("Inventario","Pedidos","Cancelar pedido","Ha intentado cancelar el pedido con id # : ".$this->pedido->id,false);
             $this->dispatch('mostrarToast', 'Cancelar pedido', 'Error cancelando el pedido, contacta con soporte');
         }
     }
@@ -198,14 +203,14 @@ class RequestView extends Component
 
                             //Guardo
                             if(!$mov->save()){
-                                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                                $this->dispatch('mostrarToast', 'Reportar inventario', 'Se ha generado un error al generar un movimiento, contacte a soporte');
                             }
 
                             //Ahora modifico el stock
                             $pto->inventory->stock_available=$mov->stock_after;
 
                             if(!$pto->inventory->save()){
-                                $this->dispatch('mostrarToast', 'Crear pedido', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                                $this->dispatch('mostrarToast', 'Reportar inventario', 'Se ha generado un error al actualizar stock, contacte a soporte');
                             }
                         }
                     }
@@ -222,6 +227,10 @@ class RequestView extends Component
                     //Guardo
                     if($this->pedido->save()){
                         $this->dispatch('mostrarToast', 'Reportar inventario', 'Se ha reportado en inventario la entrega del dia '.$fecha);
+                        registrarLog("Inventario","Pedidos","Reportar inventario","Se ha reportado el inventario del pedido con id # : ".$this->pedido->id." y fecha: ".$fecha,true);
+                    }else{
+                        $this->dispatch('mostrarToast', 'Reportar inventario', 'Error reportando la entrega del dia '.$fecha);
+                        registrarLog("Inventario","Pedidos","Reportar inventario","Se ha intentado reportar el inventario del pedido con id # : ".$this->pedido->id." y fecha: ".$fecha,false);
                     }
 
                 }
