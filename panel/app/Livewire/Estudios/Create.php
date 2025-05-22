@@ -108,33 +108,6 @@ class Create extends Component
     {
         if($this->validar()){
 
-            
-            // //Genero la petición de informacion
-            // $response = Http::withHeaders([
-            //     'Authorization' => 'AAAA'
-            // ])->withOptions([
-            //     'verify' => false // Desactiva la verificación SSL
-            // ])->post(config('app.API_URL'), [
-            //     'Branch' => 'Server',
-            //     'Service' => 'PlatformUser',
-            //     'Action' => 'CreateUpdateStudy',
-            //     'DataStudy' => [
-            //         "StudyName"=>$this->nombre,
-            //         "RazonSocial"=>$this->razonsocial,
-            //         "Nit"=>$this->nit,
-            //         "CityId"=>$this->idciudad,
-            //         "Address"=>$this->direccion,
-            //         "Contact"=>$this->responsable,
-            //         "Phone"=>$this->telcontacto,
-            //         "Phone2"=>$this->telcontacto2,
-            //         "Email"=>$this->email
-            //     ],
-            //     "Data"=>[
-            //         "UserId"=>"1"
-            //     ]
-            // ]);
-
-            // $data = $response->json();
 
             $data_send=[
                 'Branch' => 'Server',
@@ -162,9 +135,76 @@ class Create extends Component
             if (isset($data['Status'])) {
                 if($data['Status']){
                     registrarLog("Producción","Estudios","Crear estudio","Se ha creado el estudio: ".$this->nombre,true);
-                    $this->resetExcept('ciudades');
+
                     $this->dispatch('mostrarToast', 'Crear estudio', "Se ha registrado el estudio correctamente");
-                    
+
+                    //Ahora registro al primer manager con la información actual
+                    $data_ssend=[
+                        'Branch' => 'Server',
+                        'Service' => 'PlatformUser',
+                        'Action' => 'StudyList',
+                        'Data' => ["UserId" => "1"]
+                    ];
+                    $datas=sendBack($data_ssend);
+
+                    if (isset($datas['Status'])) {
+                            //Analizo si el status es true
+                            if($datas["Status"]){
+                                //Recorro los estudios
+                                //dd($datas["ListStudyData"]);
+                                foreach($datas["ListStudyData"] as $estudio){
+                                    if($estudio["StudyName"]==strtoupper($this->nombre)){
+                                        //Genero entonces al manager
+                                        $data_sendmanager=[
+                                            'Branch' => 'Server',
+                                            'Service' => 'PlatformUser',
+                                            'Action' => 'CreateEditUser',
+                                            "Data"=>[
+                                                "UserId"=>"1",
+                                                "UserData"=>[
+                                                    "Name"=>$this->responsable,
+                                                    "Phone"=> $this->telcontacto,
+                                                    "Email"=> $this->email,
+                                                    "RolID"=>"1",
+                                                    "Activo"=>True
+                                                ]
+                                                ],
+                                            "DataStudy"=>[
+                                                    "Id"=>$estudio["Id"]
+                                            ]
+                                        ];
+                                        $dataman=sendBack($data_sendmanager);
+
+                                        if (isset($dataman['Status'])) {
+                                            if($dataman['Status']){
+                                                registrarLog("Producción","Managers","Crear Manager","Se ha creado el manager: ".$this->responsable.", del estudio #".$estudio["Id"].", durante la creación del estudio",true);
+
+                                                $this->dispatch('mostrarToast', 'Crear manager', "Se ha registrado a este manager correctamente");
+                                                
+
+                                            }else{
+
+                                                $this->dispatch('mostrarToast', 'Crear manager', "Ha ocurrido un error durante la operación: ".($dataman['Error']??"Error no reportado"));
+
+
+                                                registrarLog("Producción","Managers","Crear Manager","Se ha intentado crear al manager: ".$this->responsable.", del estudio #".$estudio["Id"].", durante la creación del estudio",false);
+                                            }
+                                        }
+                                        else{
+                                            $this->dispatch('mostrarToast', 'Crear manager', "No se ha generado al manager");
+                                        }
+                                    }
+                                }
+                            }
+                            else{
+                                $this->dispatch('mostrarToast', 'Crear estudio', "No se ha recuperado la ID de los estudios con error: ".$datas['Error']);
+                            }
+                    }
+                    else{
+                        $this->dispatch('mostrarToast', 'Crear estudio', "No se ha recuperado la ID de los estudios");
+                    }
+
+                    $this->resetExcept('ciudades');
                     return;
                 }else{
                     registrarLog("Producción","Estudios","Crear estudio","Se ha intentado crear el estudio: ".$this->nombre,false);

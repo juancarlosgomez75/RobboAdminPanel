@@ -179,11 +179,12 @@ class Create extends Component
 
 
     public function nuevaPagina(){
-        if(count($this->paginas)==0){
-            $this->paginas[]=["NickName"=>$this->drivername,"NickPage"=>"-1"];
-        }else{
-            $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
-        }
+        $this->paginas[]=["NickName"=>$this->drivername,"NickPage"=>"-1"];
+        // if(count($this->paginas)==0){
+        //     $this->paginas[]=["NickName"=>$this->drivername,"NickPage"=>"-1"];
+        // }else{
+        //     $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
+        // }
         
         
     }

@@ -255,7 +255,8 @@ class Viewedit extends Component
 
     public function nuevaPagina(){
         if($this->editing){
-            $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
+            $this->paginas[]=["NickName"=>$this->drivername,"NickPage"=>"-1"];
+            // $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
         }
         
     }
