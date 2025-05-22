@@ -1,4 +1,5 @@
 <div>
+    {{-- {{json_encode($Machines)}} --}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -19,14 +20,21 @@
                 <div class="col-md-12 @if(!$filtroOn) hide @endif" id="Filtros">
 
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <input type="text" class="custom-input" placeholder="Filtrar por número" wire:model.change="filtroHardware">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <input type="text" class="custom-input" placeholder="Filtrar por ciudad" wire:model.change="filtroCiudad">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <input type="text" class="custom-input" placeholder="Filtrar por estudio" wire:model.change="filtroEstudio">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select form-select-sm" wire:model.change="filtroEstadoEstudio">
+                                <option value="-1">Todos los estudios</option>
+                                <option value="0">Estudios inactivos</option>
+                                <option value="1">Estudios activos</option>
+                            </select>
                         </div>
                     </div>
                 </div>

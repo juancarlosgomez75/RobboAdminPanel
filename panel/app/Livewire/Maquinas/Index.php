@@ -10,6 +10,7 @@ class Index extends Component
     public $filtroCiudad= "";
     public $filtroEstudio = "";
     public $filtrosActivos = false;
+    public $filtroEstadoEstudio="-1";
 
     public $ordenarPor = "hardware";
     public $ordenarDesc = true;
@@ -55,7 +56,10 @@ class Index extends Component
                     (isset($dato["FirmwareID"]) && stripos(mb_strtolower($dato["FirmwareID"]), mb_strtolower($this->filtroHardware)) !== false))
                 &&
                 (empty($this->filtroEstudio) || 
-                    (isset($dato["StudyData"]["StudyName"]) && stripos(mb_strtolower($dato["StudyData"]["StudyName"]), mb_strtolower($this->filtroEstudio)) !== false));
+                    (isset($dato["StudyData"]["StudyName"]) && stripos(mb_strtolower($dato["StudyData"]["StudyName"]), mb_strtolower($this->filtroEstudio)) !== false))
+                &&
+                (($this->filtroEstadoEstudio=="-1") || 
+                    (isset($dato["StudyData"]["Active"]) && ( $dato["StudyData"]["Active"]==(($this->filtroEstadoEstudio=="1")?True:False))));
         }));
 
         //Ordeno según el tipo de ordenación
