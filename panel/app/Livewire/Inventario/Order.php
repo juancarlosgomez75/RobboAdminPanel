@@ -301,7 +301,7 @@ class Order extends Component
         }
 
         //Ahora valido las observaciones
-        if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
+        if (!empty(trim($this->details)) && preg_match('/<[^>]*>/', $this->details)){
             $this->dispatch('mostrarToast', 'Crear orden', 'Las observaciones no son válidas');
             return false;
         }
@@ -351,7 +351,7 @@ class Order extends Component
 
             //Genero los detalles de creación
             $orden->created_by=Auth::id();
-            $orden->creation_notes=$this->details;
+            $orden->creation_notes=strip_tags($this->details);
             $orden->creation_list=json_encode($this->listProducts);
 
             //Intento guardar

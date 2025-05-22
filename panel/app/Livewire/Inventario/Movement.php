@@ -33,7 +33,7 @@ class Movement extends Component
             $this->dispatch('mostrarToast', 'Crear movimiento', 'Error: Sólo hay '.$this->inventory->stock_available." unidades");
             return false;
         }
-        elseif (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
+        elseif (!empty(trim($this->details)) && preg_match('/<[^>]*>/', $this->details)){
             $this->dispatch('mostrarToast', 'Crear movimiento', 'Las observaciones no son válidas');
             return false;
         }
@@ -51,7 +51,7 @@ class Movement extends Component
             $movimiento->reason=$this->reason;
             $movimiento->amount=$this->amount;
             $movimiento->stock_before=$this->inventory->stock_available;
-            $movimiento->details=$this->details;
+            $movimiento->details=strip_tags($this->details);
 
             if($this->type==1){
                 $movimiento->type="income";

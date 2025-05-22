@@ -59,7 +59,7 @@ class OrderView extends Component
 
     public function completarAlistamiento(){
         //Ahora valido las observaciones
-        if (!empty(trim($this->details)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->details)){
+        if (!empty(trim($this->details)) && preg_match('/<[^>]*>/', $this->details)){
             $this->dispatch('mostrarToast', 'Registrar alistamiento', 'Error: Las observaciones no son válidas o el campo está vacío');
             return false;
         }
@@ -92,7 +92,7 @@ class OrderView extends Component
         $this->orden->prepared_by=Auth::id();
         $this->orden->preparation_list=json_encode($this->preparacion_list);
         $this->orden->preparation_date=now();
-        $this->orden->preparation_notes=$this->details;
+        $this->orden->preparation_notes=strip_tags($this->details);
         $this->orden->status="prepared";
 
         //Si almaceno
@@ -237,8 +237,8 @@ class OrderView extends Component
 
     public function cancelarOrden(){
         //Valido la razon
-        if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->reasonCancel) && !empty(trim($this->reasonCancel)))){
-            $this->dispatch('mostrarToast', 'Cancelar orden', 'La razón tiene caracteres no válidos');
+        if(empty(trim($this->reasonCancel)) || preg_match('/<[^>]*>/', $this->reasonCancel)){
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'La razón tiene caracteres no válidos o está vacía');
             return false;
         }
 
@@ -250,7 +250,7 @@ class OrderView extends Component
         //Edito la información
         $this->orden->canceled_by=Auth::id();
         $this->orden->cancel_date=now();
-        $this->orden->cancellation_reason=$this->reasonCancel;
+        $this->orden->cancellation_reason=strip_tags($this->reasonCancel);
         $this->orden->status="canceled";
 
         //Si almaceno
@@ -298,7 +298,7 @@ class OrderView extends Component
 
     public function reportarLlegada(){
         //Analizo si la descripción está bien
-        if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->recibirNotas) && !empty(trim($this->recibirNotas)))){
+        if(!empty(trim($this->recibirNotas)) && preg_match('/<[^>]*>/', $this->recibirNotas)){
             $this->dispatch('mostrarToast', 'Reportar llegada', 'Los comentarios tienen caracteres no válidos');
             return false;
         }
@@ -306,7 +306,7 @@ class OrderView extends Component
         //Edito la información
         $this->orden->received_by=Auth::id();
         $this->orden->received_date=now();
-        $this->orden->received_notes=$this->recibirNotas;
+        $this->orden->received_notes=strip_tags($this->recibirNotas);
         $this->orden->status="collected";
 
         //Intento almacenar
