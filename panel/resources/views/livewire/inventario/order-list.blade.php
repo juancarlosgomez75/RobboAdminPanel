@@ -36,13 +36,15 @@
                         </div>
                         <div class="col-md-2">
                             <select class="custom-input" wire:model.change="filtroEstado">
-                                <option value="" selected>Todas</option>
-                                <option value="canceled">Cancelado</option>
+                                <option value="all">Todas</option>
+                                <option value="availables">Disponibles</option>
                                 <option value="created">Creado</option>
                                 <option value="prepared">Preparado</option>
                                 <option value="waiting">Esperando recogida</option>
                                 <option value="sended">Enviado</option>
                                 <option value="collected">Recibido</option>
+                                <option value="canceled">Cancelado</option>
+                                <option value="finished">Cerradas</option>
                             </select>
                         </div>
                     </div>
@@ -70,18 +72,22 @@
                                     <td>{{ $pedido->name }}</td>
                                     <td>{{ ($pedido->type=="shipping") ? "Envío":"Recogida" }}</td>
                                     <td>
-                                        @if($pedido->status=="created")
-                                        <span style="color:#e47d08">Creado</span>
-                                        @elseif($pedido->status=="prepared")
-                                        <span style="color:#004a8f">Preparado</span>
-                                        @elseif($pedido->status=="waiting")
-                                        <span style="color:#004a8f">Esperando recogida</span>
-                                        @elseif($pedido->status=="sended")
-                                        <span style="color:#0ea800">Enviado</span>
-                                        @elseif($pedido->status=="collected")
-                                        <span style="color:#0ea800">Recibido</span>
-                                        @elseif($pedido->status=="canceled")
-                                        <span style="color:#8f0000">Cancelado</span>
+                                        @if(!$pedido->finished)
+                                            @if($pedido->status=="created")
+                                            <span style="color:#e47d08">Creado</span>
+                                            @elseif($pedido->status=="prepared")
+                                            <span style="color:#004a8f">Preparado</span>
+                                            @elseif($pedido->status=="waiting")
+                                            <span style="color:#004a8f">Esperando recogida</span>
+                                            @elseif($pedido->status=="sended")
+                                            <span style="color:#0ea800">Enviado</span>
+                                            @elseif($pedido->status=="collected")
+                                            <span style="color:#0ea800">Recibido</span>
+                                            @elseif($pedido->status=="canceled")
+                                            <span style="color:#8f0000">Cancelado</span>
+                                            @endif
+                                        @else
+                                            <span style="color:#9413cf">Cerrada</span>
                                         @endif
                                     </td>
                                     <td>
@@ -91,7 +97,7 @@
                             @endforeach
                             @else
                             <tr>
-                                <td class="text-center" colspan="6">No se han encontrado órdenes</td>
+                                <td class="text-center" colspan="7">No se han encontrado órdenes</td>
                             </tr>
                             @endif
                             

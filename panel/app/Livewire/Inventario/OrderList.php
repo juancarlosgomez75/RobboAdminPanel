@@ -14,7 +14,7 @@ class OrderList extends Component
 
     public $filtroNombre = "";
     public $filtroFecha = "";
-    public $filtroEstado="";
+    public $filtroEstado="availables";
     public $filtroTipo="0";
     public $filtrosActivos = false;
 
@@ -25,7 +25,7 @@ class OrderList extends Component
         if (!$this->filtrosActivos) {
             $this->filtroNombre = "";
             $this->filtroFecha = "";
-            $this->filtroEstado="";
+            $this->filtroEstado="availables";
             $this->filtroTipo="0";
         }
     }
@@ -38,8 +38,29 @@ class OrderList extends Component
         ->when(!empty($this->filtroNombre), function ($query) {
             return $query->whereRaw("name LIKE ?", [strtolower($this->filtroNombre) . '%']);
         })
-        ->when(!empty($this->filtroEstado), function ($query) {
-            return $query->where("status", $this->filtroEstado);
+        ->when(true, function ($query) {
+            switch ($this->filtroEstado) {
+                case "all":
+                    // No aplicar ningún filtro
+                    return $query;
+
+                case "availables":
+                    // Excluir cancelados y finalizados
+                    return $query->where("status", "!=", "canceled")
+                                ->where("finished", false);
+
+                case "cancelled":
+                    return $query->where("status", "canceled");
+
+                case "finished":
+                    return $query->where("finished", true);
+
+                default:
+                    // Para otros estados, mostrar solo si no están cancelados ni finalizados
+                    return $query->where("status", $this->filtroEstado)
+                                ->where("status", "!=", "canceled")
+                                ->where("finished", false);
+            }
         })
         ->when($this->filtroTipo=="-1" || $this->filtroTipo=="1", function ($query) {
             return $query->where("type", ($this->filtroTipo=="-1")?'shipping':'collection');

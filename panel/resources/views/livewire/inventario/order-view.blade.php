@@ -48,7 +48,7 @@
             content: "";
             position: absolute;
             top: 25px;
-            width: {{ $orden->type == 'collection' ? '13vw' : '15.2vw' }}; /* Ajusta el tamaño de la línea */
+            width: {{ $orden->type == 'collection' ? '13vw' : '14.2vw' }}; /* Ajusta el tamaño de la línea */
             
             height: 5px; /* Grosor de la línea */
             background-color: #c0c0c0; /* Color de la línea */
@@ -525,6 +525,7 @@
                 </div>
                 @endif
                 
+                @if(auth()->check() && auth()->user()->rank >= 4)
                 @if(($orden->status=="prepared" || $orden->status=="created" || $orden->status=="waiting") && $orden->status!="canceled")
                 <div class="col-md-12 pt-3">
                     <div class="text-center">
@@ -582,6 +583,7 @@
                     </table>
                 </div>
                 @endif
+                @endif
 
                 @if($orden->status=="collected")
                 <div class="col-md-12 pt-2">
@@ -610,6 +612,31 @@
                     </table>
                 </div>
                 @endif
+
+                @if(auth()->check() && auth()->user()->rank >= 4)
+                @if($orden->finished)
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de cierre</h5>
+                    <p class="card-text">Esta es la información relacionada con el cierre de la orden</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de cierre</th>
+                                <td>{{$orden->finished_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién la cerró?</th>
+                                <td>{{$orden->finisher_info->name." (".$orden->finisher_info->id." - ".$orden->finisher_info->username.")"}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                @endif
+                @endif
                 
                 @if($orden->status=="sended" && $orden->type=="collection")
                 <div class="col-md-12 pt-3">
@@ -636,6 +663,34 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="reportarLlegada()">Confirmar llegada</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                @endif
+
+                @if((($orden->status=="sended" && $orden->type=="shipping") || ($orden->status=="collected" && $orden->type=="collection")) && !$orden->finished)
+                <div class="col-md-12 pt-3">
+                    <div class="text-center">
+                        <a class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#reportarCierre">Cerrar orden</a>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="reportarCierre" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportarCierreLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="reportarCierreLabel">Cerrar orden</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    Al cerrar la orden, esta no será visible en la pestaña de órdenes de forma inicial, tendrás que buscarla manualmente en los filtros.
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="finalizarOrden()">Confirmar cierre de orden</button>
                             </div>
                             </div>
                         </div>

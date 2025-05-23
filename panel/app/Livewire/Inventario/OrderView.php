@@ -236,6 +236,12 @@ class OrderView extends Component
     }
 
     public function cancelarOrden(){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Cancelar orden', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
         //Valido la razon
         if(empty(trim($this->reasonCancel)) || preg_match('/<[^>]*>/', $this->reasonCancel)){
             $this->dispatch('mostrarToast', 'Cancelar orden', 'La razón tiene caracteres no válidos o está vacía');
@@ -353,6 +359,29 @@ class OrderView extends Component
         }
 
         //Ahora reporto la llegada
+    }
+
+    public function finalizarOrden(){
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Terminar orden', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
+        //Edito la información
+        $this->orden->finished_by=Auth::id();
+        $this->orden->finished_date=now();
+        $this->orden->finished=True;
+
+        //Si almaceno
+        if($this->orden->save()){
+            registrarLog("Inventario","Órdenes","Finalizar orden","Ha finalizado la orden # ".$this->orden->id,true);
+
+            $this->dispatch('mostrarToast', 'Finalizar orden', 'Se ha finalizado la orden');
+
+        }else{
+            registrarLog("Inventario","Órdenes","Finalizar orden","Ha intentado finalizar la orden # ".$this->orden->id,false);
+            $this->dispatch('mostrarToast', 'Finalizar orden', 'Error finalizando la orden, contacta con soporte');
+        }
     }
 
     public function mount($orden){
