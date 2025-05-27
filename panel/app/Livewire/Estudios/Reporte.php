@@ -79,15 +79,15 @@ class Reporte extends Component
             $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de inicio no es válida o está vacía");
             return;
         }
-    
+
         if (!$this->fechaFin || !strtotime($this->fechaFin)) {
             $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de fin no es válida o está vacía");
             return;
         }
-    
+
         $inicio = Carbon::parse($this->fechaInicio);
         $fin = Carbon::parse($this->fechaFin);
-    
+
         if ($fin->greaterThan(Carbon::now())) {
             $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de fin debe ser posterior a la fecha de hoy");
             return;
@@ -97,7 +97,7 @@ class Reporte extends Component
             $this->dispatch('mostrarToast', 'Continuar reporte', "La fecha de fin debe ser posterior a la fecha de inicio");
             return;
         }
-    
+
         if ($inicio->diffInDays($fin) > 32) {
             $this->dispatch('mostrarToast', 'Continuar reporte', "No puede haber más de 31 días entre fechas");
             return;
@@ -144,6 +144,20 @@ class Reporte extends Component
         $fechaFinFormateada = Carbon::parse($this->fechaFin)
         ->format('Y-m-d');
 
+        // Cargo las fechas
+        $fechaInicio = Carbon::parse($this->fechaInicio);
+        $fechaFin = Carbon::parse($this->fechaFin);
+
+        // Calcula la diferencia en días
+        $diasDiferencia = $fechaInicio->diffInDays($fechaFin);
+
+        // Verifica si la diferencia es mayor a 32 días
+        if ($diasDiferencia > 32) {
+            // Lógica cuando hay más de 32 días de diferencia
+            $this->dispatch('mostrarToast', 'Generar reporte', "Error: La diferencia entre fechas no puede ser superior a 32 días");
+            return;
+        }
+
         //Consulto el JSON de tiempos de conexión
         $data_send=[
             'Branch' => 'Server',
@@ -165,7 +179,7 @@ class Reporte extends Component
             if($data["Status"]??False){
                 // // Crear el periodo de fechas
                 // $periodo = CarbonPeriod::create($fechaInicioFormateada, $fechaFinFormateada);
-                
+
                 // // Generar el array de fechas
                 // $fechas = [];
                 // foreach ($periodo as $fecha) {
@@ -177,7 +191,7 @@ class Reporte extends Component
                     if($archive["ArchiveExist"]){
                         //Decodifico
                         $decoded = base64_decode($archive["Archive"], true);
-                        
+
                         //Si no logra decodificar que salte
                         if ($decoded === false) {
                             continue;
@@ -265,17 +279,17 @@ class Reporte extends Component
                         $this->resultado[$key]["FechaInicio"]=$this->fechaInicio;
                         $this->resultado[$key]["FechaFin"]=$this->fechaFin;
                     }
-    
+
                     //Ahora analizo el tipo de renta que es
                     $rentaCompartida = false;
-    
+
                     foreach ($this->rentasCompartidas as $renta) {
                         if (strpos(strtolower($elemento["StudyName"]), strtolower($renta)) !== false) {
                             $rentaCompartida = true;
                             break;
                         }
                     }
-    
+
                     $this->resultado[$key]["CustomMail"]="";
 
                     // //Ahora genero el reporte de conexión
@@ -296,7 +310,7 @@ class Reporte extends Component
                         //Consulto si existe este estudio este día
                         if(array_key_exists($elemento["Id"], $estudios)){
                             $tiempo=$estudios[$elemento["Id"]];
-                            
+
                             //Comienzo a procesar, inicio sumando el tiempo
                             $reporteTiempo["Total"]+=$tiempo["Total"];
 
@@ -357,7 +371,7 @@ class Reporte extends Component
             $this->dispatch('mostrarToast', 'Continuar reporte', "El reporte no es válido o no existe");
         }
 
-        
+
 
     }
 
@@ -380,9 +394,9 @@ class Reporte extends Component
 
             //Genero la informacion
             $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
-        
+
             Mail::to($datos["Email"])->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
-        
+
             $this->dispatch('mostrarToast', 'Continuar reporte', "Mail enviado");
 
         }else{
@@ -408,9 +422,9 @@ class Reporte extends Component
 
             //Genero la informacion
             $infoReply=array_diff_key($datos, array_flip(['DetailedReport', 'ResultsReport']));
-        
+
             Mail::to($datos["CustomMail"])->send(new EnviarReporte("Reporte por periodo", $pdfResponse,'administracion@coolsofttechnology.com',$infoReply ));
-        
+
             $this->dispatch('mostrarToast', 'Enviar reporte', "Correo enviado");
 
         }else{
