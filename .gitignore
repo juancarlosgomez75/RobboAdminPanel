@@ -28,3 +28,41 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+# General node/npm/yarn
+/panel/node_modules/
+/panel/npm-debug.log
+/panel/yarn-error.log
+
+# Composer dependencies
+/panel/vendor/
+
+# Laravel 4 specific
+/panel/bootstrap/compiled.php
+/panel/app/storage/
+
+# Laravel 5 & Lumen specific
+/panel/public/storage
+/panel/public/hot
+
+# Laravel 5 & Lumen with changed public path
+/panel/public_html/storage
+/panel/public_html/hot
+
+# Sensitive and environment-specific files
+/panel/storage/*.key
+/panel/.env
+/panel/.env.backup
+/panel/.env.production
+/panel/Homestead.yaml
+/panel/Homestead.json
+/panel/.vagrant
+/panel/.phpunit.result.cache
+
+# Build and cache
+/panel/public/build
+/panel/storage/pail
+
+# IDEs, editors, tools
+/panel/.phpactor.json
+/panel/auth.json

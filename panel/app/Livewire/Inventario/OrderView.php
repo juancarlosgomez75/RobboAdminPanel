@@ -93,6 +93,7 @@ class OrderView extends Component
         $this->orden->preparation_list=json_encode($this->preparacion_list);
         $this->orden->preparation_date=now();
         $this->orden->preparation_notes=strip_tags($this->details);
+
         $this->orden->status="prepared";
 
         //Si almaceno
@@ -112,7 +113,7 @@ class OrderView extends Component
                     if($element["use_firmware"] && $this->orden->study_id!=null){
 
 
-                        
+
                         $apiData=[
                             'Branch' => 'Server',
                             'Service' => 'Machines',

@@ -3,7 +3,7 @@
         .container {
             width: 100%;
         }
-    
+
         .progressbar {
             display: flex;
             justify-content: center;
@@ -12,7 +12,7 @@
             padding: 20px 0; /* Espaciado superior e inferior */
             position: relative;
         }
-    
+
         /* Estilo de los elementos de la barra de progreso */
         .progressbar li {
             list-style: none;
@@ -23,7 +23,7 @@
             gap: 0.4em;
             position: relative;
         }
-    
+
         /* Círculo alrededor del ícono */
         .icon-circle {
             width: 50px;
@@ -36,36 +36,36 @@
             position: relative;
             z-index: 1; /* Asegura que esté encima de la línea */
         }
-    
+
         /* Ícono dentro del círculo */
         .progressbar i {
             font-size: clamp(16px, 1.7vw, 18px);
             color: white; /* Color del ícono */
         }
-    
+
         /* Línea de conexión entre los círculos */
         .progressbar li::after {
             content: "";
             position: absolute;
             top: 25px;
             width: {{ $orden->type == 'collection' ? '13vw' : '14.2vw' }}; /* Ajusta el tamaño de la línea */
-            
+
             height: 5px; /* Grosor de la línea */
             background-color: #c0c0c0; /* Color de la línea */
             left: 50%;
             z-index: 0; /* Detrás de los círculos */
         }
-    
+
         /* Elimina la línea del último elemento */
         .progressbar li:last-child::after {
             content: none;
         }
-    
+
         /* Estilos para los pasos completados */
         .progressbar li.current ~ li .icon-circle {
             background-color: #c0c0c0; /* Pasos después del actual en gris */
         }
-    
+
         .progressbar li.current .icon-circle {
             background-color: #D2665A; /* Paso actual en amarillo */
         }
@@ -90,7 +90,7 @@
         .progressbar li:not(.current) span {
             color: #d8a6a1; /* Cambia el color solo en los pasos antes del actual */
         }
-    
+
         /* Línea de conexión verde hasta el paso actual */
         .progressbar li.current ~ li::after {
             background-color: #c0c0c0; /* Mantiene la línea gris después del paso actual */
@@ -144,6 +144,8 @@
                 </div>
                 <div class="col-md-12 pt-4">
                     <ul class="progressbar @if($orden->status=="canceled") cancelled @endif">
+                        {{-- Barra de progreso dependiendo de si es envío o recogida --}}
+                        @if($orden->type=="shipping")
                         <li>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-star"></i>
@@ -190,18 +192,71 @@
                                 @endif
                             </span>
                         </li>
-                        @if($orden->type=="collection")
+                        {{-- Cuando es recogida --}}
+                        @elseif($orden->type=="collection")
+                        <li>
+                            <div class="icon-circle">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <span>Creada</span>
+                        </li>
+
+                        <li @if($orden->status=="created") class="current" @endif>
+                            <div class="icon-circle">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            </div>
+                            <span>
+                                @if($orden->status=="created")
+                                Esperando guía
+                                @elseif($orden->status!="created")
+                                Guía generada
+                                @else
+                                Generación de guía
+                                @endif
+                            </span>
+                        </li>
+
+                        <li @if($orden->status=="waiting") class="current" @endif>
+                            <div class="icon-circle">
+                                <i class="fa-solid fa-truck"></i>
+                            </div>
+                            <span>
+                                @if($orden->status=="waiting")
+                                Recogiendo
+                                @elseif($orden->status!="waiting" && $orden->status!="created" && $orden->status!="canceled")
+                                Recogido
+                                @else
+                                Recogida
+                                @endif
+                            </span>
+                        </li>
+
                         <li @if($orden->status=="sended") class="current" @endif>
                             <div class="icon-circle">
                                 <i class="fa-brands fa-get-pocket"></i>
                             </div>
                             <span>
                                 @if($orden->status=="sended")
-                                Esperando entrega
-                                @elseif($orden->status=="collected")
-                                Enviado
+                                Entregando
+                                @elseif($orden->status!="sended" && $orden->status!="created" && $orden->status!="waiting" && $orden->status!="canceled")
+                                Entregado
                                 @else
                                 Entrega
+                                @endif
+                            </span>
+                        </li>
+
+                        <li @if($orden->status=="collected") class="current" @endif>
+                            <div class="icon-circle">
+                                <i class="fa-solid fa-box"></i>
+                            </div>
+                            <span>
+                                @if($orden->status=="collected")
+                                Revisando
+                                @elseif($orden->status!="sended" && $orden->status!="created" && $orden->status!="waiting" && $orden->status!="canceled")
+                                Revisado
+                                @else
+                                Revisión
                                 @endif
                             </span>
                         </li>
@@ -213,6 +268,8 @@
                     <h5 style="color:red">Orden cancelada</h5>
                 </div>
                 @endif
+
+                {{-- Información de la creación del pedido --}}
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de creación</h5>
                     <p class="card-text">Esta es la información relacionada con la creación de la orden.</p>
@@ -295,12 +352,14 @@
                         </tbody>
                     </table>
                 </div>
-                @if($orden->status=="created")
+
+                {{-- Reportar alistamiento/revisión--}}
+                @if(($orden->status=="created" && $orden->type=="shipping") || ($orden->status=="collected" && $orden->type=="collection"))
                     @if(!$preparando)
                     <div class="col-md-12 pt-2">
                         <div class="text-center">
                             <a class="btn btn-outline-primary" wire:click="iniciarAlistamiento()">Reportar alistamiento de orden</a>
-                        </div>   
+                        </div>
                     </div>
                     @else
                     <div class="col-md-12 pt-2">
@@ -332,7 +391,7 @@
                                     </td>
                                     <td><input class="form-check-input" type="checkbox" value="" wire:model="preparacion_list.{{$index}}.check"></td>
                                 </tr>
-                                
+
                                 @endforeach
                                 @else
                                 <tr>
@@ -351,12 +410,13 @@
                     <div class="col-md-12 pt-4">
                         <div class="text-center">
                             <a class="btn btn-outline-primary" wire:click="completarAlistamiento()">Guardar alistamiento</a>
-                        </div>   
+                        </div>
                     </div>
 
 
                     @endif
-                @elseif($orden->status!="canceled")
+                {{-- Información de alistamiento --}}
+                @elseif($orden->status!="canceled" && (($orden->status!="created" && $orden->type=="shipping") || ($orden->status=="prepared" && $orden->type=="collection")))
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de alistamiento</h5>
                     <p class="card-text">Esta es la información relacionada con la creación de la orden.</p>
@@ -409,12 +469,13 @@
                 </div>
                 @endif
 
-                @if($orden->status=="prepared")
+                {{-- Reportar la gúia de envío --}}
+                @if(($orden->status=="prepared" && $orden->type=="shipping") || ($orden->status=="created" && $orden->type=="collection"))
                     @if(!$enviando)
                     <div class="col-md-12 pt-2">
                         <div class="text-center">
                             <a class="btn btn-outline-primary" wire:click="iniciarEnvio()">Reportar guía de envío</a>
-                        </div>   
+                        </div>
                     </div>
                     @else
                     <div class="col-md-12 pt-2">
@@ -430,7 +491,7 @@
                                     @foreach ($mensajerias as $mensajeria)
                                         <option value="{{$mensajeria->id}}">{{$mensajeria->name}}</option>
                                     @endforeach
-                                    
+
                                 </select>
                             </div>
                             <div class="col-md-7">
@@ -442,10 +503,12 @@
                     <div class="col-md-12 pt-3">
                         <div class="text-center">
                             <a class="btn btn-primary" wire:click="reportarGuia()">Guardar información</a>
-                        </div>   
+                        </div>
                     </div>
                     @endif
-                @elseif($orden->status!="prepared" && $orden->status!="created" && $orden->status!="canceled")
+                {{-- Información de seguimiento --}}
+                @elseif((($orden->status!="prepared" && $orden->status!="created" && $orden->status!="canceled") && $orden->type=="shipping") ||
+                (($orden->status!="waiting" && $orden->status!="created" && $orden->status!="canceled") && $orden->type=="collection"))
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de reporte de guía</h5>
                     <p class="card-text">Esta es la información relacionada con la generación de la guía de seguimiento.</p>
@@ -478,7 +541,9 @@
                     </table>
                 </div>
                 @endif
-                @if($orden->status=="waiting")
+
+                {{-- Si se está esperando la recogida --}}
+                @if(($orden->status=="waiting" && $orden->type=="shipping") || ($orden->status=="waiting" && $orden->type=="collection"))
                 <div class="col-md-12 pt-2">
                     <div class="text-center">
                         <a class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reportRecogida">Reportar recogida del paquete</a>
@@ -492,7 +557,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            Al reportar la recogida, el paquete se reporta como completado y la orden se cierra.
+                            Al reportar la recogida, indicarás que el paquete ya fue recibido por la empresa de mensajería e inició su recorrido.
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -502,7 +567,8 @@
                     </div>
                     </div>
                 </div>
-                @elseif($orden->status!="prepared" && $orden->status!="created" && $orden->status!="waiting" && $orden->status!="canceled")
+                @elseif((($orden->status!="prepared" && $orden->status!="created" && $orden->status!="waiting" && $orden->status!="canceled")&&$orden->type=="shipping") ||
+                (($orden->status!="created" && $orden->status!="waiting" && $orden->status!="canceled") && $orden->type=="collection"))
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de envío</h5>
                     <p class="card-text">Esta es la información relacionada con el envío del paquete</p>
@@ -524,9 +590,42 @@
                     </table>
                 </div>
                 @endif
-                
+
+                @if($orden->status=="sended" && $orden->type=="collection")
+                <div class="col-md-12 pt-3">
+                    <div class="text-center">
+                        <a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reportarLlegada">Reportar llegada</a>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="reportarLlegada" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportarLlegadaLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="reportarLlegadaLabel">Reportar llegada</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    Al reportar la llegada de la orden, todos los productos solicitados pasarán a hacer parte del inventario automáticamente
+                                </p>
+                                <div class="mb-3">
+                                    <label class="form-label">Comentarios de llegada</label>
+                                    <textarea class="form-control" rows="3" wire:model="recibirNotas"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="reportarLlegada()">Confirmar llegada</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                </div>
+                @endif
+
                 @if(auth()->check() && auth()->user()->rank >= 4)
-                @if(($orden->status=="prepared" || $orden->status=="created" || $orden->status=="waiting") && $orden->status!="canceled")
+                @if(((($orden->status=="prepared" || $orden->status=="created" || $orden->status=="waiting") && $orden->status!="canceled") && $orden->type=="shipping") ||
+                ((($orden->status=="sended" || $orden->status=="created" || $orden->status=="waiting") && $orden->status!="canceled") && $orden->type=="collection"))
                 <div class="col-md-12 pt-3">
                     <div class="text-center">
                         <a class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelarOrden">Reportar cancelación de la orden</a>
@@ -637,40 +736,8 @@
                 </div>
                 @endif
                 @endif
-                
-                @if($orden->status=="sended" && $orden->type=="collection")
-                <div class="col-md-12 pt-3">
-                    <div class="text-center">
-                        <a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reportarLlegada">Reportar llegada</a>
-                    </div>
-                    <!-- Modal -->
-                    <div class="modal fade" id="reportarLlegada" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportarLlegadaLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="reportarLlegadaLabel">Reportar llegada</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>
-                                    Al reportar la llegada de la orden, todos los productos solicitados pasarán a hacer parte del inventario automáticamente
-                                </p>
-                                <div class="mb-3">
-                                    <label class="form-label">Comentarios de llegada</label>
-                                    <textarea class="form-control" rows="3" wire:model="recibirNotas"></textarea>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="reportarLlegada()">Confirmar llegada</button>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                </div>
-                @endif
 
-                @if((($orden->status=="sended" && $orden->type=="shipping") || ($orden->status=="collected" && $orden->type=="collection")) && !$orden->finished)
+                @if((($orden->status=="sended" && $orden->type=="shipping") || ($orden->status=="prepared" && $orden->type=="collection")) && !$orden->finished)
                 <div class="col-md-12 pt-3">
                     <div class="text-center">
                         <a class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#reportarCierre">Cerrar orden</a>
