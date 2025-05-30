@@ -684,7 +684,7 @@
                 @endif
                 @endif
 
-                @if($orden->status=="collected")
+                @if(($orden->status=="collected" || $orden->status=="prepared") && $orden->type=="collection")
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de recepción</h5>
                     <p class="card-text">Esta es la información relacionada con la recepción del paquete.</p>
