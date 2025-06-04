@@ -508,7 +508,7 @@
                     @endif
                 {{-- Información de seguimiento --}}
                 @elseif((($orden->status!="prepared" && $orden->status!="created" && $orden->status!="canceled") && $orden->type=="shipping") ||
-                (($orden->status!="waiting" && $orden->status!="created" && $orden->status!="canceled") && $orden->type=="collection"))
+                (($orden->status!="created" && $orden->status!="canceled") && $orden->type=="collection"))
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de reporte de guía</h5>
                     <p class="card-text">Esta es la información relacionada con la generación de la guía de seguimiento.</p>
