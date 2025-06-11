@@ -84,7 +84,7 @@ class Order extends Component
             'Data' => ["UserId" => "1"]
         ];
         $generalinformation=sendBack($data_send);
-        
+
         // //Genero la petición de informacion
         // $response = Http::withHeaders([
         //     'Authorization' => 'AAAA'
@@ -129,13 +129,13 @@ class Order extends Component
                     }
                 }
                 $this->estudios=$data["ListStudyData"];
-            } 
+            }
         }
     }
 
     public function buscarEstudio(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->study_search) && !empty(trim($this->study_search)))){
-            
+
             $this->dispatch('mostrarToast', 'Buscar estudio', 'El campo no es válido');
 
             return;
@@ -145,9 +145,9 @@ class Order extends Component
         foreach($this->estudios as $estudio){
             //Analizo si el nombre coincide
             if(preg_match('/' . preg_quote(strtoupper($this->study_search), '/') . '/i', strtoupper($estudio["StudyName"]))){
-                
+
                 if(!$estudio["Active"]){
-                    $this->dispatch('mostrarToast', 'Buscar estudio', 'Se ha localizado al estudio, pero no se puede usar porque está inhabilitado');
+                    $this->dispatch('mostrarToast', 'Buscar estudio', 'Se ha localizado al estudio:'.$estudio["StudyName"].', pero no se puede usar porque está inhabilitado');
                     return;
                 }
                 //Indico que localicé el estudio
@@ -186,7 +186,7 @@ class Order extends Component
         $this->address="";
         $this->city= "";
         $this->receiver="";
-        $this->phone="";        
+        $this->phone="";
         $this->studyFind=false;
     }
 
@@ -214,7 +214,7 @@ class Order extends Component
 
     public function searchProduct(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->product_name) && !empty(trim($this->product_name)))){
-            
+
             $this->dispatch('mostrarToast', 'Buscar producto', 'El campo no es válido');
 
             return;
@@ -371,7 +371,7 @@ class Order extends Component
 
                         //Almaceno la información
                         $mov->inventory_id=$pto->inventory->id;
-                        
+
                         $mov->type='expense';
                         $mov->reason="Alistamiento de orden";
                         $mov->amount=$element["amount"];
@@ -405,13 +405,13 @@ class Order extends Component
 
                 return redirect(route("orden.ver",$orden->id));
 
-                
+
             }else{
                 $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar la orden, contacte a soporte');
                 registrarLog("Inventario","Órdenes","Crear","Ha intentado crear una orden con la siguiente información: ".json_encode($orden),false);
             }
 
-            
+
         }
 
     }
