@@ -1,4 +1,6 @@
 <div>
+    {{-- {{ json_encode($listadoEstudios) }}
+    {{ $idEstudio }} --}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -12,11 +14,11 @@
                         <i class="fa-solid fa-plus"></i> Crear
                     </a>
                     @endif
-                    
+
                     <a type="button" class="btn btn-sm action-btn btn-outline-secondary" wire:click="switchFiltros()">
                         <i class="fa-solid fa-filter"></i> Filtros
                     </a>
-                    
+
                 </div>
                 <div class="col-md-12 @if(!$filtrosActivos) hide @endif" id="Filtros">
 
@@ -24,7 +26,10 @@
                         <div class="col-md-2">
                             <input type="text" class="custom-input" placeholder="Filtrar por fecha" wire:model.change="filtroFecha">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <input type="text" class="custom-input" placeholder="Filtrar por estudio" wire:model.change="filtroEstudio">
+                        </div>
+                        <div class="col-md-2">
                             <input type="text" class="custom-input" placeholder="Filtrar por destinatario" wire:model.change="filtroNombre">
                         </div>
                         <div class="col-md-2">
@@ -56,6 +61,7 @@
                                 <th scope="col" style="width: 7%;">#</th>
                                 <th scope="col">Fecha creación</th>
                                 <th scope="col">Ciudad</th>
+                                <th scope="col">Estudio</th>
                                 <th scope="col">Destinatario</th>
                                 <th scope="col">Tipo</th>
                                 <th scope="col">Estado</th>
@@ -69,6 +75,7 @@
                                     <th scope="row">{{ $pedido->id }}</th>
                                     <td>{{ $pedido->created_at }}</td>
                                     <td>{{ $pedido->city }}</td>
+                                    <td>{{ $pedido->study_name}}</td>
                                     <td>{{ $pedido->name }}</td>
                                     <td>{{ ($pedido->type=="shipping") ? "Envío":"Recogida" }}</td>
                                     <td>
@@ -100,10 +107,10 @@
                                 <td class="text-center" colspan="7">No se han encontrado órdenes</td>
                             </tr>
                             @endif
-                            
+
                         </tbody>
                     </table>
-                    
+
                 </div>
                 <div class="col-md-12">
                     {{ $pedidos->links() }}

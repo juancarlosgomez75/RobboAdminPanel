@@ -25,29 +25,29 @@ class Create extends Component
     public function validar(){
 
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
-            
+
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El nombre no es válido");
 
             return false;
         }
-        elseif (!(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s&]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))) {
+        elseif (!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))) {
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: La razón social no es válida");
             return false;
         }
         elseif(!(is_numeric($this->nit) && $this->nit > 0)){
-            
+
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El NIT no es válido");
 
             return false;
         }
         elseif(!(is_numeric($this->idciudad) && $this->idciudad > 0)){
-            
+
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: La ciudad no es válida");
 
             return false;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
-            
+
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El dirección no es válida");
 
             return false;
@@ -62,11 +62,11 @@ class Create extends Component
 
             return false;
         }
-        elseif (!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) && 
-        (empty(trim($this->telcontacto2)) || $this->telcontacto2 === "0" || preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto2)))) { 
+        elseif (!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) &&
+        (empty(trim($this->telcontacto2)) || $this->telcontacto2 === "0" || preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto2)))) {
 
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El número de contacto secundario no es válido");
-            
+
             return false;
         }
         elseif (!empty(trim($this->email))) {
@@ -101,7 +101,7 @@ class Create extends Component
             return false;
         }
 
-        
+
     }
 
     public function registrar()
@@ -130,7 +130,7 @@ class Create extends Component
                 ]
             ];
             $data=sendBack($data_send);
-    
+
 
             if (isset($data['Status'])) {
                 if($data['Status']){
@@ -180,7 +180,7 @@ class Create extends Component
                                                 registrarLog("Producción","Managers","Crear Manager","Se ha creado el manager: ".$this->responsable.", del estudio #".$estudio["Id"].", durante la creación del estudio",true);
 
                                                 $this->dispatch('mostrarToast', 'Crear manager', "Se ha registrado a este manager correctamente");
-                                                
+
 
                                             }else{
 

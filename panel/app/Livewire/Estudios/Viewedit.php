@@ -57,7 +57,7 @@ class Viewedit extends Component
                 $this->ordenarModelosDesc = true;
             }else{
                 $this->ordenarModelosDesc = !$this->ordenarModelosDesc;
-            } 
+            }
         }
     }
     public function importCsv()
@@ -210,7 +210,7 @@ class Viewedit extends Component
 
             // dd($enviar);
             //Intento enviarlo
-            
+
             $data=sendBack($enviar);
             if (isset($data['Status'])){
                 if($data['Status']){
@@ -266,19 +266,19 @@ class Viewedit extends Component
             return false;
         }
         elseif(!(is_numeric($this->nit) && $this->nit > 0)){
-            
+
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El NIT no es válido");
 
             return false;
         }
         elseif(!(is_numeric($this->idciudad) && $this->idciudad > 0)){
-            
+
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La ciudad no es válida");
 
             return false;
         }
         elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
-            
+
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La dirección no es válida");
 
             return false;
@@ -293,11 +293,11 @@ class Viewedit extends Component
 
             return false;
         }
-        elseif (!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) && 
-        (empty(trim($this->telcontacto2)) || $this->telcontacto2 === "0" || preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto2)))) { 
+        elseif (!(preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto) &&
+        (empty(trim($this->telcontacto2)) || $this->telcontacto2 === "0" || preg_match('/^\+?\d{1,3}?\(?\d{2,4}\)?\d{6,10}$/', $this->telcontacto2)))) {
 
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El número de contacto secundario no es válido");
-            
+
             return false;
         }
         elseif (!empty(trim($this->email))) {
@@ -331,13 +331,13 @@ class Viewedit extends Component
             return false;
         }
 
-        
+
     }
 
     public function modificar()
     {
         if($this->validar()){
-            
+
             // //Genero la petición de informacion
             // $response = Http::withHeaders([
             //     'Authorization' => 'AAAA'
@@ -401,7 +401,7 @@ class Viewedit extends Component
         if($this->moveFirmwareId<100000 || $this->moveFirmwareId > 999999 || !is_numeric($this->moveFirmwareId)){
 
             $this->dispatch('mostrarToast', 'Mover máquina', "Alerta: El firmware Id no es válido");
-            
+
             return false;
         }
 
@@ -409,7 +409,7 @@ class Viewedit extends Component
         foreach($this->maquinas as $maq){
             if($maq["FirmwareID"]==$this->moveFirmwareId){
                 $this->dispatch('mostrarToast', 'Mover máquina', "Alerta: Esta máquina ya está en este estudio");
-                
+
                 return false;
             }
         }
@@ -439,7 +439,7 @@ class Viewedit extends Component
         }
 
         $this->dispatch('mostrarToast', 'Mover máquina', "Alerta: No se ha localizado máquinas con este FirmwareID");
-                
+
         return false;
     }
 
@@ -500,8 +500,8 @@ class Viewedit extends Component
 
 
                 }
-                
-                
+
+
                 $this->moveFirmwareId="";
 
                 $data_send=[
@@ -547,23 +547,23 @@ class Viewedit extends Component
                     "Id"=>"1",
                 ]
                 ];
-    
-    
-    
+
+
+
             // //Genero la petición de informacion
             // $response = Http::withHeaders([
             //     'Authorization' => 'AAAA'
             // ])->withOptions([
             //     'verify' => false // Desactiva la verificación SSL
             // ])->post(config('app.API_URL'), $apiData);
-    
+
             // $data = $response->json();
 
             $data=sendBack($apiData);
 
             if (isset($data['Status'])) {
                 if($data['Status']){
-    
+
                     $this->dispatch('mostrarToast', 'Desvincular máquina', "Se ha desvinculado la máquina #".$maquina["ID"]." de este estudio correctamente");
                     registrarLog("Producción","Estudios","Desvincular","Se ha desvinculado la máquina #".$maquina["ID"]." del estudio #".$this->informacion["Id"],true);
 
@@ -585,7 +585,7 @@ class Viewedit extends Component
 
 
 
-    
+
                 }else{
 
 
@@ -692,17 +692,17 @@ class Viewedit extends Component
                 $misModelos[]=$modelo;
             }
 
-            
+
 
             $this->modelos=array_merge($this->modelos,$misModelos);
         }
-        
+
     }
 
     public function activarEdicion(){
         $this->editing=true;
     }
-    
+
     public function render()
     {
         usort($this->maquinas, function ($a, $b) {
