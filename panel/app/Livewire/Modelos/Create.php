@@ -72,7 +72,7 @@ class Create extends Component
 
         //Valido todas las páginas ingresadas
         foreach($this->paginas as $index=>$pagina){
-            
+
             //Analizo el nickname
             if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $pagina["NickName"]) && !empty(trim($pagina["NickName"])))){
 
@@ -140,7 +140,7 @@ class Create extends Component
                 if($data['Status']){
 
                     $this->dispatch('mostrarToast', 'Crear modelo', "Se ha registrado al modelo de forma correcta");
-                    
+
                     registrarLog("Producción","Modelos","Crear","Se ha registrado al modelo con información: ".json_encode($enviar),true);
 
                     //Aquí consulto el estudio
@@ -185,8 +185,8 @@ class Create extends Component
         // }else{
         //     $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
         // }
-        
-        
+
+
     }
 
     public function eliminarPagina($index)
@@ -282,6 +282,10 @@ class Create extends Component
                     //Obtengo las páginas disponibles
                     $this->paginasDisponibles=$generalinformation['WebPagesList'];
 
+                    usort($this->paginasDisponibles, function ($a, $b) {
+                        return strcmp($a, $b);
+                    });
+
                     return true;
                 }
             }
@@ -352,7 +356,7 @@ class Create extends Component
 
         //Pongo el estudio actual
         $this->estudioactual=$idestudio;
-        
+
         //Trato de obtener los estudios
         if($this->obtenerEstudios()){
             //Trato de obtener los managers
@@ -364,7 +368,7 @@ class Create extends Component
 
     public function render()
     {
-        
+
         return view('livewire.modelos.create');
     }
 }

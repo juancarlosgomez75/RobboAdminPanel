@@ -75,7 +75,7 @@ class Viewedit extends Component
 
         //Valido todas las páginas ingresadas
         foreach($this->paginas as $pagina){
-            
+
             //Analizo el nickname
             if(!(preg_match('/^[a-zA-Z0-9._-]+$/', $pagina["NickName"]) && !empty(trim($pagina["NickName"])))){
 
@@ -142,7 +142,7 @@ class Viewedit extends Component
                 if($data['Status']){
                     $this->dispatch('mostrarToast', 'Editar modelo', "Se ha modificado esta cuenta de forma correcta");
                     $this->editing=false;
-                    
+
                     registrarLog("Producción","Modelos","Editar","Se ha editado al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),true);
 
                     return;
@@ -189,7 +189,7 @@ class Viewedit extends Component
                 if($data['Status']){
                     $this->dispatch('mostrarToast', 'Activar modelo', "Se ha activado este modelo de forma correcta");
                     $this->editing=false;
-                    
+
                     registrarLog("Producción","Modelos","Activar","Se ha activado al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),true);
                     $this->active=true;
                     return;
@@ -236,7 +236,7 @@ class Viewedit extends Component
                 if($data['Status']){
                     $this->dispatch('mostrarToast', 'Desactivar modelo', "Se ha desactivado este modelo de forma correcta");
                     $this->editing=false;
-                    
+
                     registrarLog("Producción","Modelos","Desactivar","Se ha desactivado al modelo #".$this->ModelInformation["ModelId"].", con información: ".json_encode($enviar),true);
                     $this->active=false;
                     return;
@@ -258,7 +258,7 @@ class Viewedit extends Component
             $this->paginas[]=["NickName"=>$this->drivername,"NickPage"=>"-1"];
             // $this->paginas[]=["NickName"=>"","NickPage"=>"-1"];
         }
-        
+
     }
 
     public function eliminarPagina($index)
@@ -270,7 +270,7 @@ class Viewedit extends Component
         }
 
     }
-    
+
     public function activarEdicion(){
         $this->editing=true;
 
@@ -355,6 +355,10 @@ class Viewedit extends Component
 
                     //Obtengo las páginas disponibles
                     $this->paginasDisponibles=$generalinformation['WebPagesList'];
+
+                    usort($this->paginasDisponibles, function ($a, $b) {
+                        return strcmp($a, $b);
+                    });
 
                     return true;
                 }
