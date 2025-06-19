@@ -1,5 +1,7 @@
 <div>
     {{-- {{json_encode($ModelInformation)}} --}}
+    {{-- {{ dd($ModelInformation) }} --}}
+    {{-- {{json_encode($RanksInformation)}} --}}
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item "><a href="{{route("estudios.index")}}" class="text-secondary">Estudios</a></li>
@@ -15,7 +17,7 @@
                     <p class="card-text">Esta es la información almacenada actualmente para este modelo</p><br>
                 </div>
                 <div class="col-md-12">
-                    
+
                     <div class="row">
                         <div class="col-md-5">
                             <label for="manname" class="form-label">Nombre de usuario</label>
@@ -40,7 +42,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Estudio actual</label>
                             <select class="form-select" @if(!$editing) disabled @endif wire:model.live="estudioactual">
-                                
+
                                 @if(!empty($listadoestudios))
                                 <option disabled value="0">Seleccionar un estudio</option>
                                 @foreach($listadoestudios as $estudio)
@@ -57,7 +59,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Manager actual</label>
                             <select class="form-select" @if(!$editing) disabled @endif wire:model="manageractual">
-                                
+
                                 @if(!empty($listadomanagers))
                                 <option disabled value="0">Seleccionar un manager</option>
                                 @foreach($listadomanagers as $manager)
@@ -69,16 +71,16 @@
                             </select>
                             <br>
                         </div>
-                        
+
                     </div>
-                    
+
                 </div>
 
                 <div class="col-md-9">
                     <h5 class="card-title">Páginas que usa</h5>
                     <p class="card-text">Estas son las páginas que el modelo indica que usa</p><br>
                 </div>
-                
+
                 <div class="col-md-3 text-end pe-4">
                     <br><br>
                     @if($editing)
@@ -88,7 +90,7 @@
                     @endif
                 </div>
                 <div class="col-md-12">
-                    
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -111,7 +113,7 @@
                             @foreach ($paginas as $indice => $Page)
                                 @php
                                      $seleccionActual = $Page['NickPage'] ?? '-1';
-                                    
+
                                 @endphp
 
                                 <tr>
@@ -147,8 +149,8 @@
 
                         </tbody>
                     </table>
-                    
-                    
+
+
                 </div>
                 <div class="col-md-12 text-center">
                     @if(!$editing)
@@ -170,6 +172,99 @@
                         Activar modelo
                     </button>
                     @endif
+                </div>
+
+                <div class="col-md-12 mt-4">
+                    <h5 class="card-title">Información de rangos</h5>
+                    <p class="card-text">Estos son los rangos almacenados para este modelo</p>
+
+                    <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">
+                            Descripción
+                        </th>
+                        <th scope="col">Tiempo</th>
+                        <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('tokens')" >
+                            @if($ordenarPor=="tokens")
+                                @if($ordenarDesc)
+                                    <a  class="text-decoration-none text-dark">
+                                        <i class="fa-solid fa-angle-down me-2"></i>
+                                    </a>
+                                @else
+                                    <a class="text-decoration-none text-dark">
+                                        <i class="fa-solid fa-angle-up me-2"></i>
+                                    </a>
+                                @endif
+                            @endif
+                            Tokens
+                        </th>
+                        <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('stream')" >
+                            @if($ordenarPor=="stream")
+                                @if($ordenarDesc)
+                                    <a  class="text-decoration-none text-dark">
+                                        <i class="fa-solid fa-angle-down me-2"></i>
+                                    </a>
+                                @else
+                                    <a class="text-decoration-none text-dark">
+                                        <i class="fa-solid fa-angle-up me-2"></i>
+                                    </a>
+                                @endif
+                            @endif
+                            Golds</th>
+                        <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('cams')" >
+                            @if($ordenarPor=="cams")
+                                @if($ordenarDesc)
+                                    <a  class="text-decoration-none text-dark">
+                                        <i class="fa-solid fa-angle-down me-2"></i>
+                                    </a>
+                                @else
+                                    <a class="text-decoration-none text-dark">
+                                        <i class="fa-solid fa-angle-up me-2"></i>
+                                    </a>
+                                @endif
+                            @endif
+                            Cams</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(!empty($rangos))
+                        @foreach ($rangos as $rango)
+                        <tr>
+                            <td>
+                                @if($rango["idAccion"]=="1")
+                                    Movimiento (Intensidad: {{ $rango["power"] }})
+                                @elseif($rango["idAccion"]=="2")
+                                    Cum (Shots: {{ $rango["vecesCum"] }})
+                                @elseif($rango["idAccion"]=="8")
+                                    Supercum
+                                @elseif($rango["idAccion"]=="4")
+                                    Key control
+                                @elseif($rango["idAccion"]=="3")
+                                    Stand By
+                                @elseif($rango["idAccion"]=="5")
+                                    Control remoto
+                                @elseif($rango["idAccion"]=="7")
+                                    Cum Party
+                                @elseif($rango["idAccion"]=="6")
+                                    Extracum
+                                @endif
+                            </td>
+                            <td>{{$rango["time"]}}</td>
+                            <td>{{$rango["tokens"]." -> ".$rango["tokensFin"]}}</td>
+                            <td>{{$rango["golds"]." -> ".$rango["goldsFin"]}}</td>
+                            <td>{{$rango["tkscams"]." -> ".$rango["tkscamsFin"]}}</td>
+                        </tr>
+                        @endforeach
+                        @else
+                        <tr>
+                            <td  colspan="5" class="text-center">No se encontraron registros de rangos para este modelo</td>
+                        </tr>
+                        @endif
+                    </tbody>
+                    </table>
+
+
                 </div>
 
             </div>

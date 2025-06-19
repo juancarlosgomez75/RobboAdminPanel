@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 class ModelController extends Controller
 {
-    
+
     public function view(){
 
 
@@ -16,10 +16,10 @@ class ModelController extends Controller
 
 
 
-        
+
         return view("modelos.listado");
     }
-    
+
     public function create($idestudio){
 
         $data_send=[
@@ -39,8 +39,8 @@ class ModelController extends Controller
         }
 
         return "Estudio no encontrado";
-        
-        
+
+
     }
 
     public function viewedit($idmodelo){
@@ -77,17 +77,33 @@ class ModelController extends Controller
         ];
         $data=sendBack($data_send);
 
+        $data_sendRangos=[
+            'Branch' => 'Server',
+            'Service' => 'SelfModels',
+            'Action' => 'GetConfig',
+            'Data' => [
+                "UserId" => "1",
+                "ModelData"=>[
+                    "ModelId"=>$idmodelo
+                ],
+                "UserData"=>[
+                    "Id"=>1
+                ]
+            ]
+        ];
+        $dataRangos=sendBack($data_sendRangos);
+
         //Analizo si es válido lo que necesito
         if (isset($data['Status'])) {
             //Analizo si el status es true
             if($data["Status"]){
-                return view("modelos.viewedit",["ModelInformation"=>$data["Data"]["ModelData"],"ManagerInformation"=>$data["Data"]["UserData"],"StudyInformation"=>$data["DataStudy"]]);
+                return view("modelos.viewedit",["ModelInformation"=>$data["Data"]["ModelData"],"ManagerInformation"=>$data["Data"]["UserData"],"StudyInformation"=>$data["DataStudy"],"RanksInformation"=>$dataRangos["Data"]["ModelData"]["RangeValues"]??[]]);
             }
             return "Error de status";
-            
+
         }
-        
-        
+
+
         return "Error general";
     }
 }

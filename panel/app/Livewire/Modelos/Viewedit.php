@@ -11,6 +11,7 @@ class Viewedit extends Component
     public $ModelInformation;
     public $ManagerInformation;
     public $StudyInformation;
+    public $RanksInformation;
     public $editing=false;
 
     //Inicializo la información de la modelo
@@ -22,11 +23,26 @@ class Viewedit extends Component
     public $active=false;
     public $paginas=[];
 
+    public $ordenarPor = "tokens";
+    public $ordenarDesc = true;
+
     public $paginasDisponibles=[];
 
     //Genero la variable de lista de managers y estudios
     public $listadoestudios;
     public $listadomanagers;
+
+    public function ordenarBy($filtro){
+        //Analizo si cambia es la columna o la dirección
+        if($filtro == "tokens" || $filtro == "stream" || $filtro=="cams"){
+            if($filtro != $this->ordenarPor){
+                $this->ordenarPor = $filtro;
+                $this->ordenarDesc = true;
+            }else{
+                $this->ordenarDesc = !$this->ordenarDesc;
+            }
+        }
+    }
 
     public function validar(){
 
@@ -261,8 +277,7 @@ class Viewedit extends Component
 
     }
 
-    public function eliminarPagina($index)
-    {
+    public function eliminarPagina($index){
         // $this->paginas[$index]["NickName"]="Index es: ".$index;
         if($this->editing){
             unset($this->paginas[$index]); // Elimina el elemento del array
@@ -416,18 +431,18 @@ class Viewedit extends Component
         return false;
     }
 
-    public function updatedestudioactual($valor)
-    {
+    public function updatedestudioactual($valor){
         $this->listadomanagers=[];
         $this->manageractual=0;
         $this->obtenerManagers($this->estudioactual);
     }
 
-    public function mount($ModelInformation,$ManagerInformation,$StudyInformation){
+    public function mount($ModelInformation,$ManagerInformation,$StudyInformation,$RanksInformation){
         //Cargo la información principal
         $this->ModelInformation = $ModelInformation;
         $this->ManagerInformation = $ManagerInformation;
         $this->StudyInformation = $StudyInformation;
+        $this->RanksInformation=$RanksInformation;
 
         //Cargo la información de la modelo
         $this->drivername = $ModelInformation["ModelUserName"];
@@ -450,6 +465,43 @@ class Viewedit extends Component
     }
     public function render()
     {
-        return view('livewire.modelos.viewedit');
+        $rangos=$this->RanksInformation;
+
+        if($this->ordenarPor=="tokens"){
+            if($this->ordenarDesc){
+                usort($rangos, function ($a, $b) {
+                    return intval($a["tokens"]) <=> intval($b["tokens"]);
+                });
+            }else{
+                usort($rangos, function ($a, $b) {
+                    return intval($b["tokens"]) <=> intval($a["tokens"]);
+                });
+            }
+        }else if($this->ordenarPor=="stream"){
+            if($this->ordenarDesc){
+                usort($rangos, function ($a, $b) {
+                    return intval($a["golds"]) <=> intval($b["golds"]);
+                });
+            }else{
+                usort($rangos, function ($a, $b) {
+                    return intval($b["golds"]) <=> intval($a["golds"]);
+                });
+            }
+
+        }else if($this->ordenarPor=="cams"){
+            if($this->ordenarDesc){
+                usort($rangos, function ($a, $b) {
+                    return intval($a["tkscams"]) <=> intval($b["tkscams"]);
+                });
+            }else{
+                usort($rangos, function ($a, $b) {
+                    return intval($b["tkscams"]) <=> intval($a["tkscams"]);
+                });
+            }
+        }
+
+
+
+        return view('livewire.modelos.viewedit',compact("rangos"));
     }
 }
