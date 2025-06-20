@@ -14,7 +14,7 @@
                     <p class="card-text">Esta es la información almacenada actualmente para este estudio</p><br>
                 </div>
                 <div class="col-md-12">
-                    
+
                     <div class="row">
                         <div class="col-md-4">
                             <label for="studyname" class="form-label">Nombre del estudio</label>
@@ -95,7 +95,7 @@
                         </div>
                         @endif
                     </div>
-                    
+
                 </div>
                 <div class="col-md-12">
                     <br>
@@ -159,28 +159,28 @@
                         <thead>
                             <tr class="align-middle">
                                 <th scope="col">#</th>
-                                <th scope="col" style="cursor: pointer;" wire:click="ordenarModelosBy('manager')">
+                                {{-- <th scope="col" style="cursor: pointer;" wire:click="ordenarModelosBy('manager')">
                                     @if($ordenarModelosPor=="manager")
                                     @if($ordenarModelosDesc)
-                                        <a  class="text-decoration-none text-dark"> 
+                                        <a  class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-down me-2"></i>
                                         </a>
                                     @else
-                                        <a class="text-decoration-none text-dark"> 
+                                        <a class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-up me-2"></i>
                                         </a>
                                     @endif
                                     @endif
                                     Manager
-                                </th>
+                                </th> --}}
                                 <th scope="col" style="cursor: pointer;" wire:click="ordenarModelosBy('user')">
                                     @if($ordenarModelosPor=="user")
                                     @if($ordenarModelosDesc)
-                                        <a  class="text-decoration-none text-dark"> 
+                                        <a  class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-down me-2"></i>
                                         </a>
                                     @else
-                                        <a class="text-decoration-none text-dark"> 
+                                        <a class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-up me-2"></i>
                                         </a>
                                     @endif
@@ -196,7 +196,7 @@
                             @foreach ($modelosOrdenados as $Model)
                             <tr>
                                 <td>{{$Model["ModelId"]}}</td>
-                                <td>{{$Model["manager_name"]}}</td>
+                                {{-- <td>{{$Model["manager_name"]}}</td> --}}
                                 <td>{{$Model["ModelUserName"]}}</td>
                                 <td>
                                     @if(!empty($Model["ModelPages"]))
@@ -227,17 +227,17 @@
                     <a type="button" class="btn btn-outline-secondary" href="{{route("modelos.create",$informacion["Id"])}}">
                         Crear modelo
                     </a>
-                    
+
                 </div>
                 <div class="col-md-5 text-center">
-                    
+
                         <form wire:submit.prevent="importCsv">
                             <div class="input-group">
                             <input class="form-control" type="file" wire:model.change="csv_file" accept=".csv">
                             <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Subir CSV</button>
                             </div>
                         </form>
-                    
+
                 </div>
                 <div class="col-md-12">
                     <br>
@@ -260,14 +260,14 @@
                                     <td>{{ $maquina["ID"] ?? 'N/R' }}</td>
                                     <td>{{ $maquina["FirmwareID"] ?? 'N/E' }}</td>
                                     <td>{{ $maquina["Tipo"] ?? 'No especificado' }}</td>
-                                    
+
                                     <td>
                                         <a type="button" class="btn btn-outline-primary btn-sm" href="{{route("maquinas.view",$maquina["ID"])}}">Visualizar</a>
                                         @if($informacion["Id"]!=1)
                                         <a type="button" class="btn btn-outline-danger btn-sm" wire:click="desvincular({{$index}})">Desvincular</a>
                                         @endif
                                     </td>
-                                    
+
                                 </tr>
                             @endforeach
                             @else
@@ -509,7 +509,7 @@
                 let modal = new bootstrap.Modal(document.getElementById('moveModal'));
                 modal.show();
             });
-    
+
             Livewire.on('cerrarModalMove', () => {
                 let modalEl = document.getElementById('moveModal');
                 let modal = bootstrap.Modal.getInstance(modalEl);
