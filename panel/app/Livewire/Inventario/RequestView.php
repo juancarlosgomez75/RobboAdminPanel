@@ -165,8 +165,31 @@ class RequestView extends Component
         }
     }
 
+    public function finalizarOrden(){
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Cerrar pedido', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
+        //Edito la información
+        $this->pedido->finished_by=Auth::id();
+        $this->pedido->finished_date=now();
+        $this->pedido->finished=True;
+
+        //Si almaceno
+        if($this->pedido->save()){
+            registrarLog("Inventario","Pedidos","Finalizar orden","Ha finalizado el pedido # ".$this->pedido->id,true);
+
+            $this->dispatch('mostrarToast', 'Finalizar orden', 'Se ha finalizado el pedido');
+
+        }else{
+            registrarLog("Inventario","Pedidos","Finalizar orden","Ha intentado finalizar el pedido # ".$this->pedido->id,false);
+            $this->dispatch('mostrarToast', 'Finalizar orden', 'Error finalizando el pedido, contacta con soporte');
+        }
+    }
+
     public function reportarInventario(){
-        
+
         if(Auth::user()->rank < 4){
             $this->dispatch('mostrarToast', 'Reportar inventario', 'Error: No tienes los permisos para ejecutar esta acción');
             return false;

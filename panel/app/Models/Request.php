@@ -17,4 +17,9 @@ class Request extends Model
     {
         return $this->belongsTo(User::class, 'canceled_by', 'id');
     }
+
+    public function finisher_info()
+    {
+        return $this->belongsTo(User::class, 'finished_by', 'id');
+    }
 }

@@ -3,7 +3,7 @@
         .container {
             width: 100%;
         }
-    
+
         .progressbar {
             display: flex;
             justify-content: center;
@@ -12,7 +12,7 @@
             padding: 20px 0; /* Espaciado superior e inferior */
             position: relative;
         }
-    
+
         /* Estilo de los elementos de la barra de progreso */
         .progressbar li {
             list-style: none;
@@ -23,7 +23,7 @@
             gap: 0.5em;
             position: relative;
         }
-    
+
         /* Círculo alrededor del ícono */
         .icon-circle {
             width: 50px;
@@ -36,13 +36,13 @@
             position: relative;
             z-index: 1; /* Asegura que esté encima de la línea */
         }
-    
+
         /* Ícono dentro del círculo */
         .progressbar i {
             font-size: clamp(16px, 1.7vw, 18px);
             color: white; /* Color del ícono */
         }
-    
+
         /* Línea de conexión entre los círculos */
         .progressbar li::after {
             content: "";
@@ -54,17 +54,17 @@
             left: 50%;
             z-index: 0; /* Detrás de los círculos */
         }
-    
+
         /* Elimina la línea del último elemento */
         .progressbar li:last-child::after {
             content: none;
         }
-    
+
         /* Estilos para los pasos completados */
         .progressbar li.current ~ li .icon-circle {
             background-color: #c0c0c0; /* Pasos después del actual en gris */
         }
-    
+
         .progressbar li.current .icon-circle {
             background-color: #D2665A; /* Paso actual en amarillo */
         }
@@ -89,7 +89,7 @@
         .progressbar li:not(.current) span {
             color: #d8a6a1; /* Cambia el color solo en los pasos antes del actual */
         }
-    
+
         /* Línea de conexión verde hasta el paso actual */
         .progressbar li.current ~ li::after {
             background-color: #c0c0c0; /* Mantiene la línea gris después del paso actual */
@@ -163,7 +163,7 @@
                                 @endif
                             </span>
                         </li>
-                        <li @if($pedido->status=="delivered") class="current" @endif>
+                        <li @if($pedido->status=="delivered" && !$pedido->finished) class="current" @endif>
                             <div class="icon-circle">
                                 <i class="fa-solid fa-circle-check"></i>
                             </div>
@@ -265,10 +265,10 @@
                     <p class="card-text">Este es el listado de comentarios de las entregas reportadas.</p>
                     @foreach($deliveryList as $fecha=>$contenido)
                     <p>
-                        <b>{{$fecha}}</b> - 
+                        <b>{{$fecha}}</b> -
                         @if($contenido["inventoried"])
                         <span class="text-success">{{"Reportado en inventario el: ".($contenido["inventoried_date"]??"N/F")." por usuario con id #".$contenido["inventoried_by"]??"N/R"}}</span>
-                        @else 
+                        @else
                         <span class="text-primary">Sin reportar en inventario</span>
                         @endif
                         <br>
@@ -276,6 +276,30 @@
                     </p>
                     @endforeach
                 </div>
+
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de cierre</h5>
+                    <p class="card-text">Esta es la información relacionada con el cierre del pedido</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de cierre</th>
+                                <td>{{$pedido->finished_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién la cerró?</th>
+                                <td>{{$pedido->finisher_info->name." (".$pedido->finisher_info->id." - ".$pedido->finisher_info->username.")"}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+
                 @endif
 
                 <div class="col-md-12 pt-2">
@@ -323,7 +347,7 @@
                                     <td>
                                         @if($pd->internal)
                                         <a href="{{route("inventario.viewedit",$pd->id)}}">#{{$pd->id}}</a>
-                                        @else 
+                                        @else
                                         No
                                         @endif
                                     </td>
@@ -377,6 +401,36 @@
                 </div>
 
             </div>
+
+            @if(!$pendienteInventariar && $pedido->status=="delivered" && !$pedido->finished)
+            <div class="col-md-12 pt-3">
+                <div class="text-center">
+                    <a class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#reportarCierre">Cerrar pedido</a>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="reportarCierre" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportarCierreLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="reportarCierreLabel">Cerrar pedido</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                Al cerrar el pedido, esta no será visible en la pestaña de pedidos de forma inicial, tendrás que buscarlo manualmente en los filtros.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="finalizarOrden()">Confirmar cierre de orden</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            @endif
+
+
         </div>
     </div>
 
