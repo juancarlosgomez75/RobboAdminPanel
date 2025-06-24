@@ -12,11 +12,11 @@
                         <i class="fa-solid fa-plus"></i> Crear
                     </a>
                     @endif
-                    
+
                     <a type="button" class="btn btn-sm action-btn btn-outline-secondary" wire:click="switchFiltros()">
                         <i class="fa-solid fa-filter"></i> Filtros
                     </a>
-                    
+
                 </div>
                 <div class="col-md-12 @if(!$filtrosActivos) hide @endif" id="Filtros">
 
@@ -32,11 +32,13 @@
                         </div>
                         <div class="col-md-2">
                             <select class="custom-input" wire:model.change="filtroEstado">
-                                <option value="" selected>Todos</option>
-                                <option value="canceled">Cancelado</option>
+                                <option value="all" selected>Todos</option>
+                                <option value="availables">Disponibles</option>
+                                <option value="cancelled">Cancelado</option>
                                 <option value="created">Creado</option>
                                 <option value="partial delivery">Entrega parcial</option>
-                                <option value="delivered">Entregado</option>
+                                <option value="delivered">Entregados</option>
+                                <option value="finished">Cerrados</option>
                             </select>
                         </div>
                     </div>
@@ -59,17 +61,21 @@
                                 <tr>
                                     <th scope="row">{{ $pedido->id }}</th>
                                     <td>{{ $pedido->created_at }}</td>
-                                    <td>{{ $pedido->enterprise }}</td> 
+                                    <td>{{ $pedido->enterprise }}</td>
                                     <td>{{ \Carbon\Carbon::parse($pedido->tentative_delivery_date)->toDateString() }}</td>
                                     <td>
-                                        @if($pedido->status=="created")
-                                        <span style="color:#e47d08">Creado</span>
-                                        @elseif($pedido->status=="partial delivery")
-                                        <span style="color:#004a8f">Entrega parcial</span>
-                                        @elseif($pedido->status=="delivered")
-                                        <span style="color:#0ea800">Entregado</span>
-                                        @elseif($pedido->status=="canceled")
-                                        <span style="color:#8f0000">Cancelado</span>
+                                        @if(!$pedido->finished)
+                                            @if($pedido->status=="created")
+                                            <span style="color:#e47d08">Creado</span>
+                                            @elseif($pedido->status=="partial delivery")
+                                            <span style="color:#004a8f">Entrega parcial</span>
+                                            @elseif($pedido->status=="delivered")
+                                            <span style="color:#0ea800">Entregado</span>
+                                            @elseif($pedido->status=="canceled")
+                                            <span style="color:#8f0000">Cancelado</span>
+                                            @endif
+                                        @else
+                                            <span style="color:#9413cf">Cerrada</span>
                                         @endif
                                     </td>
                                     <td>
@@ -82,10 +88,10 @@
                                 <td class="text-center" colspan="6">No se han encontrado pedidos</td>
                             </tr>
                             @endif
-                            
+
                         </tbody>
                     </table>
-                    
+
                 </div>
                 <div class="col-md-12">
                     {{ $pedidos->links() }}
