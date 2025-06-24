@@ -40,6 +40,12 @@ return new class extends Migration
             $table->text('cancellation_reason')->nullable();
             $table->timestamp('cancel_date')->nullable();
 
+            //Finalización
+            $table->unsignedBigInteger('finished_by')->nullable();
+            $table->foreign('finished_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->timestamp('finished_date')->nullable();
+            $table->boolean('finished')->default(False);
+
             //Marcas temporales
             $table->timestamps();
         });

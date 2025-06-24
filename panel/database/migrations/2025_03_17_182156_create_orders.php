@@ -36,7 +36,7 @@ return new class extends Migration
             $table->json("preparation_list")->nullable();
             $table->timestamp('preparation_date')->nullable();
             $table->text('preparation_notes')->nullable();
-            
+
             //Información de envío
             $table->unsignedBigInteger('enlisted_by')->nullable();
             $table->foreign('enlisted_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
@@ -70,6 +70,7 @@ return new class extends Migration
             $table->unsignedBigInteger('finished_by')->nullable();
             $table->foreign('finished_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
             $table->timestamp('finished_date')->nullable();
+            $table->string('internal_code')->nullable();
             $table->boolean('finished')->default(False);
 
             //Marcas temporales
