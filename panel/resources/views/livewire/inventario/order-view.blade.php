@@ -731,6 +731,11 @@
                                 <td>{{$orden->finisher_info->name." (".$orden->finisher_info->id." - ".$orden->finisher_info->username.")"}}</td>
                             </tr>
 
+                            <tr>
+                                <th scope="row">Código de facturación</th>
+                                <td>{{$orden->internal_code}}</td>
+                            </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -754,6 +759,13 @@
                                 <p>
                                     Al cerrar la orden, esta no será visible en la pestaña de órdenes de forma inicial, tendrás que buscarla manualmente en los filtros.
                                 </p>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Código de facturación</label>
+                                    <input class="form-control" rows="3" wire:model="facNumber" />
+                                </div>
+
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

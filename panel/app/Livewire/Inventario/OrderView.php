@@ -9,6 +9,8 @@ use App\Models\ProductInventoryMovement;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
+use function PHPUnit\Framework\isNumeric;
+
 class OrderView extends Component
 {
     public $orden;
@@ -25,6 +27,8 @@ class OrderView extends Component
 
     public $reasonCancel="";
     public $recibirNotas="";
+
+    public $facNumber="";
 
     public function iniciarAlistamiento(){
         //Actualizo el estado
@@ -368,10 +372,16 @@ class OrderView extends Component
             return false;
         }
 
+        if($this->facNumber!="" && !is_numeric($this->facNumber)){
+            $this->dispatch('mostrarToast', 'Terminar orden', 'Error: El código de facturación no es numérico');
+            return false;
+        }
+
         //Edito la información
         $this->orden->finished_by=Auth::id();
         $this->orden->finished_date=now();
         $this->orden->finished=True;
+        $this->orden->internal_code=$this->facNumber;
 
         //Si almaceno
         if($this->orden->save()){

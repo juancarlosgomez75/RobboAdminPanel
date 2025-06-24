@@ -79,7 +79,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a type="button" class="btn btn-outline-secondary btn-sm" href="{{route("pedido.ver",$pedido->id)}}">Ver detalles</a>
+                                        <a type="button" class="btn btn-outline-secondary btn-sm" href="{{route("pedido.ver",$pedido->id)}}" target="_blank">Ver detalles</a>
                                     </td>
                                 </tr>
                             @endforeach

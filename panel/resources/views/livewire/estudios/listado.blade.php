@@ -10,11 +10,11 @@
                     <a href="estudios/crear" class="btn btn-sm action-btn btn-outline-secondary">
                         <i class="fa-solid fa-plus"></i> Crear
                     </a>
-                    
+
                     <a type="button" class="btn btn-sm action-btn btn-outline-secondary" wire:click="switchFiltros()">
                         <i class="fa-solid fa-filter"></i> Filtros
                     </a>
-                    
+
                 </div>
                 <div class="col-md-12 @if(!$filtroOn) hide @endif" id="Filtros">
 
@@ -42,11 +42,11 @@
                                 <th class="w-10" scope="col" style="cursor: pointer;" wire:click="ordenarBy('id')" style="width: 5%;">
                                     @if($ordenarPor=="id")
                                         @if($ordenarDesc)
-                                            <a  class="text-decoration-none text-dark"> 
+                                            <a  class="text-decoration-none text-dark">
                                                 <i class="fa-solid fa-angle-down me-2"></i>
                                             </a>
                                         @else
-                                            <a class="text-decoration-none text-dark"> 
+                                            <a class="text-decoration-none text-dark">
                                                 <i class="fa-solid fa-angle-up me-2"></i>
                                             </a>
                                         @endif
@@ -56,25 +56,25 @@
                                 <th class="w-40" scope="col" style="cursor: pointer;" wire:click="ordenarBy('name')" >
                                     @if($ordenarPor=="name")
                                         @if($ordenarDesc)
-                                            <a  class="text-decoration-none text-dark"> 
+                                            <a  class="text-decoration-none text-dark">
                                                 <i class="fa-solid fa-angle-down me-2"></i>
                                             </a>
                                         @else
-                                            <a class="text-decoration-none text-dark"> 
+                                            <a class="text-decoration-none text-dark">
                                                 <i class="fa-solid fa-angle-up me-2"></i>
                                             </a>
                                         @endif
                                     @endif
-                                    Nombre 
+                                    Nombre
                                 </th>
                                 <th class="w-30" scope="col" style="cursor: pointer;" wire:click="ordenarBy('city')">
                                     @if($ordenarPor=="city")
                                         @if($ordenarDesc)
-                                            <a  class="text-decoration-none text-dark"> 
+                                            <a  class="text-decoration-none text-dark">
                                                 <i class="fa-solid fa-angle-down me-2"></i>
                                             </a>
                                         @else
-                                            <a class="text-decoration-none text-dark"> 
+                                            <a class="text-decoration-none text-dark">
                                                 <i class="fa-solid fa-angle-up me-2"></i>
                                             </a>
                                         @endif
@@ -101,7 +101,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/{{ $dato['Id'] }}">Visualizar</a>
+                                        <a type="button" class="btn btn-outline-primary btn-sm" href="estudio/{{ $dato['Id'] }}" target="_blank">Visualizar</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -114,7 +114,7 @@
                             @endif
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>
