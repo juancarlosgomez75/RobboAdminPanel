@@ -20,6 +20,8 @@ class Viewedit extends Component
     public $activo;
     public $editing=false;
 
+    public $habilitado=true;
+
     public $informacion;
     public $managers;
     public $maquinas;
@@ -658,6 +660,18 @@ class Viewedit extends Component
                 $this->dispatch('mostrarToast', 'Activar estudio', "Error al activar estudio, contacte a soporte");
                 registrarLog("Producción","Estudios","Activar estudio","Se ha intentado activar el estudio #".$this->informacion["Id"],false);
             }
+        }
+    }
+
+    public function habilitarEstudio(){
+        if(true){
+            $this->habilitado=true;
+        }
+    }
+
+    public function deshabilitarEstudio(){
+        if(true){
+            $this->habilitado=false;
         }
     }
 
