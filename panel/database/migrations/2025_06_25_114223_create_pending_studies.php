@@ -17,6 +17,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('id_study');
             $table->unsignedBigInteger('author')->nullable(); // ✅ Debe coincidir con 'id' de ranks
+            $table->enum("environment",["production","development"]);
             $table->foreign('author')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
 
         });

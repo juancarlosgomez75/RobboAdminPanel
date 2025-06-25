@@ -665,9 +665,39 @@ class Viewedit extends Component
     }
 
     public function habilitarEstudio(){
-        if(true){
-            $this->habilitado=true;
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Habilitar estudio', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
         }
+
+        $information=$this->informacion;
+        $information["Active"]=true;
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'CreateUpdateStudy',
+            'Data' => ["UserId" => "1"],
+            "DataStudy"=>$information,
+        ];
+        $data=sendBack($data_send);
+
+        if (isset($data['Status'])){
+            if($data['Status']){
+                $this->activo=False;
+                $this->dispatch('mostrarToast', 'Habilitar estudio', "Se ha habilitado el estudio correctamente");
+                $this->informacion["Active"]=$information["Active"];
+                registrarLog("Producción","Estudios","Habilitar estudio","Se ha habilitado el estudio #".$this->informacion["Id"],true);
+            }else{
+                $this->dispatch('mostrarToast', 'Habilitar estudio', "Error al habilitar estudio, contacte a soporte");
+                registrarLog("Producción","Estudios","Habilitar estudio","Se ha intentado habilitar el estudio #".$this->informacion["Id"],false);
+            }
+        }
+
+        //Lo registro
+        PendingStudy::where('id_study', $this->informacion["Id"])->delete();
+        $this->habilitado=true;
+        $this->activo=True;
     }
 
     public function deshabilitarEstudio(){
@@ -704,8 +734,10 @@ class Viewedit extends Component
         $pendiente=new PendingStudy();
         $pendiente->id_study=$this->informacion["Id"];
         $pendiente->author=Auth::user()->id;
+        $pendiente->environment=session('API_used',"development");
         $pendiente->save();
         $this->habilitado=false;
+        $this->activo=false;
     }
 
     public function mount($Informacion,$Managers,$Maquinas,$Ciudades){
@@ -716,6 +748,7 @@ class Viewedit extends Component
 
 
         $this->activo=$Informacion["Active"];
+        $this->habilitado=!PendingStudy::where("id_study", "=", $Informacion['Id'])->where("environment","=",session('API_used',"development"))->exists();
         //Cargo la información
         $this->nombre=$this->informacion["StudyName"] ?? "No definido";
         $this->razonsocial=$this->informacion["RazonSocial"] ?? "No definida";
