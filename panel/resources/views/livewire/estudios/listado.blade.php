@@ -29,6 +29,7 @@
                             <select class="form-select form-select-sm" wire:model.change="filtroEstado">
                                 <option value="-1">Todos</option>
                                 <option value="0">Inactivos</option>
+                                <option value="2">Pago pendiente</option>
                                 <option value="1">Activos</option>
                             </select>
                         </div>
@@ -102,7 +103,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($dato["Active"] )
+                                        @if(!$dato["StudyPending"] )
                                         <i class="fa-solid fa-plug-circle-check" style="color: green;"></i>
                                         @else
                                         <i class="fa-solid fa-plug-circle-xmark" style="color: grey;"></i>

@@ -3,6 +3,7 @@
 namespace App\Livewire\Estudios;
 
 use App\Models\MachineHistory;
+use App\Models\PendingStudy;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -670,9 +671,41 @@ class Viewedit extends Component
     }
 
     public function deshabilitarEstudio(){
-        if(true){
-            $this->habilitado=false;
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Deshabilitar estudio', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
         }
+
+        $information=$this->informacion;
+        $information["Active"]=false;
+
+        $data_send=[
+            'Branch' => 'Server',
+            'Service' => 'PlatformUser',
+            'Action' => 'CreateUpdateStudy',
+            'Data' => ["UserId" => "1"],
+            "DataStudy"=>$information,
+        ];
+        $data=sendBack($data_send);
+
+        if (isset($data['Status'])){
+            if($data['Status']){
+                $this->activo=False;
+                $this->dispatch('mostrarToast', 'Deshabilitar estudio', "Se ha deshabilitado el estudio correctamente");
+                $this->informacion["Active"]=$information["Active"];
+                registrarLog("Producción","Estudios","Deshabilitar estudio","Se ha deshabilitado el estudio #".$this->informacion["Id"],true);
+            }else{
+                $this->dispatch('mostrarToast', 'Deshabilitar estudio', "Error al deshabilitar estudio, contacte a soporte");
+                registrarLog("Producción","Estudios","Deshabilitar estudio","Se ha intentado deshabilitar el estudio #".$this->informacion["Id"],false);
+            }
+        }
+
+        //Lo registro
+        $pendiente=new PendingStudy();
+        $pendiente->id_study=$this->informacion["Id"];
+        $pendiente->author=Auth::user()->id;
+        $pendiente->save();
+        $this->habilitado=false;
     }
 
     public function mount($Informacion,$Managers,$Maquinas,$Ciudades){

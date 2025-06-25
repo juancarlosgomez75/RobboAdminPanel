@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Estudios;
 
+use App\Models\PendingStudy;
 use Livewire\Component;
 use Illuminate\Support\Collection;
 
@@ -25,24 +26,31 @@ class Listado extends Component
                 $this->ordenarDesc = true;
             }else{
                 $this->ordenarDesc = !$this->ordenarDesc;
-            } 
+            }
         }
     }
 
     public function switchFiltros()
     {
         $this->filtrosActivos = !$this->filtrosActivos;
-        
+
         if (!$this->filtrosActivos) {
             $this->filtroNombre = "";
             $this->filtroCiudad = "";
         }
     }
-    
+
 
     public function mount($datos)
     {
+        //Recorro loa datos
+            foreach($datos as $index => $dato){
+                $pendiente = PendingStudy::where("id_study", "=", $dato['Id'])->exists();
+                $datos[$index]["StudyPending"] = $pendiente;
+            }
+
         $this->datos = $datos;
+
     }
 
 
@@ -52,10 +60,29 @@ class Listado extends Component
         $filtrados = array_filter($this->datos, function ($dato) {
             $nombreCoincide = empty($this->filtroNombre) || stripos($dato["StudyName"], $this->filtroNombre) !== false;
             $ciudadCoincide = empty($this->filtroCiudad) || stripos($dato["City"], $this->filtroCiudad) !== false;
-            
-            // Convertimos filtroEstado en booleano si es 0 o 1
-            $estadoFiltrado = $this->filtroEstado == "-1" ? null : (bool) $this->filtroEstado;
-            $estadoCoincide = is_null($estadoFiltrado) || (isset($dato["Active"]) && (bool) $dato["Active"] === $estadoFiltrado);
+
+            // // Convertimos filtroEstado en booleano si es 0 o 1
+            // $estadoFiltrado = $this->filtroEstado == "-1" ? null : (bool) $this->filtroEstado;
+
+            // $estadoCoincide = is_null($estadoFiltrado) || (isset($dato["Active"]) && (bool) $dato["Active"] === $estadoFiltrado);
+
+            // Evaluamos según el estado:
+            if ($this->filtroEstado == "-1") {
+                $estadoCoincide = true; // Mostrar todos
+            } elseif ($this->filtroEstado == "0") {
+                // Inactivos y que no estén en pendiente
+                $estadoCoincide = isset($dato["Active"], $dato["StudyPending"]) && !$dato["Active"] && !$dato["StudyPending"];
+            } elseif ($this->filtroEstado == "1") {
+                // Activos o que estén en pendiente
+                $estadoCoincide = (isset($dato["Active"]) && $dato["Active"]) || (isset($dato["StudyPending"]) && $dato["StudyPending"]);
+            } elseif ($this->filtroEstado == "2") {
+                // Solo los pendientes
+                $estadoCoincide = isset($dato["StudyPending"]) && $dato["StudyPending"];
+            } else {
+                $estadoCoincide = true; // Valor inesperado, por seguridad se muestran todos
+            }
+
+
             return $nombreCoincide && $ciudadCoincide  && $estadoCoincide;
         });
 
