@@ -82,6 +82,7 @@
                                     Ciudad
                                 </th>
                                 <th></th>
+                                <th></th>
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
@@ -98,6 +99,13 @@
                                         <i class="fa-solid fa-circle-check" style="color: green;"></i>
                                         @else
                                         <i class="fa-solid fa-circle-xmark" style="color: red;"></i>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($dato["Active"] )
+                                        <i class="fa-solid fa-plug-circle-check" style="color: green;"></i>
+                                        @else
+                                        <i class="fa-solid fa-plug-circle-xmark" style="color: grey;"></i>
                                         @endif
                                     </td>
                                     <td>
