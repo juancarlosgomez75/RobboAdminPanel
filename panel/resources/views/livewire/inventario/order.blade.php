@@ -13,6 +13,7 @@
     </div>
     @endif --}}
     {{-- {{json_encode($listProducts)}} --}}
+    {{-- {{ json_encode($razonesRecogida) }} --}}
     <div class="card shadow-custom">
         <div class="card-body">
             <div class="row">
@@ -76,18 +77,35 @@
                             <input type="tel" class="form-control" placeholder="Ejemplo: +573002000000" wire:model="phone" @if($studyFind=="1") disabled @endif >
                         </div>
                         @endif
-                    </div> 
+                    </div>
                 </div>
                 <div class="col-md-12 pt-3 mb-2">
                     <h5 class="card-title">Tipo de orden</h5>
                     <p class="card-text">Indique aquí la naturaleza de esta orden</p>
-                    
-                    <select class="form-select" wire:model="tipoOrden">
+
+                    <select class="form-select" wire:model.change="tipoOrden">
                         <option disabled value="0">Seleccione una opción</option>
                         <option value="-1">Envío: Los items se descontarán del inventario</option>
                         <option value="1">Recogida: Los items se sumarán al inventario</option>
                     </select>
                 </div>
+                @if($tipoOrden=="1")
+
+                <div class="col-md-12 pt-3 mb-2">
+                    <h5 class="card-title">Razón de recogida</h5>
+                    <p class="card-text">Seleccione la razón por la cual se está realizando esta recogida</p>
+
+                    <select class="form-select" wire:model="razonRecoleccion">
+                        <option disabled value="0">Seleccione una opción</option>
+                        @if(!$razonesRecogida->isEmpty())
+                            @foreach($razonesRecogida as $razon)
+                            <option value="{{ $razon->id }}">{{$razon->reason}}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+                @endif
+
                 <div class="col-md-12 pt-3">
                     <h5 class="card-title">Listado de productos</h5>
                     <p class="card-text">Este es el listado de elementos que se deberán enviar en esta orden.</p>
@@ -128,7 +146,7 @@
                     @if(!$addingProduct)
                     <div class="text-center">
                         <a class="btn btn-outline-secondary btn-sm" wire:click="startAdding()">Añadir item</a>
-                    </div>    
+                    </div>
                     @else
                     <div class="row">
                         <div class="col-md-8 mb-3">
@@ -182,7 +200,7 @@
                 <div class="col-md-12 pt-3">
                     <h5 class="card-title">Observaciones</h5>
                     <p class="card-text">Aquí podrás añadir las observaciones que consideres importantes para esta orden.</p>
-                    
+
                     <div class="mb-3">
                         <textarea class="form-control" rows="3" wire:model="details"></textarea>
                     </div>
@@ -191,7 +209,7 @@
                 <div class="col-md-12">
                     <div class="text-center">
                         <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Registrar orden en sistema</a>
-                    </div>   
+                    </div>
                 </div>
             </div>
         </div>

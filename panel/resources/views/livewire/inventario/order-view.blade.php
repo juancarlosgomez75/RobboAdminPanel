@@ -325,6 +325,12 @@
                                 <th scope="row">Tipo de orden</th>
                                 <td>{{($orden->type=="shipping") ? "Envío" : "Recogida"}}</td>
                             </tr>
+                            @if($orden->type=="collection")
+                            <tr>
+                                <th scope="row">Razón de recogida</th>
+                                <td>{{$orden->collection_reason_info->reason ?? "No especificada"}}</td>
+                            </tr>
+                            @endif
 
                         </tbody>
                     </table>

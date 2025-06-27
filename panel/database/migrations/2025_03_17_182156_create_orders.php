@@ -73,6 +73,10 @@ return new class extends Migration
             $table->string('internal_code')->nullable();
             $table->boolean('finished')->default(False);
 
+            //El id de la razón
+            $table->unsignedBigInteger('collection_reason')->nullable();
+            $table->foreign('collection_reason')->references('id')->on('collection_reasons')->onDelete('set null')->onUpdate('cascade');
+
             //Marcas temporales
             $table->timestamps();
 

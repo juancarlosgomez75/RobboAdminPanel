@@ -43,6 +43,11 @@ class ProductOrder extends Model
         return $this->belongsTo(User::class, 'finished_by', 'id');
     }
 
+    public function collection_reason_info()
+    {
+        return $this->belongsTo(CollectionReason::class, 'collection_reason', 'id');
+    }
+
     public function courier_info()
     {
         return $this->belongsTo(Courier::class, 'enterprise', 'id');

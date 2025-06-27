@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Inventario;
 
+use App\Models\CollectionReason;
 use App\Models\ProductOrder;
 use App\Models\Product;
 use App\Models\ProductInventoryMovement;
@@ -40,6 +41,8 @@ class Order extends Component
 
     public $searchResults;
     public $finded=false;
+
+    public $razonRecoleccion="0";
 
     //El elemento de updated
     public function updatedtoStudy($valor)
@@ -300,6 +303,14 @@ class Order extends Component
             return false;
         }
 
+        //Valido la razon de recogida
+        if($this->tipoOrden=="1"){
+            if(!CollectionReason::find($this->razonRecoleccion) || $this->razonRecoleccion=="0"){
+                $this->dispatch('mostrarToast', 'Crear orden', 'La razón de recolección no es válida o no se ha seleccionado');
+                return false;
+            }
+        }
+
         //Ahora valido las observaciones
         if (!empty(trim($this->details)) && preg_match('/<[^>]*>/', $this->details)){
             $this->dispatch('mostrarToast', 'Crear orden', 'Las observaciones no son válidas');
@@ -353,6 +364,10 @@ class Order extends Component
             $orden->created_by=Auth::id();
             $orden->creation_notes=strip_tags($this->details);
             $orden->creation_list=json_encode($this->listProducts);
+
+            if($this->tipoOrden=="1"){
+                $orden->collection_reason=$this->razonRecoleccion;
+            }
 
             //Intento guardar
             if($orden->save()){
@@ -417,6 +432,10 @@ class Order extends Component
     }
     public function render()
     {
-        return view('livewire.inventario.order');
+        //COnsulto las razones por las cuales se hace la recogida
+        $razonesRecogida=CollectionReason::all();
+        // dd($razonesRecogida);
+
+        return view('livewire.inventario.order',compact("razonesRecogida"));
     }
 }

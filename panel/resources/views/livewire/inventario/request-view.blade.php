@@ -259,7 +259,7 @@
                     </table>
                 </div>
                 @endif
-                                @if(!is_null($deliveryList))
+                @if(!is_null($deliveryList))
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de entregas</h5>
                     <p class="card-text">Este es el listado de comentarios de las entregas reportadas.</p>
@@ -277,6 +277,7 @@
                     @endforeach
                 </div>
 
+                @if($pedido->finished)
                 <div class="col-md-12 pt-2">
                     <h5 class="card-title">Información de cierre</h5>
                     <p class="card-text">Esta es la información relacionada con el cierre del pedido</p>
@@ -297,7 +298,7 @@
                         </tbody>
                     </table>
                 </div>
-
+                @endif
 
 
                 @endif
