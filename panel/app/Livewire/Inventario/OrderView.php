@@ -372,16 +372,16 @@ class OrderView extends Component
             return false;
         }
 
-        if($this->facNumber!="" && !is_numeric($this->facNumber)){
-            $this->dispatch('mostrarToast', 'Terminar orden', 'Error: El código de facturación no es numérico');
-            return false;
-        }
+        // if($this->facNumber!="" && !is_numeric($this->facNumber)){
+        //     $this->dispatch('mostrarToast', 'Terminar orden', 'Error: El código de facturación no es numérico');
+        //     return false;
+        // }
 
         //Edito la información
         $this->orden->finished_by=Auth::id();
         $this->orden->finished_date=now();
         $this->orden->finished=True;
-        $this->orden->internal_code=$this->facNumber;
+        $this->orden->internal_code=$this->facNumber??"";
 
         //Si almaceno
         if($this->orden->save()){

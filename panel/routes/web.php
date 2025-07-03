@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MachineController;
@@ -16,7 +17,7 @@ use Livewire\Livewire;
 
 Livewire::setUpdateRoute(function ($handle) {
     return Route::get(env('LIVEWIRE_CUSTOM_URL', '/RobboAdminPanel/panel/public/livewire/update'), $handle);
-    
+
 });
 
 Route::get('/', function () {
@@ -34,7 +35,7 @@ Route::middleware(['auth','checkuserstatus'])->controller(StudyController::class
 
     Route::middleware('checkrank:4')->get('/panel/estudio/manager/crear/{idestudio}', 'manager_create')->name('manager.create');
     Route::middleware('checkrank:4')->get('/panel/estudio/manager/{idmanager}', 'manager_viewedit')->name('manager.ver');
-    
+
     Route::get('/panel/estudio/{idestudio}', 'viewedit')->name('estudio.ver');
 
     Route::middleware('checkrank:4')->get('/panel/reportes', 'report')->name('reportes');
@@ -90,6 +91,15 @@ Route::middleware(['auth','checkuserstatus'])->middleware('checkrank:2')->contro
     Route::get('/generar-pdf', 'generatePdf');
     Route::post('/reporte-pdf', 'generateReport')->name('reporte.pdf');
     Route::get('/reporte-get', 'getReport')->name('reporte.get');
+});
+
+// Route::controller(ApiController::class)->group(function(){
+//     //Productos
+//     Route::post('/api/dashboard', 'dashboard')->name('api.dashboard');
+// });
+
+Route::prefix('api')->middleware('api')->group(function () {
+    Route::post('/dashboard', [ApiController::class, 'dashboard']);
 });
 
 

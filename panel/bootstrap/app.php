@@ -16,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'checkrank' => CheckRank::class,
             'checkuserstatus' => CheckUserStatus::class,
+
+        ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

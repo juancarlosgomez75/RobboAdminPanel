@@ -64,8 +64,14 @@
                                 <th scope="col">Estudio</th>
                                 <th scope="col">Destinatario</th>
                                 <th scope="col">Tipo</th>
+
+                                @if($filtroEstado=="finished")
+                                <th scope="col">#int</th>
+                                @endif
+
                                 <th scope="col">Estado</th>
                                 <th scope="col" style="width: 15%;"></th>
+
                             </tr>
                         </thead>
                         <tbody class="align-middle">
@@ -78,6 +84,11 @@
                                     <td>{{ $pedido->study_name}}</td>
                                     <td>{{ $pedido->name }}</td>
                                     <td>{{ ($pedido->type=="shipping") ? "Envío":"Recogida" }}</td>
+
+                                    @if($filtroEstado=="finished")
+                                        <td scope="col">{{$pedido->internal_code}}</td>
+                                    @endif
+
                                     <td>
                                         @if(!$pedido->finished)
                                             @if($pedido->status=="created")
