@@ -69,7 +69,7 @@ if (!function_exists('sendBack')) {
         ])->post($api, $data);
 
         // Obtener la respuesta como string comprimido
-        $compressedResponse = $response->body(); 
+        $compressedResponse = $response->body();
 
         // Descomprimir la respuesta
         $decompressedResponse = decompressString($compressedResponse);
@@ -148,18 +148,18 @@ if (!function_exists('generateReportPDF')) {
                 $data["CobrosModelos"][$modelo]["CUM"]=number_format(($valores["Acciones"]["CUM"]["Cantidad"] ?? 0)*$data["Montos"]["CUM"], 2);
                 $data["CobrosModelos"][$modelo]["SCUM"]=number_format(($valores["Acciones"]["SCUM"]["Cantidad"] ?? 0)*$data["Montos"]["SCUM"], 2);
                 $data["CobrosModelos"][$modelo]["XCUM"]=number_format(($valores["Acciones"]["XCUM"]["Cantidad"] ?? 0)*$data["Montos"]["XCUM"], 2);
-                
+
                 $data["CobrosModelos"][$modelo]["Total"]=array_sum($data["CobrosModelos"][$modelo]);
             }
         }
         ini_set('max_execution_time', 300); // 5 minutos
         ini_set('memory_limit', '512M');
-        
+
         // Genera el PDF con los datos
         $pdf = Pdf::loadView('report_template', compact('data','fechaActual','fechaInicio','fechaFin'));
-    
+
         return $pdf->output();
-    
+
     }
-    
+
 }
