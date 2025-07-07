@@ -104,10 +104,6 @@
                             @if(!empty($paginas))
 
                             @foreach ($paginas as $indice => $Page)
-                                @php
-                                     $seleccionActual = $Page['NickPage'] ?? '-1';
-
-                                @endphp
 
                                 <tr>
                                     <td>{{ $indice + 1 }}</td>
