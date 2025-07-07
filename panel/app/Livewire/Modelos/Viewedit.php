@@ -281,7 +281,7 @@ class Viewedit extends Component
         // $this->paginas[$index]["NickName"]="Index es: ".$index;
         if($this->editing){
             unset($this->paginas[$index]); // Elimina el elemento del array
-            $this->paginas = array_values($this->paginas); // Reorganiza los índices
+            // $this->paginas = array_values($this->paginas); // Reorganiza los índices
         }
 
     }
@@ -452,6 +452,7 @@ class Viewedit extends Component
         $this->active= $ModelInformation["ModelActive"];
         $this->estudioactual = $StudyInformation["Id"];
         $this->manageractual = $ManagerInformation["Id"];
+
         $this->paginas=$ModelInformation["ModelPages"];
 
         //Trato de obtener los estudios
@@ -500,8 +501,13 @@ class Viewedit extends Component
             }
         }
 
+        $paginasUsadas = [];
+
+        foreach($this->paginas as $indice => $Page){
+            $paginasUsadas[] = $Page['NickPage'];
+        }
 
 
-        return view('livewire.modelos.viewedit',compact("rangos"));
+        return view('livewire.modelos.viewedit',compact("rangos","paginasUsadas"));
     }
 }
