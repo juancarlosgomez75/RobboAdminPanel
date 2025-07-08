@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BusinessModelHistory;
 use App\Models\MachineHistory;
+use Illuminate\Bus\BusServiceProvider;
 use Illuminate\Http\Request;
 
 class ApiController extends Controller
@@ -86,6 +88,11 @@ class ApiController extends Controller
                                 ];
                             }
 
+                            //COnsulto si hay elementos o no en compra fija
+                            $compra=BusinessModelHistory::where("id_study", $data['Data']['Machines'][0]['StudyData']["Id"] ?? null)
+                                ->where("environment", session('API_used', "production"))
+                                ->exists();
+
                             return response()->json([
                                 'success' => true,
                                 'command'=>'getMachineInformation',
@@ -93,7 +100,8 @@ class ApiController extends Controller
                                 'data' => [
                                     'machineFirmware' => $firmwareMaquina,
                                     'mantenimientos'=>$mantenimientos,
-                                    'autoclean'=>$data['Data']['Machines'][0]['AutoClean'] ?? []
+                                    'autoclean'=>$data['Data']['Machines'][0]['AutoClean'] ?? [],
+                                    'studymodel'=>$compra
                                 ],
                                 // 'machineFirmware'=>$datas['machine'],
                                 // 'ranks'=>$datamod["Data"]["ModelData"]["RangeValues"]??[]

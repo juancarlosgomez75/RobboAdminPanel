@@ -31,7 +31,7 @@ class MachineController extends Controller
             'Data' => ["UserId" => "1"]
         ];
         $generalinformation=sendBack($data_send);
-        
+
         // //Genero la petición de informacion
         // $response = Http::withHeaders([
         //     'Authorization' => 'AAAA'
@@ -80,9 +80,9 @@ class MachineController extends Controller
 
             }
             return abort(400, 'Error de status');
-            
+
         }
-        
+
         return abort(404, 'No se ha encontrado este recurso');
 
     }
@@ -111,7 +111,7 @@ class MachineController extends Controller
             'Data' => ["UserId" => "1"]
         ];
         $generalinformation=sendBack($data_send);
-        
+
         // //Genero la petición de informacion
         // $response = Http::withHeaders([
         //     'Authorization' => 'AAAA'
@@ -163,9 +163,9 @@ class MachineController extends Controller
                 return view("maquinas.create",["information"=>$data["ListStudyData"]]);
             }
             return abort(400, 'Error de status');
-            
+
         }
-        
+
         return abort(404, 'No se ha encontrado este recurso');
 
     }
@@ -194,6 +194,8 @@ class MachineController extends Controller
         ];
         $data=sendBack($data_send);
 
+        // dd($data);
+
         // return json_encode($data);
 
         // return view("maquinas.view");
@@ -219,9 +221,9 @@ class MachineController extends Controller
                 return view("maquinas.view",["Maquina"=>$data["Data"]["Machines"][0]]);
             }
             return abort(400, 'Error de status');
-            
+
         }
-        
+
         return abort(404, 'No se ha encontrado este recurso');
 
     }
