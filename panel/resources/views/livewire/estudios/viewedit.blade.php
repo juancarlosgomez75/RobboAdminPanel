@@ -173,10 +173,41 @@
                         <thead>
                             <tr class="align-middle">
                                 <th scope="col">#</th>
-                                <th scope="col">Fecha</th>
+                                <th scope="col">Fecha de inicio</th>
                                 <th scope="col">Autor</th>
+                                <th scope="col">Fecha creación</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
+                        <tbody>
+                            @if(!$historialCompra->isEmpty())
+                            @foreach($historialCompra as $index=>$historial)
+                               <tr>
+                                    <td>
+                                        {{ $index+1 }}
+                                    </td>
+                                    <td>
+                                        {{ $historial->start_date }}
+                                    </td>
+                                    <td>
+                                        {{ $historial->author_info->name }}
+                                    </td>
+                                    <td>
+                                        {{ $historial->created_at }}
+                                    </td>
+                                    <td>
+                                        <a type="button" class="btn btn-outline-danger btn-sm" wire:click="eliminarModeloCompras({{ $historial->id }})">Eliminar</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5">
+                                        No hay movimientos registrados
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
                     </table>
 
 

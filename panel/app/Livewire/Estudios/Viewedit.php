@@ -12,7 +12,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Validator;
 
 use Carbon\Carbon;
-
+use Illuminate\Bus\BusServiceProvider;
 
 class Viewedit extends Component
 
@@ -793,6 +793,12 @@ class Viewedit extends Component
     }
 
     public function regOption(){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Editar estudio', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
         //Valido el campo de fecha
         if (empty($this->fechaNuevoModelo) || !Carbon::hasFormat($this->fechaNuevoModelo, 'Y-m-d') ) {
             $this->dispatch('mostrarToast', 'Registrar opción de compra', 'La fecha ingresada no es válida');
@@ -811,14 +817,38 @@ class Viewedit extends Component
             $this->dispatch('mostrarToast', 'Registrar opción de compra', 'Se ha registrado el cambio de modelo');
             $this->buscarHistorialModeloCompras();
             $this->fechaNuevoModelo="";
+
+            registrarLog("Producción","Estudios","Registrar modelo de venta","Se ha registrado el modelo: ".json_encode($newModel),true);
+
         }else{
             $this->dispatch('mostrarToast', 'Registrar opción de compra', 'Error registrando el cambio de modelo');
+            registrarLog("Producción","Estudios","Registrar modelo de venta","Se ha intentado registrar el modelo: ".json_encode($newModel),false);
+        }
+    }
+
+    public function eliminarModeloCompras($id){
+
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Editar estudio', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
+        $modelo = BusinessModelHistory::find($id);
+
+        if ($modelo) {
+            $modelo->delete();
+            $this->dispatch('mostrarToast', 'Eliminar modelo de venta', 'Se ha eliminado el modelo satisfactoriamente');
+            registrarLog("Producción","Estudios","Eliminar modelo de venta","Se ha eliminado el modelo: ".json_encode($modelo),true);
+            $this->buscarHistorialModeloCompras();
+        } else {
+            $this->dispatch('mostrarToast', 'Eliminar modelo de venta', 'Error eliminando el modelo');
+            registrarLog("Producción","Estudios","Eliminar modelo de venta","Se ha intentado eliminar el modelo: ".json_encode($modelo),false);
         }
     }
 
     public function buscarHistorialModeloCompras(){
         //Genero la búsqueda
-        $this->historialCompra=BusinessModelHistory::where("id_study", "=", $this->informacion['Id'])->get();
+        $this->historialCompra=BusinessModelHistory::where("id_study", "=", $this->informacion['Id'])->where("environment","=",session('API_used',"production"))->get();
     }
 
     public function render()
