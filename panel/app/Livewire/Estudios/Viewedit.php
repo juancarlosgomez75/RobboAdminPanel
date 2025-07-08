@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Estudios;
 
+use App\Models\BusinessModelHistory;
 use App\Models\MachineHistory;
 use App\Models\PendingStudy;
 use Livewire\Component;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Validator;
+
+use Carbon\Carbon;
 
 
 class Viewedit extends Component
@@ -29,6 +32,10 @@ class Viewedit extends Component
     public $ciudades;
 
     public $modelos=[];
+
+    public $historialCompra;
+
+    public $fechaNuevoModelo="";
 
 
     //Variables
@@ -63,8 +70,7 @@ class Viewedit extends Component
             }
         }
     }
-    public function importCsv()
-    {
+    public function importCsv(){
         //Reinicio los registros
 
         $this->loadedModels=[];
@@ -749,6 +755,9 @@ class Viewedit extends Component
 
         $this->activo=$Informacion["Active"];
         $this->habilitado=!PendingStudy::where("id_study", "=", $Informacion['Id'])->where("environment","=",session('API_used',"development"))->exists();
+
+        $this->buscarHistorialModeloCompras();
+
         //Cargo la información
         $this->nombre=$this->informacion["StudyName"] ?? "No definido";
         $this->razonsocial=$this->informacion["RazonSocial"] ?? "No definida";
@@ -781,6 +790,35 @@ class Viewedit extends Component
 
     public function activarEdicion(){
         $this->editing=true;
+    }
+
+    public function regOption(){
+        //Valido el campo de fecha
+        if (empty($this->fechaNuevoModelo) || !Carbon::hasFormat($this->fechaNuevoModelo, 'Y-m-d') ) {
+            $this->dispatch('mostrarToast', 'Registrar opción de compra', 'La fecha ingresada no es válida');
+            return false;
+        }
+
+        //Genero el registro
+        $newModel=new BusinessModelHistory();
+        $newModel->id_study=$this->informacion['Id'];
+        $newModel->start_date=$this->fechaNuevoModelo;
+        $newModel->author=Auth::user()->id;
+        $newModel->environment=session('API_used',"production");
+
+        //Intento almacenar
+        if($newModel->save()){
+            $this->dispatch('mostrarToast', 'Registrar opción de compra', 'Se ha registrado el cambio de modelo');
+            $this->buscarHistorialModeloCompras();
+            $this->fechaNuevoModelo="";
+        }else{
+            $this->dispatch('mostrarToast', 'Registrar opción de compra', 'Error registrando el cambio de modelo');
+        }
+    }
+
+    public function buscarHistorialModeloCompras(){
+        //Genero la búsqueda
+        $this->historialCompra=BusinessModelHistory::where("id_study", "=", $this->informacion['Id'])->get();
     }
 
     public function render()

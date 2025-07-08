@@ -163,6 +163,30 @@
                     </a>
                 </div>
                 @endif
+
+                <div class="col-md-12">
+                    <br>
+                    <h5 class="card-title">Historial de opción de compra</h5>
+                    <p class="card-text">Este es el historial de opción de compra que hay en el sistema</p><br>
+
+                    <table class="table">
+                        <thead>
+                            <tr class="align-middle">
+                                <th scope="col">#</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Autor</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+                </div>
+                <div class="col-md-12 text-center">
+                    <a type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#registrarOpcion">
+                        Registrar una opción de compra
+                    </a>
+                </div>
+
                 <div class="col-md-12">
                     <br>
                     <h5 class="card-title">Modelos registrados</h5>
@@ -298,6 +322,28 @@
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="registrarOpcion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registrarOpcionLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="registrarOpcionLabel">Registrar opción de compra</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fecha de inicio</label>
+                    <input type="date" class="form-control" wire:model="fechaNuevoModelo">
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="regOption()">Registrar opción</button>
+            </div>
+        </div>
         </div>
     </div>
 
