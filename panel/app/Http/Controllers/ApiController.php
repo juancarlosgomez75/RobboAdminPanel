@@ -291,6 +291,66 @@ class ApiController extends Controller
 
                 break;
 
+            case 'refreshModelCache':
+
+                //Valido que los campos de mi interés lleguen
+                if(!isset($datas['data']['model'])){
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Faltan campos en la consulta',
+                        'timestamp' => now()->toDateTimeString(),
+                    ]);
+                }
+
+                //Obtengo la información de la máquina y modelo
+                $modelId=$datas['data']['model'];
+
+                //Genero la consulta para obtener los rangos del modelo
+                $data_sendmod=[
+                    'Branch' => 'Server',
+                    'Service' => 'SelfModels',
+                    'Action' => 'ReloadConfig',
+                    'Data' => [
+                        "UserId" => "1",
+                        "ModelData"=>[
+                            "ModelId"=>$modelId
+                        ],
+                        "UserData"=>[
+                            "Id"=>"1"
+                        ]
+                    ]
+
+
+                ];
+                $data=sendBack(data:$data_sendmod,produccionForced: true);
+
+                //Consulto si se obtuvieron todos los valores
+                if (isset($data['Status'])) {
+                    //Analizo si el status es true
+                    if($data["Status"]){
+                        return response()->json([
+                            'success' => true,
+                            'command'=>'refreshModelCache',
+                            'timestamp' => now()->toDateTimeString(),
+                            'data' => [
+                                'modelId'=>$modelId
+                            ],
+                            // 'other'=>$data
+                        ]);
+                    }
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No fue posible obtener la información',
+                    'command'=>'refreshModelCache',
+                    'data' => [
+                        'modelId'=>$modelId
+                    ],
+                    'timestamp' => now()->toDateTimeString(),
+                ], 403);
+
+                break;
             default:
                 return response()->json([
                     'success' => false,

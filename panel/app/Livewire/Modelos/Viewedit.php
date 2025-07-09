@@ -291,6 +291,46 @@ class Viewedit extends Component
 
     }
 
+    public function refrescarCache(){
+
+            //Cargo la data
+            $enviar=[
+                'Branch' => 'Server',
+                'Service' => 'SelfModels',
+                'Action' => 'ReloadConfig',
+                "Data"=>[
+                    "UserId"=>"1",
+                    "ModelData"=>[
+                        "ModelId"=>$this->ModelInformation["ModelId"],
+                    ],
+                    "UserData"=>[
+                        "Id"=>"1"
+                    ]
+                ],
+            ];
+
+            $data=sendBack($enviar);
+
+            if (isset($data['Status'])) {
+                if($data['Status']){
+                    $this->dispatch('mostrarToast', 'Refrescar caché', "Se ha refrescado el caché de la modelo");
+                    $this->editing=false;
+
+                    registrarLog("Producción","Modelos","Refrescar caché","Se ha refrescado al modelo #".$this->ModelInformation["ModelId"],true);
+
+                    return;
+
+                }else{
+
+                    $this->dispatch('mostrarToast', 'Refrescar caché', "Ha ocurrido un error durante la operación: ".($data['Error']??"Error no reportado"));
+                    registrarLog("Producción","Modelos","Refrescar caché","Se ha intentado refrescar al modelo #".$this->ModelInformation["ModelId"],false);
+                    return;
+                }
+            }
+
+            $this->dispatch('mostrarToast', 'Refrescar caché', "Ha ocurrido un error durante la operación, contacte a soporte");
+    }
+
     public function obtenerEstudios(){
 
         // //Genero la petición para obtener la información

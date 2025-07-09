@@ -161,6 +161,9 @@
                         Activar modelo
                     </button>
                     @endif
+                    <button type="button" class="btn btn-outline-secondary ms-2" wire:click="refrescarCache()">
+                        Refrescar caché
+                    </button>
                 </div>
 
                 <div class="col-md-12 mt-4">
