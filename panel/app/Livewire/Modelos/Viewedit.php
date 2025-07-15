@@ -134,7 +134,7 @@ class Viewedit extends Component
                         "ModelActive"=>$this->active,
                         "ModelPersonalCm"=>($this->usecustomname == "1"),
                         "ModelPersonalCmName"=>$this->customname,
-                        "ModelPages"=>$this->paginas,
+                        "ModelPages"=>array_values($this->paginas),
                     ],
                     "UserData"=>[
                         "Id"=>$this->manageractual
