@@ -39,7 +39,7 @@ class ProcesarConsultaReportes implements ShouldQueue
         if($API_URL=="production"){
             $this->API_PROD=True;
         }
-        
+
 
         Cache::forget("reportProgress_".$userId);
     }
@@ -112,6 +112,17 @@ class ProcesarConsultaReportes implements ShouldQueue
                                 }
                             }
                             if(($rentaCompartida && $log["Tokens"]>=5) || !$rentaCompartida){
+
+                                //Salto los test
+                                if (strpos($log["ModelData"]["ModelUserName"], "test") !== false &&
+                                    strpos($log["ModelData"]["ModelUserName"], "labtest") === false) {
+                                    continue;
+                                }
+
+                                //Salto sucker
+                                if ($log["ModelData"]["ModelUserName"]=="sucker_drool"){
+                                    continue;
+                                }
 
                                 $maquina=$log["Machine"]["FirmwareID"];
                                 //Analizo si ya tengo registrada la maquina o no
@@ -244,7 +255,7 @@ class ProcesarConsultaReportes implements ShouldQueue
                                 $this->studies[$index]["CobrosModelos"][$modelo]["CUM"]=number_format(($valores["Acciones"]["CUM"]["Cantidad"] ?? 0)*$this->montos["CUM"], 2);
                                 $this->studies[$index]["CobrosModelos"][$modelo]["SCUM"]=number_format(($valores["Acciones"]["SCUM"]["Cantidad"] ?? 0)*$this->montos["SCUM"], 2);
                                 $this->studies[$index]["CobrosModelos"][$modelo]["XCUM"]=number_format(($valores["Acciones"]["XCUM"]["Cantidad"] ?? 0)*$this->montos["XCUM"], 2);
-                                
+
                                 $this->studies[$index]["CobrosModelos"][$modelo]["Total"]=array_sum($this->studies[$index]["CobrosModelos"][$modelo]);
                             }
                         }else{
