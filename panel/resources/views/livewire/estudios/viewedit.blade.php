@@ -352,7 +352,82 @@
                         Vincular máquina
                     </a>
                 </div>
+
+                <div class="col-md-12">
+                    <br>
+                    <h5 class="card-title">Historial de mantenimientos</h5>
+                    <p class="card-text">Estos son los últimos 20 mantenimientos realizados</p><br>
+
+                    <table class="table">
+                        <thead>
+                            <tr class="align-middle">
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Autor</th>
+                                <th scope="col" style="width: 50%;">Descripción/Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(!$Mantenimientos->isEmpty())
+                            @foreach($Mantenimientos as $mant)
+                            <tr>
+                                <td>
+                                    {{ $mant->date }}
+                                </td>
+                                <td>
+                                    {{ $mant->author_info->name }}
+                                </td>
+                                <td>
+                                    {{ $mant->description }}
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    Sin mantenimientos registrados
+                                </td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="col-md-12 text-center">
+                    <a type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#registrarMantenimiento">
+                        Registrar mantenimiento
+                    </a>
+                </div>
+
+
+
             </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="registrarMantenimiento" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registrarMantenimientoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5" id="registrarMantenimientoLabel">Registrar mantenimiento</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fecha de mantenimiento</label>
+                    <input type="date" class="form-control" wire:model="fechaNuevoMantenimiento">
+                </div>
+                <div class="form-group">
+                    <label>Descripción del mantenimiento</label>
+                    <textarea class="form-control" rows="3" wire:model="detallesNuevoMantenimiento"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="registrarMantenimiento()">Registrar mantenimiento</button>
+            </div>
+        </div>
         </div>
     </div>
 

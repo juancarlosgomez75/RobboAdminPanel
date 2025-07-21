@@ -5,6 +5,7 @@ namespace App\Livewire\Estudios;
 use App\Models\BusinessModelHistory;
 use App\Models\MachineHistory;
 use App\Models\PendingStudy;
+use App\Models\StudyMaintenance;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +59,10 @@ class Viewedit extends Component
 
     public $loadedModels=[];
     public $loadedResults=[];
+
+    //MAntenimiento
+    public $fechaNuevoMantenimiento="";
+    public $detallesNuevoMantenimiento="";
 
     public function ordenarModelosBy($filtro){
         //Analizo si cambia es la columna o la dirección
@@ -752,7 +757,6 @@ class Viewedit extends Component
         $this->maquinas = $Maquinas;
         $this->ciudades = $Ciudades;
 
-
         $this->activo=$Informacion["Active"];
         $this->habilitado=!PendingStudy::where("id_study", "=", $Informacion['Id'])->where("environment","=",session('API_used',"development"))->exists();
 
@@ -851,6 +855,39 @@ class Viewedit extends Component
         $this->historialCompra=BusinessModelHistory::where("id_study", "=", $this->informacion['Id'])->where("environment","=",session('API_used',"production"))->get();
     }
 
+    public function registrarMantenimiento(){
+        //Valido los campos
+
+        //Valido el campo de fecha
+        if (empty($this->fechaNuevoMantenimiento) || !Carbon::hasFormat($this->fechaNuevoMantenimiento, 'Y-m-d') ) {
+            $this->dispatch('mostrarToast', 'Registrar mantenimiento', 'La fecha ingresada no es válida');
+            return false;
+        }
+        elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->detallesNuevoMantenimiento) && !empty(trim($this->detallesNuevoMantenimiento)))){
+            $this->dispatch('mostrarToast', 'Registrar mantenimiento', "Alerta: La descripción tiene caracteres no permitidos o está vacía");
+
+            return false;
+        }
+
+        //Genero
+        $mantenimiento=new StudyMaintenance();
+        $mantenimiento->author=Auth::user()->id;
+        $mantenimiento->description=$this->detallesNuevoMantenimiento;
+        $mantenimiento->date=$this->fechaNuevoMantenimiento;
+        $mantenimiento->study_id=$this->informacion["Id"];
+
+        if($mantenimiento->save()){
+            $this->detallesNuevoMantenimiento="";
+            $this->fechaNuevoMantenimiento="";
+
+            $this->dispatch('mostrarToast', 'Registrar mantenimiento', "Se ha registrado el mantenimiento");
+            registrarLog("Producción","Estudios","Registrar mantenimiento","Se ha registrado el mantenimiento con información: ".json_encode($mantenimiento),true);
+        }else{
+            $this->dispatch('mostrarToast', 'Registrar mantenimiento', "Error generando el mantenimiento, contacte a soporte");
+            registrarLog("Producción","Estudios","Registrar mantenimiento","Se ha intentado registrar el mantenimiento con información: ".json_encode($mantenimiento),false);
+        }
+    }
+
     public function render()
     {
         usort($this->maquinas, function ($a, $b) {
@@ -882,6 +919,12 @@ class Viewedit extends Component
             }
         }
 
-        return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"modelosOrdenados"=>$modelosFiltrados, "maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades]);
+        //Busco los últimos mantenimientos
+        $mantenimientos = StudyMaintenance::where("study_id", "=", $this->informacion["Id"])
+                                 ->orderBy('date', 'desc')
+                                 ->limit(20)
+                                 ->get();
+
+        return view('livewire.estudios.viewedit',["informacion"=>$this->informacion, "managers"=> $this->managers,"modelosOrdenados"=>$modelosFiltrados, "maquinas"=> $this->maquinas,"Ciudades"=> $this->ciudades, "Mantenimientos"=>$mantenimientos]);
     }
 }
