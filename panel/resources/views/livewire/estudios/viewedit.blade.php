@@ -371,7 +371,7 @@
                             @foreach($Mantenimientos as $mant)
                             <tr>
                                 <td>
-                                    {{ $mant->date }}
+                                    {{ $mant->date->format('Y-m-d') }}
                                 </td>
                                 <td>
                                     {{ $mant->author_info->name }}

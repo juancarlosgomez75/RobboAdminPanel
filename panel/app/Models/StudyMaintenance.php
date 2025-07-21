@@ -12,4 +12,11 @@ class StudyMaintenance extends Model
     {
         return $this->belongsTo(User::class, 'author', 'id'); // 'rank' es la clave foránea en users, 'id' es la clave primaria en ranks
     }
+
+
+    protected $casts = [
+        'date' => 'datetime', // or 'date' if you only store dates without time
+    ];
+
+
 }
