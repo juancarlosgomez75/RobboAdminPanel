@@ -63,7 +63,10 @@ class RequestView extends Component
 
     public function completarEntrega(){
         //Recorro los elementos paraa ver si son válidos
+        $noZeros=False;
+
         foreach($this->entregando as $index=>$cantidad){
+            //Valido stock
             if($cantidad>$this->pendientes[$index]){
                 $this->dispatch('mostrarToast', 'Reportar entrega', "Alerta: La cantidad reportada del producto #".($index+1)." supera a la pendiente");
                 return false;
@@ -72,10 +75,21 @@ class RequestView extends Component
                 $this->dispatch('mostrarToast', 'Reportar entrega', "Alerta: La cantidad reportada del producto #".($index+1)." no es válida");
                 return false;
             }
+
+            //Valido que sea mayor a cero al menos uno
+            if($cantidad>0){
+                $noZeros=True;
+            }
         }
 
         if (!empty(trim($this->observaciones)) && !preg_match('/^[a-zA-Z0-9\/\-_\.\,\$\#\@\!\?\%\&\*\(\)\[\]\{\}\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->observaciones)){
             $this->dispatch('mostrarToast', 'Reportar entrega', 'Las observaciones no son válidas');
+            return false;
+        }
+
+        //Analizo si al menos hay uno mayor a cero
+        if(!$noZeros){
+            $this->dispatch('mostrarToast', 'Reportar entrega', 'Error: Todas las cantidades de entrega están en cero, debe entregar al menos un producto.');
             return false;
         }
 
@@ -204,40 +218,42 @@ class RequestView extends Component
                     foreach(json_decode($this->pedido->creation_list,true) as $index=>$producto){
                         //Analizo si es un producto interno
                         if($producto["internal"]){
-                            //Busco el producto
-                            $pto=Product::find($producto['id']);
+                            //Analizo si la cantidad a reportr si es mayor a 0
+                            if($delivery["products"][$index]>0){
+                                //Busco el producto
+                                $pto=Product::find($producto['id']);
 
-                            //Genero un nuevo movimiento
-                            $mov=new ProductInventoryMovement();
+                                //Genero un nuevo movimiento
+                                $mov=new ProductInventoryMovement();
 
-                            //Almaceno la información
-                            $mov->inventory_id=$pto->inventory->id;
+                                //Almaceno la información
+                                $mov->inventory_id=$pto->inventory->id;
 
-                            $mov->type='income';
-                            $mov->reason="Inventariar pedido";
-                            $mov->amount=$delivery["products"][$index];
-                            $mov->stock_before=$pto->inventory->stock_available;
+                                $mov->type='income';
+                                $mov->reason="Inventariar pedido";
+                                $mov->amount=$delivery["products"][$index];
+                                $mov->stock_before=$pto->inventory->stock_available;
 
-                            // $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
-                            $mov->stock_after=$pto->inventory->stock_available+$delivery["products"][$index];
+                                // $mov->stock_after=$pto->inventory->stock_available-$element["amount"];
+                                $mov->stock_after=$pto->inventory->stock_available+$delivery["products"][$index];
 
-                            $mov->author=Auth::id();
-                            $mov->request_id=$this->pedido->id;
+                                $mov->author=Auth::id();
+                                $mov->request_id=$this->pedido->id;
 
-                            //Guardo
-                            if(!$mov->save()){
-                                $this->dispatch('mostrarToast', 'Reportar inventario', 'Se ha generado un error al generar un movimiento, contacte a soporte');
-                            }
+                                //Guardo
+                                if(!$mov->save()){
+                                    $this->dispatch('mostrarToast', 'Reportar inventario', 'Se ha generado un error al generar un movimiento, contacte a soporte');
+                                }
 
-                            //Ahora modifico el stock
-                            $pto->inventory->stock_available=$mov->stock_after;
+                                //Ahora modifico el stock
+                                $pto->inventory->stock_available=$mov->stock_after;
 
-                            if(!$pto->inventory->save()){
-                                $this->dispatch('mostrarToast', 'Reportar inventario', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                                if(!$pto->inventory->save()){
+                                    $this->dispatch('mostrarToast', 'Reportar inventario', 'Se ha generado un error al actualizar stock, contacte a soporte');
+                                }
                             }
                         }
                     }
-
                     //Ahora indico que ya inventarié
                     $todos=json_decode($this->pedido->delivery_list,true);
                     $todos[$fecha]["inventoried"]=True;
