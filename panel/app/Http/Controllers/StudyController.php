@@ -31,7 +31,7 @@ class StudyController extends Controller
             'Data' => ["UserId" => "1"]
         ];
         $generalinformation=sendBack($data_send);
-        
+
         // //Genero la petición de informacion
         // $response = Http::withHeaders([
         //     'Authorization' => 'AAAA'
@@ -53,7 +53,7 @@ class StudyController extends Controller
             'Data' => ["UserId" => "1"]
         ];
         $data=sendBack($data_send);
-        
+
 
         //Analizo si es válido lo que necesito
         if (isset($data['Status']) && isset($generalinformation['Status'])) {
@@ -79,10 +79,10 @@ class StudyController extends Controller
                 return view("estudios.index",["information"=>$data["ListStudyData"]]);
             }
             return "Error de status";
-            
+
         }
-        
-        
+
+
         return "Error general";
     }
 
@@ -133,14 +133,14 @@ class StudyController extends Controller
 
                 return view("estudios.create",["Ciudades"=>$cityMap]);
             }
-            
+
         }
-        
-        
+
+
         return "Error";
 
-        
-        
+
+
     }
 
     public function viewedit($idestudio){
@@ -205,8 +205,10 @@ class StudyController extends Controller
                     }
                 }
 
+                // return json_encode($dataStudio);
 
-                return view("estudios.viewedit",["Information"=> $dataStudio["DataStudy"],"Managers"=> $dataStudio["ListUserData"],"Machines"=> $dataStudio["Data"]["Machines"],"Ciudades"=>$cityMap]);
+
+                return view("estudios.viewedit",["Information"=> $dataStudio["DataStudy"],"Managers"=> $dataStudio["ListUserData"],"Models"=> $dataStudio["ListModelData"],"Machines"=> $dataStudio["Data"]["Machines"],"Ciudades"=>$cityMap]);
             }
         }
 
@@ -322,7 +324,7 @@ class StudyController extends Controller
             'Data' => ["UserId" => "1"]
         ];
         $generalinformation=sendBack($data_send);
-        
+
         // //Genero la petición de informacion
         // $response = Http::withHeaders([
         //     'Authorization' => 'AAAA'
@@ -344,7 +346,7 @@ class StudyController extends Controller
             'Data' => ["UserId" => "1"]
         ];
         $data=sendBack($data_send);
-        
+
 
         //Analizo si es válido lo que necesito
         if (isset($data['Status']) && isset($generalinformation['Status'])) {
@@ -370,10 +372,10 @@ class StudyController extends Controller
                 return view("estudios.reporte",["information"=>$data["ListStudyData"]]);
             }
             return "Error de status";
-            
+
         }
-        
-        
+
+
         return "Error general";
     }
 

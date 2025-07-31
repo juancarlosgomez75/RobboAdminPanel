@@ -268,7 +268,7 @@ class Viewedit extends Component
             return false;
         }
 
-        if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
+        if(!(preg_match('/^[a-zA-Z0-9\/\-áéíóúÁÉÍÓÚüÜñÑ\s\.,;()\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
 
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El nombre del estudio no es válido");
 
@@ -751,7 +751,7 @@ class Viewedit extends Component
         $this->activo=false;
     }
 
-    public function mount($Informacion,$Managers,$Maquinas,$Ciudades){
+    public function mount($Informacion,$Managers,$Modelos,$Maquinas,$Ciudades){
         $this->informacion=$Informacion;
         $this->managers = $Managers;
         $this->maquinas = $Maquinas;
@@ -774,21 +774,7 @@ class Viewedit extends Component
         $this->email=$this->informacion["Email"] ?? "noconfigurado@noconfigurado.com";
 
         //Cargo las modelos
-        foreach($Managers as $Manager){
-            //Asigno mis modelos
-            $misModelos=[];
-
-            //Recorro
-            foreach($Manager["ModelsList"] as $modelo){
-                $modelo["manager_id"]=$Manager["Id"];
-                $modelo["manager_name"]=$Manager["Name"];
-                $misModelos[]=$modelo;
-            }
-
-
-
-            $this->modelos=array_merge($this->modelos,$misModelos);
-        }
+        $this->modelos=$Modelos;
 
     }
 

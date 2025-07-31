@@ -282,6 +282,9 @@ class ApiController extends Controller
                             'data' => [
                                 // 'times' => $tiempos,
                                 'models' => $modelos,
+                                "InitialDate"=>$diaInicial,
+                                "FinalDate"=>$diaFinal,
+                                "Raw"=>$data['Data']['CxTimeArchives']
                             ],
                             // 'other'=>$data
                         ]);
