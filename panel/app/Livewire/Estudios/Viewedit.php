@@ -268,13 +268,13 @@ class Viewedit extends Component
             return false;
         }
 
-        if(!(preg_match('/^[a-zA-Z0-9\/\-áéíóúÁÉÍÓÚüÜñÑ\s\.,;()\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
+        if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->nombre) && !empty(trim($this->nombre)))){
 
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El nombre del estudio no es válido");
 
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s&]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))){
+        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))){
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La razón social no es válida");
 
             return false;
@@ -291,13 +291,13 @@ class Viewedit extends Component
 
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
+        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->direccion) && !empty(trim($this->direccion)))){
 
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: La dirección no es válida");
 
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->responsable) && !empty(trim($this->responsable)))){
+        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->responsable) && !empty(trim($this->responsable)))){
             $this->dispatch('mostrarToast', 'Editar estudio', "Alerta: El nombre del responsable no es válido");
 
             return false;

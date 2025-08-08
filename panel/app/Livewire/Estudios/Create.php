@@ -24,13 +24,13 @@ class Create extends Component
 
     public function validar(){
 
-        if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->nombre) && !empty(trim($this->nombre)))){
+        if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->nombre) && !empty(trim($this->nombre)))){
 
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El nombre no es válido");
 
             return false;
         }
-        elseif (!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))) {
+        elseif (!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->razonsocial) && !empty(trim($this->razonsocial)))) {
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: La razón social no es válida");
             return false;
         }
@@ -46,13 +46,13 @@ class Create extends Component
 
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
+        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->direccion) && !empty(trim($this->direccion)))){
 
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El dirección no es válida");
 
             return false;
         }
-        elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->responsable) && !empty(trim($this->responsable)))){
+        elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->responsable) && !empty(trim($this->responsable)))){
             $this->dispatch('mostrarToast', 'Crear estudio', "Alerta: El nombre de responsable no es válido");
 
             return false;
