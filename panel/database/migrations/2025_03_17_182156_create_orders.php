@@ -73,6 +73,13 @@ return new class extends Migration
             $table->string('internal_code')->nullable();
             $table->boolean('finished')->default(False);
 
+            //Finalización
+            $table->unsignedBigInteger('factured_by')->nullable();
+            $table->foreign('factured_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->timestamp('factured_date')->nullable();
+            $table->string('factured_code')->nullable();
+            $table->boolean('factured')->default(False);
+
             //El id de la razón
             $table->unsignedBigInteger('collection_reason')->nullable();
             $table->foreign('collection_reason')->references('id')->on('collection_reasons')->onDelete('set null')->onUpdate('cascade');

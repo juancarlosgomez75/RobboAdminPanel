@@ -118,7 +118,8 @@ class Create extends Component
                     ],
                     "UserData"=>[
                         "Id"=>$this->manageractual
-                    ]
+                    ],
+                    "StudyId"=>$this->estudioactual
                 ],
             ];
 
@@ -154,11 +155,9 @@ class Create extends Component
                     $dataStudio=sendBack($data_send);
 
                     //Recorro los managers
-                    foreach($dataStudio["ListUserData"] as $Manager){
-                        foreach($Manager["ModelsList"] as $modelo){
-                            if($modelo["ModelUserName"]==$this->drivername){
-                                return redirect(route("modelo.viewedit",$modelo["ModelId"]));
-                            }
+                    foreach($dataStudio["ListModelData"] as $modelo){
+                        if($modelo["ModelUserName"]==$this->drivername){
+                            return redirect(route("modelo.viewedit",$modelo["ModelId"]));
                         }
                     }
 
