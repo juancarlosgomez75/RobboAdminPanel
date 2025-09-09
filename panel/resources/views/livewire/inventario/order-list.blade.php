@@ -106,6 +106,9 @@
                                             @endif
                                         @else
                                             <span style="color:#9413cf">Cerrada</span>
+                                            @if($pedido->factured)
+                                            <span style="color:#5e5e5e" class="text-sm">Facturada</span>
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
