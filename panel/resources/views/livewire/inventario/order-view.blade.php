@@ -779,9 +779,75 @@
                             </div>
                             </div>
                         </div>
-                        </div>
+                    </div>
                 </div>
                 @endif
+
+                @if($orden->finished)
+                @if($orden->factured)
+                <div class="col-md-12 pt-2">
+                    <h5 class="card-title">Información de facturación de envío</h5>
+                    <p class="card-text">Esta es la información relacionada con el reporte de la facturación de envío</p>
+                </div>
+                <div class="col-md-12 pt-2">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Fecha de reporte</th>
+                                <td>{{$orden->factured_date}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">¿Quién lo reportó?</th>
+                                <td>{{$orden->facturer_info->name." (".$orden->facturer_info->id." - ".$orden->facturer_info->username.")"}}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Código de facturación</th>
+                                <td>{{$orden->factured_code}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                @else
+                <div class="col-md-12 pt-3">
+                    <div class="text-center">
+                        <a class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#facturacionOrden">Reportar facturación de envío</a>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="facturacionOrden" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reportarCierreLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="reportarCierreLabel">Reportar facturación de envío</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    Reporta la factura que la empresa de mensajería reporta para cerrar el sistema
+                                </p>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Código de facturación</label>
+                                    <input class="form-control" rows="3" wire:model="shippingFac" />
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" wire:click="finalizarShippingFac()">Confirmar código</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                @endif
+                @endif
+
 
             </div>
         </div>

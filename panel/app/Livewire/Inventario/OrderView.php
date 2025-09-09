@@ -30,6 +30,8 @@ class OrderView extends Component
 
     public $facNumber="";
 
+    public $shippingFac="";
+
     public function iniciarAlistamiento(){
         //Actualizo el estado
         $this->preparando=true;
@@ -392,6 +394,35 @@ class OrderView extends Component
         }else{
             registrarLog("Inventario","Órdenes","Finalizar orden","Ha intentado finalizar la orden # ".$this->orden->id,false);
             $this->dispatch('mostrarToast', 'Finalizar orden', 'Error finalizando la orden, contacta con soporte');
+        }
+    }
+
+    public function finalizarShippingFac(){
+        if(Auth::user()->rank < 4){
+            $this->dispatch('mostrarToast', 'Terminar orden', 'Error: No tienes los permisos para ejecutar esta acción');
+            return false;
+        }
+
+        if($this->shippingFac!="" && !is_numeric($this->shippingFac)){
+            $this->dispatch('mostrarToast', 'Reportar facturción de envío', 'Error: El código de facturación no es numérico');
+            return false;
+        }
+
+        //Edito la información
+        $this->orden->factured_by=Auth::id();
+        $this->orden->factured_date=now();
+        $this->orden->factured=True;
+        $this->orden->factured_code=$this->shippingFac;
+
+        //Si almaceno
+        if($this->orden->save()){
+            registrarLog("Inventario","Órdenes","Reportar facturación envío","Ha registrado la facturación del envío de la orden # ".$this->orden->id,true);
+
+            $this->dispatch('mostrarToast', 'Reportar facturación envío', 'Se ha registrado la facturación del envío de la orden');
+
+        }else{
+            registrarLog("Inventario","Órdenes","Reportar facturación envío","Ha intentado registrar la facturación del envío de la orden # ".$this->orden->id,false);
+            $this->dispatch('mostrarToast', 'Reportar facturación envío', 'Error registrando la facturación del envío de la orden, contacta con soporte');
         }
     }
 
