@@ -403,16 +403,17 @@ class OrderView extends Component
             return false;
         }
 
-        if($this->shippingFac!="" && !is_numeric($this->shippingFac)){
-            $this->dispatch('mostrarToast', 'Reportar facturción de envío', 'Error: El código de facturación no es numérico');
+        // Validar shippingFac
+        if ($this->shippingFac != "" && !preg_match('/^[A-Za-z0-9\-\_\.\s]+$/', $this->shippingFac)) {
+            $this->dispatch('mostrarToast', 'Reportar facturación de envío', 'Error: El código de facturación contiene caracteres inválidos');
             return false;
         }
 
-        //Edito la información
-        $this->orden->factured_by=Auth::id();
-        $this->orden->factured_date=now();
-        $this->orden->factured=True;
-        $this->orden->factured_code=$this->shippingFac;
+        // Edito la información
+        $this->orden->factured_by = Auth::id();
+        $this->orden->factured_date = now();
+        $this->orden->factured = true;
+        $this->orden->factured_code = strtoupper($this->shippingFac);
 
         //Si almaceno
         if($this->orden->save()){
