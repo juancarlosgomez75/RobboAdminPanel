@@ -72,7 +72,7 @@ class OrderList extends Component
                 return $query->whereRaw("TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') LIKE ?", [$this->filtroFecha . '%']);
             })
             ->when(!empty($this->filtroNombre), function ($query) {
-                return $query->whereRaw("name LIKE ?", [strtolower($this->filtroNombre) . '%']);
+                return $query->whereRaw("tracking LIKE ?", [strtolower($this->filtroNombre) . '%']);
             })
             ->when(true, function ($query) {
                 switch ($this->filtroEstado) {

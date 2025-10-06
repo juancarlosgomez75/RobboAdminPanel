@@ -30,7 +30,7 @@
                             <input type="text" class="custom-input" placeholder="Filtrar por estudio" wire:model.change="filtroEstudio">
                         </div>
                         <div class="col-md-2">
-                            <input type="text" class="custom-input" placeholder="Filtrar por destinatario" wire:model.change="filtroNombre">
+                            <input type="text" class="custom-input" placeholder="Filtrar por guia" wire:model.change="filtroNombre">
                         </div>
                         <div class="col-md-2">
                             <select class="custom-input" wire:model.change="filtroTipo">
@@ -62,7 +62,7 @@
                                 <th scope="col">Fecha creación</th>
                                 <th scope="col">Ciudad</th>
                                 <th scope="col">Estudio</th>
-                                <th scope="col">Destinatario</th>
+                                <th scope="col">Guía</th>
                                 <th scope="col">Tipo</th>
 
                                 @if($filtroEstado=="finished")
@@ -82,7 +82,13 @@
                                     <td>{{ $pedido->created_at }}</td>
                                     <td>{{ $pedido->city }}</td>
                                     <td>{{ $pedido->study_name}}</td>
-                                    <td>{{ $pedido->name }}</td>
+                                    <td>
+                                        @if($pedido->tracking==null || $pedido->tracking==""    )
+                                            <span style="color:#0026a1">Sin asignar</span>
+                                        @else
+                                            {{ $pedido->tracking }}
+                                        @endif
+                                    </td>
                                     <td>{{ ($pedido->type=="shipping") ? "Envío":"Recogida" }}</td>
 
                                     @if($filtroEstado=="finished")
