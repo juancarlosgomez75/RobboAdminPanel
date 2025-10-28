@@ -135,7 +135,7 @@ class OrderView extends Component
                             ]
                         ];
 
-                        $data=sendBack($apiData,"AAA",true);
+                        $data=sendBack($apiData);
 
                         if (!isset($data['Status'])) {
                             // $this->dispatch('mostrarToast', 'Mover máquina', 'Se ha generado un error al mover automáticamente una máquina, contacte a soporte');
