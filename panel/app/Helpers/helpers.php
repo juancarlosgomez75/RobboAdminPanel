@@ -52,8 +52,9 @@ if (!function_exists('decompressString')) {
 }
 
 if (!function_exists('sendBack')) {
-    function sendBack($data,$code="bf0964133c1f20809d756cfd11d2a51b1eea1eaeddd1f81f57550ac52fdab130",$produccionForced=False)
+    function sendBack($data,$produccionForced=False)
     {
+        $code="bf0964133c1f20809d756cfd11d2a51b1eea1eaeddd1f81f57550ac52fdab130";
 
         if(session('API_used',"development")=="production" || $produccionForced){
             $api = config('app.API_URL_PROD');

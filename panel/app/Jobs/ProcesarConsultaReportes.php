@@ -78,7 +78,7 @@ class ProcesarConsultaReportes implements ShouldQueue
                 ]
             ];
             //Obtengo la informacion que requiero
-            $data=sendBack($data_send,"AAA",$this->API_PROD);
+            $data=sendBack($data_send,$this->API_PROD);
 
             if(isset($data["Status"])){
                 if($data["Status"]??False){
