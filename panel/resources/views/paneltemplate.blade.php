@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    @vite('resources/css/app.css')
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
@@ -226,7 +227,7 @@ body {
                         </ul>
                     </li>
                     @endif
-                
+
 
                     @if(auth()->check() && auth()->user()->rank >= 4)
                     <li>
@@ -246,7 +247,7 @@ body {
                     <li class="sticky-bottom user-info">
                         <img src="{{ asset('img/bb.jpg') }}" alt="Usuario" class="user-avatar">
 
-                        
+
                         <div class="user-details">
                             <span class="user-name">{{ auth()->user()->name }}</span>
                             <span class="user-role">
@@ -265,7 +266,7 @@ body {
                         @endif
 
                     </li>
-                    
+
                 </ul>
             </nav>
         </div>
