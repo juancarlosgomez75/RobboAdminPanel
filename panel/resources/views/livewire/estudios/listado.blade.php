@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-12">
                     <table class="table">
-                        <thead>
+                        <thead style="font-size:14px">
                             <tr>
                                 <th class="w-10" scope="col" style="width: 5%;">#</th>
                                 <th class="w-10" scope="col" style="cursor: pointer;" wire:click="ordenarBy('id')" style="width: 5%;">
@@ -87,7 +87,7 @@
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:12px">
                             @if(!empty($datosUsar))
                             @foreach($datosUsar as $index => $dato)
                                 <tr>

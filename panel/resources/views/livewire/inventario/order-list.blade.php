@@ -60,10 +60,8 @@
                             <tr>
                                 <th scope="col" style="width: 7%;">#</th>
                                 <th scope="col">Fecha creación</th>
-                                <th scope="col">Ciudad</th>
-                                <th scope="col">Estudio</th>
-                                <th scope="col">Guía</th>
-                                <th scope="col">Tipo</th>
+                                <th scope="col">Detalles</th>
+                                {{-- <th scope="col">Tipo</th> --}}
 
                                 @if($filtroEstado=="finished")
                                 <th scope="col">#int</th>
@@ -80,16 +78,24 @@
                                 <tr>
                                     <th scope="row">{{ $pedido->id }}</th>
                                     <td>{{ $pedido->created_at }}</td>
-                                    <td>{{ $pedido->city }}</td>
-                                    <td>{{ $pedido->study_name}}</td>
                                     <td>
-                                        @if($pedido->tracking==null || $pedido->tracking==""    )
-                                            <span style="color:#0026a1">Sin asignar</span>
-                                        @else
-                                            {{ $pedido->tracking }}
-                                        @endif
+                                        {{ $pedido->study_name}}
+                                        <br>
+                                        <span style="color:#5e5e5e; font-size:13px">
+                                            {{ $pedido->city }}
+                                        </span>
+                                        <br>
+                                        <span style="color:#929292; font-size:12px">{{ ($pedido->type=="shipping") ? "Envío":"Recogida" }}</span>
+                                        -
+                                        <span style="font-size:12px">
+                                            @if($pedido->tracking==null || $pedido->tracking==""    )
+                                                <span style="color:#0026a1">Sin asignar</span>
+                                            @else
+                                                #{{ $pedido->tracking }}
+                                            @endif
+                                        </span>
+
                                     </td>
-                                    <td>{{ ($pedido->type=="shipping") ? "Envío":"Recogida" }}</td>
 
                                     @if($filtroEstado=="finished")
                                         <td scope="col">{{$pedido->internal_code}}</td>

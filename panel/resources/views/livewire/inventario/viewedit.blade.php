@@ -45,9 +45,9 @@
                                 @foreach ($categorias as $categoria)
                                 <option value="{{$categoria->id}}">{{$categoria->name}}</option>
                                 @endforeach
-                                
+
                             </select>
-                        </div>                    
+                        </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Referencia</label>
                             <input type="text" class="form-control" placeholder="Ejemplo: 001RG" wire:model="ref" required @if(!$editing) disabled @endif>
@@ -84,7 +84,7 @@
 
                         </div>
                         @endif
-                    </div> 
+                    </div>
                 </div>
                 <div class="col-md-8 pt-3">
                     <h5 class="card-title">Historial de movimientos</h5>
@@ -104,11 +104,9 @@
                                 <th scope="col">Fecha</th>
                                 <th scope="col">Razón</th>
                                 <th scope="col">Cantidad</th>
-                                <th scope="col">Stock antes</th>
-                                <th scope="col">Stock despues</th>
                                 <th scope="col">Autor</th>
                                 <th scope="col"># Orden</th>
-                                <th scope="col">Comentarios</th>
+                                {{-- <th scope="col">Comentarios</th> --}}
                             </tr>
                         </thead>
                         <tbody class="align-center">
@@ -118,15 +116,19 @@
                                 <td scope="row">{{$movimiento->created_at}}</td>
                                 <td scope="row">{{$movimiento->reason}}</td>
                                 <td scope="row">
+
                                     @if($movimiento->type=="expense")
                                     <span style="color:#be0000">-{{$movimiento->amount}}</span>
                                     @else
                                     <span style="color:#33a100">{{$movimiento->amount}}</span>
                                     @endif
-                                    
+
+                                    <br>
+                                    Ant: {{$movimiento->stock_before}}
+                                    <br>
+                                    Des: {{$movimiento->stock_after}}
+
                                 </td>
-                                <td scope="row">{{$movimiento->stock_before}}</td>
-                                <td scope="row">{{$movimiento->stock_after}}</td>
                                 <td scope="row">{{$movimiento->author_info->username}}</td>
                                 <td>
                                     @if($movimiento->order_id)
@@ -137,11 +139,11 @@
                                     No
                                     @endif
                                 </td>
-                                <td>
+                                {{-- <td>
                                     @if(!is_null($movimiento->details) && $movimiento->details!="")
                                     {{$movimiento->details}}
                                     @endif
-                                </td>
+                                </td> --}}
                             </tr>
 
                             @endforeach

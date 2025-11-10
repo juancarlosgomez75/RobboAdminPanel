@@ -115,7 +115,7 @@
                     <p class="card-text">Estas son las personas registradas que gestionan el estudio</p><br>
 
                     <table class="table">
-                        <thead>
+                        <thead style="font-size:14px">
                             <tr class="align-middle">
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Contacto</th>
@@ -124,7 +124,7 @@
                                 <th scope="col" style="width: 12%;"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:12px">
                             @if(!empty($managers))
                             @foreach($managers as $index => $manager)
                                 <tr class="align-middle">
@@ -359,14 +359,14 @@
                     <p class="card-text">Estos son los últimos 20 mantenimientos realizados</p><br>
 
                     <table class="table">
-                        <thead>
+                        <thead style="font-size:14px">
                             <tr class="align-middle">
                                 <th scope="col">Fecha</th>
                                 <th scope="col">Autor</th>
                                 <th scope="col" style="width: 50%;">Descripción/Detalles</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:12px">
                             @if(!$Mantenimientos->isEmpty())
                             @foreach($Mantenimientos as $mant)
                             <tr>

@@ -54,19 +54,17 @@
                 <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('name')">
                     @if($ordenarPor=="name")
                     @if($ordenarDesc)
-                        <a  class="text-decoration-none text-dark"> 
+                        <a  class="text-decoration-none text-dark">
                             <i class="fa-solid fa-angle-down me-2"></i>
                         </a>
                     @else
-                        <a class="text-decoration-none text-dark"> 
+                        <a class="text-decoration-none text-dark">
                             <i class="fa-solid fa-angle-up me-2"></i>
                         </a>
                     @endif
                     @endif
                     Nombre
                 </th>
-                <th scope="col">Categoría</th>
-                <th scope="col">Estado</th>
                 <th scope="col">Disponibles</th>
                 <th scope="col" style="width: 6%"></th>
                 <th scope="col" style="width: 15%"></th>
@@ -77,16 +75,16 @@
             @foreach ($productos as $producto)
             <tr>
                 <th scope="row">{{$producto->id}}</th>
-                <td>{{$producto->name}}</td>
                 <td>
-                    {{$producto->category_info->name??"SIN CATEGORÍA"}}
-                </td>
-                <td>
+                    {{$producto->name}} <br>
                     @if($producto->available)
                     <span style="color:green">Activo</span>
                     @else
                     <span style="color:red">Oculto</span>
                     @endif
+                    <br>
+                    <span style="font-size: 12px">{{$producto->category_info->name??"SIN CATEGORÍA"}}</span>
+
                 </td>
                 <td>{{$producto->inventory->stock_available}}</td>
                 <td>
@@ -111,12 +109,12 @@
             @endif
         </tbody>
     </table>
-    
+
     @if(auth()->check() && auth()->user()->rank >= 4)
     <center><a class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#createProduct">Crear nuevo producto</a></center>
 
     <!-- Modal -->
-    
+
     <div class="modal fade" id="createProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createProductLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -154,9 +152,9 @@
                             @foreach ($categorias as $categoria)
                             <option value="{{$categoria->id}}">{{$categoria->name}}</option>
                             @endforeach
-                            
+
                         </select>
-                    </div>                    
+                    </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Referencia</label>
                         <input type="text" class="form-control" placeholder="Ejemplo: 001RG" wire:model="ref">

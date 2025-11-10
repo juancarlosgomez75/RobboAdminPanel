@@ -11,11 +11,11 @@
                     {{-- <a href="maquinas/crear" class="btn btn-sm action-btn btn-outline-secondary">
                         <i class="fa-solid fa-plus"></i> Crear
                     </a> --}}
-                    
+
                     <a type="button" class="btn btn-sm action-btn btn-outline-secondary" wire:click="switchFiltros()">
                         <i class="fa-solid fa-filter"></i> Filtros
                     </a>
-                    
+
                 </div>
                 <div class="col-md-12 @if(!$filtroOn) hide @endif" id="Filtros">
 
@@ -40,33 +40,31 @@
                 </div>
                 <div class="col-md-12">
                     <table class="table align-middle">
-                        <thead>
+                        <thead style="font-size:14px">
                             <tr>
-                                <th scope="col" style="width: 5%;">#</th>
-                                <th scope="col" style="width: 5%;">Id</th>
+                                <th scope="col"># - Id</th>
                                 <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('hardware')">
                                     @if($ordenarPor=="hardware")
                                     @if($ordenarDesc)
-                                        <a  class="text-decoration-none text-dark"> 
+                                        <a  class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-down me-2"></i>
                                         </a>
                                     @else
-                                        <a class="text-decoration-none text-dark"> 
+                                        <a class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-up me-2"></i>
                                         </a>
                                     @endif
                                     @endif
                                     Hardware
                                 </th>
-                                <th scope="col">Tipo</th>
                                 <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('city')">
                                     @if($ordenarPor=="city")
                                     @if($ordenarDesc)
-                                        <a  class="text-decoration-none text-dark"> 
+                                        <a  class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-down me-2"></i>
                                         </a>
                                     @else
-                                        <a class="text-decoration-none text-dark"> 
+                                        <a class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-up me-2"></i>
                                         </a>
                                     @endif
@@ -76,11 +74,11 @@
                                 <th scope="col" style="cursor: pointer;" wire:click="ordenarBy('study')">
                                     @if($ordenarPor=="study")
                                     @if($ordenarDesc)
-                                        <a  class="text-decoration-none text-dark"> 
+                                        <a  class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-down me-2"></i>
                                         </a>
                                     @else
-                                        <a class="text-decoration-none text-dark"> 
+                                        <a class="text-decoration-none text-dark">
                                             <i class="fa-solid fa-angle-up me-2"></i>
                                         </a>
                                     @endif
@@ -90,14 +88,12 @@
                                 <th scope="col" style="width: 15%;"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:12px">
                             @if(!empty($Machines))
                             @foreach($Machines as $index => $Maquina)
                                 <tr>
-                                    <th scope="row">{{ $index }}</th>
-                                    <th scope="row">{{ $Maquina['ID'] }}</th>
+                                    <th scope="row">{{ $index }} - {{ $Maquina['ID'] }}</th>
                                     <td>{{ $Maquina["FirmwareID"] ?? 'N/R' }}</td>
-                                    <td>{{ $Maquina['Tipo'] ?? 'N/R' }}</td>
                                     <td>{{ $Maquina['Location'] ?? 'No especificada' }}</td>
                                     <td>{{ $Maquina['StudyData']["StudyName"] ?? 'No especificada' }}</td>
                                     <td>
@@ -110,7 +106,7 @@
 
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>

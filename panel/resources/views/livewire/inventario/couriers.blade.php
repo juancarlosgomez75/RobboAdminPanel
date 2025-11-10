@@ -7,13 +7,12 @@
                     <p class="card-text">Estas son las empresas de mensajería disponibles en este momento en tu sistema:</p>
                 </div>
                 <div class="col-md-12">
-                    <table class="table">
+                    <table class="table table-responsive">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nombre</th>
-                                <th scope="col">Página</th>
-                                <th scope="col">Fecha de creación</th>
+                                {{-- <th scope="col">Página</th> --}}
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -23,8 +22,7 @@
                             <tr>
                                 <th>{{$courier->id}}</th>
                                 <td>{{$courier->name}}</td>
-                                <td>{{$courier->page}}</td>
-                                <td>{{$courier->created_at}}</td>
+                                {{-- <td>{{$courier->page}}</td> --}}
                                 <td>
                                     <a class="btn btn-outline-secondary btn-sm" wire:click="editar({{$courier->id}})">
                                         Editar información
@@ -114,7 +112,7 @@
                 let modal = new bootstrap.Modal(document.getElementById('editModal'));
                 modal.show();
             });
-    
+
             Livewire.on('cerrarModalEdit', () => {
                 let modalEl = document.getElementById('editModal');
                 let modal = bootstrap.Modal.getInstance(modalEl);
