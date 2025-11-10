@@ -1,4 +1,9 @@
-@import 'tailwindcss';
+
+/* Tus estilos personalizados */
+body {
+  background-color: #f8f9fa;
+}
+
 @import '../../vendor/livewire/flux/dist/flux.css';
 
 @source "../views";
