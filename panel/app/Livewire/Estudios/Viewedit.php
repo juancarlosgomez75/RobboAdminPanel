@@ -471,7 +471,7 @@ class Viewedit extends Component
             'DataStudy' => [
                 "Id"=>$this->informacion["Id"],
             ]
-        ];
+            ];
 
         $data=sendBack($apiData);
 
@@ -547,8 +547,6 @@ class Viewedit extends Component
             //Obtengo la maquina por el index
             $maquina=$this->maquinas[$index];
 
-            // dd($maquina);
-
             $apiData=[
                 'Branch' => 'Server',
                 'Service' => 'Machines',
@@ -556,13 +554,14 @@ class Viewedit extends Component
                 "Data"=>[
                     "UserId"=>"1",
                     "Machines"=>[
-                        ["FirmwareID"=>$maquina["FirmwareID"]]
+                        ["ID"=>$maquina["ID"]]
                     ]
                     ],
                 'DataStudy' => [
                     "Id"=>"1",
                 ]
                 ];
+
 
 
             // //Genero la petición de informacion
