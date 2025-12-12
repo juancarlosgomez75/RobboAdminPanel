@@ -18,7 +18,7 @@ class Request extends Component
     public $nombre="";
     public $fecha="";
     public $observaciones="";
-    
+
     //Información de los productos
     public $listProducts=[];
     public $addingProduct=false;
@@ -37,7 +37,7 @@ class Request extends Component
     }
     public function searchProduct(){
         if(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->product_name) && !empty(trim($this->product_name)))){
-            
+
             $this->dispatch('mostrarToast', 'Buscar producto', 'El campo no es válido');
 
             return;
@@ -121,11 +121,11 @@ class Request extends Component
             $this->dispatch('mostrarToast', 'Crear pedido', 'El nombre de eempresa no es válido');
             return false;
         }
-        elseif($this->direccion!="" && !(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->direccion) && !empty(trim($this->direccion)))){
+        elseif($this->direccion!="" && !(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->direccion) && !empty(trim($this->direccion)))){
             $this->dispatch('mostrarToast', 'Crear pedido', 'La dirección no es válida');
             return false;
         }
-        elseif($this->ciudad!="" && !(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->ciudad) && !empty(trim($this->ciudad)))){
+        elseif($this->ciudad!="" && !(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->ciudad) && !empty(trim($this->ciudad)))){
             $this->dispatch('mostrarToast', 'Crear pedido', 'La ciudad no es válida');
             return false;
         }
@@ -212,13 +212,13 @@ class Request extends Component
 
                 return redirect(route("pedido.ver",$orden->id));
 
-                
+
             }else{
                 $this->dispatch('mostrarToast', 'Crear pedido', 'Ha ocurrido un error al generar el pedido, contacte a soporte');
                 registrarLog("Inventario","Órdenes","Crear","Ha intentado crear un pedido con la siguiente información: ".json_encode($orden),false);
             }
 
-            
+
         }
 
     }
