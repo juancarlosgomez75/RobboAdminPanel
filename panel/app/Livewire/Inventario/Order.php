@@ -266,15 +266,15 @@ class Order extends Component
     public function validar(){
         //Analizo los campos si no es un estudio
         if(!$this->studyFind){
-            if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ]+$/', $this->address) && !empty(trim($this->address)))){
+            if(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->address) && !empty(trim($this->address)))){
                 $this->dispatch('mostrarToast', 'Crear orden', 'La dirección no es válida');
                 return false;
             }
-            elseif(!(preg_match('/^[a-zA-Z0-9\/\-\áéíóúÁÉÍÓÚüÜñÑ\s]+$/', $this->city) && !empty(trim($this->city)))){
+            elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->city) && !empty(trim($this->city)))){
                 $this->dispatch('mostrarToast', 'Crear orden', 'La ciudad no es válida');
                 return false;
             }
-            elseif(!(preg_match('/^[a-zA-ZÀ-ÿ0-9#\-.\s]+$/', $this->receiver) && !empty(trim($this->receiver)))){
+            elseif(!(preg_match('/^[a-zA-Z0-9#\-. áéíóúÁÉÍÓÚüÜñÑ,;\[\]\(\)\/&!¡¿?@#$%^&*+=\|~`<>:"]+$/', $this->receiver) && !empty(trim($this->receiver)))){
                 $this->dispatch('mostrarToast', 'Crear orden', 'El nombre de quién recibe no es válido');
                 return false;
             }
