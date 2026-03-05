@@ -117,7 +117,6 @@ return new class extends Migration
             $table->index(['from_warehouse_id']);
             $table->index(['to_warehouse_id']);
             $table->index('admin_id');
-            $table->index(['reference_type','reference_id']);
 
         });
 
@@ -138,6 +137,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('panel_order_system');
+        Schema::dropIfExists('inv_product_compositions');
+        Schema::dropIfExists('inv_inventory_movements');
+        Schema::dropIfExists('inv_movement_types');
+        Schema::dropIfExists('inv_warehouse_stocks');
+        Schema::dropIfExists('inv_warehouses');
+        Schema::dropIfExists('inv_products');
+        Schema::dropIfExists('inv_categories');
     }
 };
